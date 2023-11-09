@@ -14,7 +14,7 @@ public class CarMapper {
         this.categoryRepository = categoryRepository;
     }
 
-    Car map(CarDto dto)b{
+    Car map(CarDto dto){
         Car car = new Car();
         car.setId(dto.getId());
         car.setMark(dto.getMark());
