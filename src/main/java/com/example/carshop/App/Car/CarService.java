@@ -38,7 +38,18 @@ public class CarService {
                 .stream().map(carMapper::map)
             .collect(Collectors.toSet());
     }
-
-
-
+    public
+    Optional<CarDto> sellParts(String serialNumber,int quantity){
+        Optional<Car> bySerialnumber = carRepository.findBySerialnumber(serialNumber);
+        if (bySerialnumber.isPresent()){
+            Car q = bySerialnumber.get();
+            if (q.getQuantity()>0&&q.getQuantity()>=quantity){
+                int update = q.getQuantity()-quantity;
+                q.setQuantity(update);
+                carRepository.save(q);
+                return Optional.of(carMapper.map(q));
+            }
+        }
+        return Optional.empty();
+    }
 }
