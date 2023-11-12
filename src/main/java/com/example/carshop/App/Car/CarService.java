@@ -2,7 +2,10 @@ package com.example.carshop.App.Car;
 
 import org.springframework.stereotype.Service;
 
+
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class CarService {
@@ -29,5 +32,13 @@ public class CarService {
     public void deleteAll(){
         carRepository.deleteAll();
     }
+
+  public Set<CarDto> findAllBySerialNumber(String serialNumber){
+    return     carRepository.findCarBySerialnumberContainingIgnoreCase(serialNumber)
+                .stream().map(carMapper::map)
+            .collect(Collectors.toSet());
+    }
+
+
 
 }

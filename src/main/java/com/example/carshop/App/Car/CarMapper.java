@@ -19,7 +19,7 @@ public class CarMapper {
         car.setId(dto.getId());
         car.setMark(dto.getMark());
         car.setModel(dto.getModel());
-        car.setSerialnumber(dto.getSerialnumber());
+        car.setSerialnumber(dto.getSerialNumber());
         car.setPartsBrand(dto.getPartsBrand());
         car.setPrice(dto.getPrice());
         car.setQuantity(dto.getQuantity());
@@ -33,8 +33,8 @@ public class CarMapper {
         dto.setId(car.getId());
         dto.setMark(car.getMark());
         dto.setModel(car.getModel());
-        dto.setSerialnumber(dto.getSerialnumber());
-        dto.setPartsBrand(dto.getPartsBrand());
+        dto.setSerialNumber(car.getSerialnumber());
+        dto.setPartsBrand(car.getPartsBrand());
         dto.setPrice(car.getPrice());
         dto.setQuantity(car.getQuantity());
         dto.setCategory(car.getCategory().getName());

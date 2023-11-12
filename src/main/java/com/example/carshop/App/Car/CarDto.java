@@ -4,7 +4,7 @@ public class CarDto {
     private long id;
     private String mark;
     private String model;
-    private String serialnumber;
+    private String serialNumber;
     private String partsBrand;
     private String price;
     private int quantity;
@@ -34,12 +34,12 @@ public class CarDto {
         this.model = model;
     }
 
-    public String getSerialnumber() {
-        return serialnumber;
+    public String getSerialNumber() {
+        return serialNumber;
     }
 
-    public void setSerialnumber(String serialnumber) {
-        this.serialnumber = serialnumber;
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
     }
 
     public String getPartsBrand() {

@@ -8,11 +8,11 @@ import com.vaadin.flow.router.Route;
 
 
     @Route("delete")
-    public class Delete extends VerticalLayout {
+    public class DeleteCar extends VerticalLayout {
         private final CarService carService;
 
 
-        public Delete(CarService carService) {
+        public DeleteCar(CarService carService) {
             this.carService = carService;
             Button deleteButton = new Button("usun wszystko");
             FormLayout formLayout = new FormLayout();

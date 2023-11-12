@@ -14,7 +14,7 @@ import com.vaadin.flow.router.Route;
 
 
 @Route("car")
-public class CarController  extends VerticalLayout {
+public class AddNewCar extends VerticalLayout {
 
     private final CarService carService;
     private final CategoryService categoryService;
@@ -27,7 +27,7 @@ public class CarController  extends VerticalLayout {
     private TextField category;
     private ComboBox<String> categories;
 
-    public CarController(CarService carService, CategoryService categoryService) {
+    public AddNewCar(CarService carService, CategoryService categoryService) {
         this.carService = carService;
         this.categoryService = categoryService;
 
@@ -38,7 +38,7 @@ public class CarController  extends VerticalLayout {
         partsBrand = new TextField("Marka części");
         price = new TextField("Cena");
         quantity = new TextField("Stan magazynowy");
-        categories = new ComboBox<>("Category");
+        categories = new ComboBox<>("Kategoria");
         categories.setItems(categoryService.findAll());
 
 
@@ -65,7 +65,7 @@ public class CarController  extends VerticalLayout {
             CarDto carDto = new CarDto();
             carDto.setMark(value);
             carDto.setModel(value1);
-            carDto.setSerialnumber(value2);
+            carDto.setSerialNumber(value2);
             carDto.setPartsBrand(value3);
             carDto.setPrice(value4);
             carDto.setQuantity(Integer.parseInt(value5));
