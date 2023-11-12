@@ -35,11 +35,6 @@ public class SellParts extends VerticalLayout {
     private void sellParts(){
         String value = serialNumber.getValue();
         int quantityUp  = Integer.parseInt(quantity.getValue());
-
-
-
-
-
         Optional<CarDto> carDto = carService.sellParts(value, quantityUp);
         if (carDto.isPresent()) {
             Notification.show("Sprzedane");

@@ -18,6 +18,11 @@ public class CategoryService {
              .stream()
              .map(Category::getName)
              .sorted().toList();
+    }
+    public Category newCategory(Category category){
+        return categoryRepository.save(category);
+
 
     }
+
 }

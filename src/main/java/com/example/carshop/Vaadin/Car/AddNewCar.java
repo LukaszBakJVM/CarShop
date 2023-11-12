@@ -24,7 +24,7 @@ public class AddNewCar extends VerticalLayout {
     private TextField partsBrand;
     private TextField price;
     private TextField quantity;
-    private TextField category;
+ //   private TextField category;
     private ComboBox<String> categories;
 
     public AddNewCar(CarService carService, CategoryService categoryService) {
