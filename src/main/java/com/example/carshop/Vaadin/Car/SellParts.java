@@ -25,7 +25,7 @@ public class SellParts extends VerticalLayout {
         serialNumber = new TextField("Wpisz numer seryjny");
         quantity = new TextField("Wpisz ilość");
 
-        Button updateButton = new Button("attualizacja");
+        Button updateButton = new Button("Zatwierdz Sprzedaż");
         formLayout.add(serialNumber,quantity,updateButton);
         updateButton.addClickListener(e->sellParts());
         add(formLayout);
