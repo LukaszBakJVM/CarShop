@@ -9,7 +9,7 @@ public class Car extends Parts  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @ManyToOne
+    @ManyToOne()
     private Category category;
 
 
@@ -17,6 +17,8 @@ public class Car extends Parts  {
     public Car() {
 
     }
+
+
 
     public long getId() {
         return id;

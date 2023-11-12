@@ -13,9 +13,10 @@ import java.util.Set;
 public class Category {
     @Id
     @Column(unique = true)
+
     private String name;
-    @OneToMany
-    private Set<Car>cars=new HashSet<>();
+    @OneToMany(mappedBy = "category")
+    private Set<Car>cars = new HashSet<>();
 
     public String getName() {
         return name;
@@ -33,3 +34,5 @@ public class Category {
         this.cars = cars;
     }
 }
+
+

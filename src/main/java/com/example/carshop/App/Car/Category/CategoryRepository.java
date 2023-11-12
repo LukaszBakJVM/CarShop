@@ -2,11 +2,14 @@ package com.example.carshop.App.Car.Category;
 
 import org.springframework.data.repository.CrudRepository;
 
-import java.util.Optional;
+import java.util.List;
 
 
-public interface CategoryRepository extends CrudRepository<String,Category> {
+
+public interface CategoryRepository extends CrudRepository<Category,String> {
+    List<Category>findAll();
 
 
-    Optional<Category> findById(String category);
+
+
 }
