@@ -14,7 +14,7 @@ import com.vaadin.flow.router.Route;
 
 
 @Route("car")
-public class AddNewCar extends VerticalLayout {
+public class AddNewPart extends VerticalLayout {
 
     private final CarService carService;
     private final CategoryService categoryService;
@@ -27,7 +27,7 @@ public class AddNewCar extends VerticalLayout {
  //   private TextField category;
     private ComboBox<String> categories;
 
-    public AddNewCar(CarService carService, CategoryService categoryService) {
+    public AddNewPart(CarService carService, CategoryService categoryService) {
         this.carService = carService;
         this.categoryService = categoryService;
 
@@ -60,7 +60,7 @@ public class AddNewCar extends VerticalLayout {
         String category = categories.getValue();
 
         if (brand.isEmpty() || model.isEmpty() || category == null) {
-            Notification.show("Please fill in all fields");
+            Notification.show("Uzupełnij wszystkie pola");
         } else {
             CarDto carDto = new CarDto();
             carDto.setMark(value);
@@ -74,10 +74,10 @@ public class AddNewCar extends VerticalLayout {
             CarDto savedCar = carService.save(carDto);
 
             if (savedCar != null) {
-                Notification.show("Car saved successfully");
+                Notification.show("Zapisano");
 
             } else {
-                Notification.show("Failed to save car");
+                Notification.show("Błąd zapisu");
             }
 
         }

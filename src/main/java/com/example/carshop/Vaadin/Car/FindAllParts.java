@@ -11,13 +11,13 @@ import com.vaadin.flow.router.Route;
 import java.util.Set;
 
 @Route("all")
-public class FindAll extends VerticalLayout {
+public class FindAllParts extends VerticalLayout {
     private final CarService carService;
     private TextField serialNumberField;
     private Grid<CarDto> carGrid;
 
 
-    public FindAll(CarService carService) {
+    public FindAllParts(CarService carService) {
         this.carService = carService;
 
         serialNumberField = new TextField("Enter Serial Number");
@@ -35,6 +35,7 @@ public class FindAll extends VerticalLayout {
         if (!serialNumber.isEmpty()) {
             Set<CarDto> cars = findAllCarsBySerialNumber(serialNumber);
             carGrid.setItems(cars);
+
         }
     }
 

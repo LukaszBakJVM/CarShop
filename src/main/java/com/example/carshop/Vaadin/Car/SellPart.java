@@ -14,12 +14,12 @@ import java.util.Optional;
 
 @Route("sell")
 
-public class SellParts extends VerticalLayout {
+public class SellPart extends VerticalLayout {
     private final CarService carService;
     private TextField serialNumber;
     private TextField quantity;
 
-    public SellParts(CarService carService) {
+    public SellPart(CarService carService) {
         this.carService = carService;
         FormLayout formLayout = new FormLayout();
         serialNumber = new TextField("Wpisz numer seryjny");
