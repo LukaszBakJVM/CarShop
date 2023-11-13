@@ -35,12 +35,19 @@ public class FindAllParts extends VerticalLayout {
         if (!serialNumber.isEmpty()) {
             Set<CarDto> cars = findAllCarsBySerialNumber(serialNumber);
             carGrid.setItems(cars);
+        }else {
+            Set<CarDto> all = findAll();
+            carGrid.setItems(all);
+
 
         }
     }
 
  private Set<CarDto>findAllCarsBySerialNumber(String serialNumber){
         return carService.findAllBySerialNumber(serialNumber);
+    }
+    private Set<CarDto>findAll(){
+        return carService.findAll();
     }
 
 }

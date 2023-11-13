@@ -42,6 +42,11 @@ public class CarService {
                 .stream().map(carMapper::map)
                 .collect(Collectors.toSet());
     }
+    public Set<CarDto>findAll(){
+        return carRepository.findAll()
+                .stream().map(carMapper::map)
+                .collect(Collectors.toSet());
+    }
 
     public Optional<CarDto> sellParts(String serialNumber, int quantity) {
         Optional<Car> bySerialnumber = carRepository.findBySerialnumber(serialNumber);
