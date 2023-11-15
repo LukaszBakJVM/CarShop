@@ -1,6 +1,7 @@
 package com.example.carshop.App.Car.Category;
 
 import com.example.carshop.App.Car.Car;
+import com.example.carshop.App.Moto.MotoParts;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -17,6 +18,8 @@ public class Category {
     private String name;
     @OneToMany(mappedBy = "category")
     private Set<Car>cars = new HashSet<>();
+    @OneToMany(mappedBy = "category")
+    private Set<MotoParts>motoParts = new HashSet<>();
 
     public String getName() {
         return name;
@@ -32,6 +35,14 @@ public class Category {
 
     public void setCars(Set<Car> cars) {
         this.cars = cars;
+    }
+
+    public Set<MotoParts> getMotoParts() {
+        return motoParts;
+    }
+
+    public void setMotoParts(Set<MotoParts> motoParts) {
+        this.motoParts = motoParts;
     }
 }
 
