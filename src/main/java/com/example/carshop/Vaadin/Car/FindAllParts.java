@@ -29,7 +29,7 @@ public class FindAllParts extends VerticalLayout {
         searchButton.addClickListener(event -> searchBySerialNumber());
 
         carGrid = new Grid<>(CarDto.class);
-        carGrid.setColumns("mark", "model", "serialNumber", "partsBrand", "price", "quantity", "category", "photoDto");
+        carGrid.setColumns("mark", "model", "serialNumber", "partsBrand", "price", "quantity", "category");
         carGrid.addColumn(new ComponentRenderer<>(this::createImageComponent)).setHeader("Photo");
 
         Set<CarDto> serialNumber = findAllCarsBySerialNumber("wpisz nr seryjny");
