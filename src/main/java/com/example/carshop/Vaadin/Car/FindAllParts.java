@@ -64,8 +64,8 @@ public class FindAllParts extends VerticalLayout {
             StreamResource resource = new StreamResource("image.jpg", () -> new ByteArrayInputStream(carDto.getPhotoDto()));
             image.setSrc(resource);
         }
-        image.setWidth("50px");
-        image.setHeight("50px");
+        image.setWidth("150px");
+        image.setHeight("150px");
         return image;
     }
 
