@@ -3,12 +3,11 @@ package com.example.carshop.App.Car;
 import com.example.carshop.App.Car.Category.Category;
 import com.example.carshop.App.Car.Category.CategoryRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+
 
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.Base64;
+
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
@@ -65,7 +64,7 @@ public class CarMapper {
     private byte[] compressImage(byte[] data) {
 
         Deflater deflater = new Deflater();
-        deflater.setLevel(Deflater.BEST_COMPRESSION);
+        deflater.setLevel(Deflater.BEST_SPEED);
         deflater.setInput(data);
         deflater.finish();
 
