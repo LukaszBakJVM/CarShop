@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 public class CarService {
     private final CarRepository carRepository;
     private final CarMapper carMapper;
+    private final int PAGE_SIZE = 1;
 
     public CarService(CarRepository carRepository, CarMapper carMapper) {
         this.carRepository = carRepository;
@@ -38,15 +39,15 @@ public class CarService {
 
     }
 
-    public Set<CarDto> findAllBySerialNumber(String serialNumber,int page,int size) {
-        PageRequest pageRequest = PageRequest.of(page,size);
+    public Set<CarDto> findAllBySerialNumber(String serialNumber,int page) {
+        PageRequest pageRequest = PageRequest.of(page,PAGE_SIZE);
         return carRepository.findCarBySerialnumberContainingIgnoreCase(serialNumber,pageRequest)
                 .getContent()
                 .stream().map(carMapper::map)
                 .collect(Collectors.toSet());
     }
-    public Set<CarDto>findAll(int page,int size){
-        PageRequest pageRequest = PageRequest.of(page, size);
+    public Set<CarDto>findAll(int page){
+        PageRequest pageRequest = PageRequest.of(page,PAGE_SIZE);
         return carRepository.findAll(pageRequest).getContent()
                 .stream().map(carMapper::map)
                 .collect(Collectors.toSet());

@@ -22,7 +22,8 @@ public class FindAllParts extends VerticalLayout {
     private Grid<CarDto> carGrid;
 
     private int currentPage = 0;
-    private int pageSize = 10;
+    private int pageSize = 20;
+
 
 
     public FindAllParts(CarService carService) {
@@ -30,7 +31,7 @@ public class FindAllParts extends VerticalLayout {
 
         serialNumberField = new TextField("Enter Serial Number");
         Button searchButton = new Button("Search");
-        searchButton.addClickListener(event -> searchBySerialNumber());
+        searchButton.addClickListener(event -> searchBySerialNumber(currentPage));
 
         carGrid = new Grid<>(CarDto.class);
         carGrid.setColumns("mark", "model", "serialNumber", "partsBrand", "price", "quantity", "category");
@@ -38,34 +39,38 @@ public class FindAllParts extends VerticalLayout {
 
         Set<CarDto> serialNumber = findAllCarsBySerialNumber("wpisz nr seryjny");
         carGrid.setItems(serialNumber);
-        Button prevButton = new Button("Previous", e -> navigate(-1));
-        Button nextButton = new Button("Next", e -> navigate(1));
+        Button prevButton = new Button("Previous", e -> searchBySerialNumber(-1));
+        Button nextButton = new Button("Next", e -> searchBySerialNumber(1));
 
         HorizontalLayout navigationLayout = new HorizontalLayout(prevButton, nextButton);
 
         add(serialNumberField, searchButton, carGrid,navigationLayout);
     }
 
-    private void searchBySerialNumber() {
+    private void searchBySerialNumber(int direction) {
+
         String serialNumber = serialNumberField.getValue();
+
         if (!serialNumber.isEmpty()) {
             Set<CarDto> cars = findAllCarsBySerialNumber(serialNumber);
-            carGrid.setItems(cars);
-        } else {
-            Set<CarDto> all = findAll();
-            carGrid.setItems(all);
 
+            currentPage += direction;
+                carGrid.setItems(cars);
+
+        } else {
+            Set<CarDto> all = carService.findAll(currentPage);
+
+            currentPage += direction;
+                carGrid.setItems(all);
 
         }
     }
 
     private Set<CarDto> findAllCarsBySerialNumber(String serialNumber) {
-        return carService.findAllBySerialNumber(serialNumber,currentPage,pageSize);
+        return carService.findAllBySerialNumber(serialNumber,currentPage);
     }
 
-    private Set<CarDto> findAll() {
-        return carService.findAll(currentPage,pageSize);
-    }
+
 
     private Image createImageComponent(CarDto carDto) {
         Image image = new Image();
@@ -77,10 +82,11 @@ public class FindAllParts extends VerticalLayout {
         image.setHeight("150px");
         return image;
     }
-    private void navigate(int direction) {
-        currentPage += direction;
-        Set<CarDto> cars = findAll();
-        carGrid.setItems(cars);
+    private int numberOfPage(int pageSize ,int size) {
+        return size/pageSize;
+
+
     }
+
 
 }
