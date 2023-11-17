@@ -22,12 +22,14 @@ public class FindAllParts extends VerticalLayout {
     private Grid<CarDto> carGrid;
 
     private int currentPage = 0;
-    private int pageSize = 20;
+    int pageSize = 20;
+
 
 
 
     public FindAllParts(CarService carService) {
         this.carService = carService;
+
 
         serialNumberField = new TextField("Enter Serial Number");
         Button searchButton = new Button("Search");
@@ -61,7 +63,7 @@ public class FindAllParts extends VerticalLayout {
             Set<CarDto> all = carService.findAll(currentPage);
 
             currentPage += direction;
-                carGrid.setItems(all);
+               carGrid.setItems(all);
 
         }
     }

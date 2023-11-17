@@ -1,7 +1,9 @@
 package com.example.carshop.App.Car;
 
+
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
 
 
 import java.util.Optional;
@@ -12,7 +14,7 @@ import java.util.stream.Collectors;
 public class CarService {
     private final CarRepository carRepository;
     private final CarMapper carMapper;
-    private final int PAGE_SIZE = 1;
+    private final int PAGE_SIZE = 2;
 
     public CarService(CarRepository carRepository, CarMapper carMapper) {
         this.carRepository = carRepository;
@@ -39,18 +41,22 @@ public class CarService {
 
     }
 
-    public Set<CarDto> findAllBySerialNumber(String serialNumber,int page) {
-        PageRequest pageRequest = PageRequest.of(page,PAGE_SIZE);
-        return carRepository.findCarBySerialnumberContainingIgnoreCase(serialNumber,pageRequest)
+    public Set<CarDto> findAllBySerialNumber(String serialNumber, int page) {
+        PageRequest pageRequest = PageRequest.of(page, PAGE_SIZE);
+        return carRepository.findCarBySerialnumberContainingIgnoreCase(serialNumber, pageRequest)
                 .getContent()
                 .stream().map(carMapper::map)
                 .collect(Collectors.toSet());
     }
-    public Set<CarDto>findAll(int page){
-        PageRequest pageRequest = PageRequest.of(page,PAGE_SIZE);
+
+    public Set<CarDto> findAll(int page) {
+
+        PageRequest pageRequest = PageRequest.of(page, PAGE_SIZE);
+
         return carRepository.findAll(pageRequest).getContent()
                 .stream().map(carMapper::map)
                 .collect(Collectors.toSet());
+
     }
 
     public Optional<CarDto> sellParts(String serialNumber, int quantity) {
@@ -67,7 +73,7 @@ public class CarService {
         return Optional.empty();
     }
 
- public    Optional<CarDto> findBySerialNumber(String serialNumber) {
+    public Optional<CarDto> findBySerialNumber(String serialNumber) {
         Optional<Car> bySerialnumber = carRepository.findBySerialnumber(serialNumber);
         if (bySerialnumber.isPresent()) {
             Car car = bySerialnumber.get();
@@ -75,5 +81,13 @@ public class CarService {
             return Optional.of(map);
         }
         return Optional.empty();
+    }
+
+    private int numberOfPage(int pageSize, int size) {
+        return size / pageSize;
+    }
+
+    public int getPAGE_SIZE() {
+        return PAGE_SIZE;
     }
 }
