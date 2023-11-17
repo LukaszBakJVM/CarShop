@@ -1,5 +1,6 @@
 package com.example.carshop.App.Car;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 
@@ -37,13 +38,16 @@ public class CarService {
 
     }
 
-    public Set<CarDto> findAllBySerialNumber(String serialNumber) {
-        return carRepository.findCarBySerialnumberContainingIgnoreCase(serialNumber)
+    public Set<CarDto> findAllBySerialNumber(String serialNumber,int page,int size) {
+        PageRequest pageRequest = PageRequest.of(page,size);
+        return carRepository.findCarBySerialnumberContainingIgnoreCase(serialNumber,pageRequest)
+                .getContent()
                 .stream().map(carMapper::map)
                 .collect(Collectors.toSet());
     }
-    public Set<CarDto>findAll(){
-        return carRepository.findAll()
+    public Set<CarDto>findAll(int page,int size){
+        PageRequest pageRequest = PageRequest.of(page, size);
+        return carRepository.findAll(pageRequest).getContent()
                 .stream().map(carMapper::map)
                 .collect(Collectors.toSet());
     }

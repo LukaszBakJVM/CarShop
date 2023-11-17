@@ -5,6 +5,7 @@ import com.example.carshop.App.Car.CarService;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
@@ -20,6 +21,9 @@ public class FindAllParts extends VerticalLayout {
     private TextField serialNumberField;
     private Grid<CarDto> carGrid;
 
+    private int currentPage = 0;
+    private int pageSize = 10;
+
 
     public FindAllParts(CarService carService) {
         this.carService = carService;
@@ -34,7 +38,12 @@ public class FindAllParts extends VerticalLayout {
 
         Set<CarDto> serialNumber = findAllCarsBySerialNumber("wpisz nr seryjny");
         carGrid.setItems(serialNumber);
-        add(serialNumberField, searchButton, carGrid);
+        Button prevButton = new Button("Previous", e -> navigate(-1));
+        Button nextButton = new Button("Next", e -> navigate(1));
+
+        HorizontalLayout navigationLayout = new HorizontalLayout(prevButton, nextButton);
+
+        add(serialNumberField, searchButton, carGrid,navigationLayout);
     }
 
     private void searchBySerialNumber() {
@@ -51,11 +60,11 @@ public class FindAllParts extends VerticalLayout {
     }
 
     private Set<CarDto> findAllCarsBySerialNumber(String serialNumber) {
-        return carService.findAllBySerialNumber(serialNumber);
+        return carService.findAllBySerialNumber(serialNumber,currentPage,pageSize);
     }
 
     private Set<CarDto> findAll() {
-        return carService.findAll();
+        return carService.findAll(currentPage,pageSize);
     }
 
     private Image createImageComponent(CarDto carDto) {
@@ -67,6 +76,11 @@ public class FindAllParts extends VerticalLayout {
         image.setWidth("150px");
         image.setHeight("150px");
         return image;
+    }
+    private void navigate(int direction) {
+        currentPage += direction;
+        Set<CarDto> cars = findAll();
+        carGrid.setItems(cars);
     }
 
 }
