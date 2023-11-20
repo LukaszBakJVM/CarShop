@@ -2,6 +2,7 @@ package com.example.carshop.Vaadin.Car;
 
 import com.example.carshop.App.Car.Category.Category;
 import com.example.carshop.App.Car.Category.CategoryService;
+import com.example.carshop.Vaadin.ButtonReturn;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.notification.Notification;
@@ -21,7 +22,9 @@ public class NewCategory extends VerticalLayout {
         FormLayout formLayout =new FormLayout();
         category = new TextField("Dodaj kategorie");
         Button save = new Button("Zapisz");
-        formLayout.add(category,save);
+        ButtonReturn buttonReturn = new ButtonReturn();
+        buttonReturn.returnToIndex();
+        formLayout.add(category,save,buttonReturn);
         save.addClickListener(e->saveCategory());
         add(formLayout);
     }

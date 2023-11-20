@@ -2,6 +2,7 @@ package com.example.carshop.Vaadin.Car;
 
 import com.example.carshop.App.Car.CarDto;
 import com.example.carshop.App.Car.CarService;
+import com.example.carshop.Vaadin.ButtonReturn;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.notification.Notification;
@@ -26,7 +27,9 @@ public class SellPart extends VerticalLayout {
         quantity = new TextField("Wpisz ilość");
 
         Button updateButton = new Button("Zatwierdz Sprzedaż");
-        formLayout.add(serialNumber,quantity,updateButton);
+        ButtonReturn buttonReturn = new ButtonReturn();
+        buttonReturn.returnToIndex();
+        formLayout.add(serialNumber,quantity,updateButton,buttonReturn);
         updateButton.addClickListener(e->sellParts());
         add(formLayout);
 

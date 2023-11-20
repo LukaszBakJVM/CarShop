@@ -3,6 +3,7 @@ package com.example.carshop.Vaadin.Car;
 import com.example.carshop.App.Car.CarDto;
 import com.example.carshop.App.Car.CarService;
 import com.example.carshop.App.Car.Category.CategoryService;
+import com.example.carshop.Vaadin.ButtonReturn;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -19,7 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 
-@Route("car")
+@Route("newpart")
 public class AddNewPart extends VerticalLayout {
 
     private final CarService carService;
@@ -48,15 +49,13 @@ public class AddNewPart extends VerticalLayout {
         categories = new ComboBox<>("Kategoria");
         categories.setItems(categoryService.findAll());
 
-        upload.addSucceededListener(e->{Notification.show("Zdięcie dodane",3000,Notification.Position.MIDDLE);
-        });
-
-
-
-
+        upload.addSucceededListener(e-> Notification.show("Zdięcie dodane",3000,Notification.Position.MIDDLE));
 
         Button saveButton = new Button("Zapisz");
-        formLayout.add(brand, model, serialnumber, partsBrand, price, quantity, categories,upload, saveButton);
+        ButtonReturn buttonReturn = new ButtonReturn();
+        buttonReturn.returnToIndex();
+        formLayout.add(brand, model, serialnumber, partsBrand, price, quantity,
+                categories,upload, saveButton,buttonReturn);
         saveButton.addClickListener(e -> saveCar());
 
 

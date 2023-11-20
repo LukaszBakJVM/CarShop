@@ -2,6 +2,7 @@ package com.example.carshop.Vaadin.Car;
 
 import com.example.carshop.App.Car.CarDto;
 import com.example.carshop.App.Car.CarService;
+import com.example.carshop.Vaadin.ButtonReturn;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.notification.Notification;
@@ -25,8 +26,11 @@ import java.util.Optional;
             FormLayout formLayout = new FormLayout();
             serialNumber = new TextField("Wpisz numer seryjny");
             Button deleteButton = new Button("Usuń część");
+            ButtonReturn buttonReturn = new ButtonReturn();
+            buttonReturn.returnToIndex();
+            formLayout.add(serialNumber,deleteButton,buttonReturn);
             deleteButton.addClickListener(e -> delete());
-            formLayout.add(serialNumber,deleteButton);
+
             add(formLayout);
         }
 
