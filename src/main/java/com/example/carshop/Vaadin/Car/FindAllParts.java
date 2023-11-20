@@ -2,7 +2,9 @@ package com.example.carshop.Vaadin.Car;
 
 import com.example.carshop.App.Car.CarDto;
 import com.example.carshop.App.Car.CarService;
+import com.example.carshop.Vaadin.ButtonReturn;
 import com.vaadin.flow.component.button.Button;
+
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -16,13 +18,14 @@ import java.io.ByteArrayInputStream;
 import java.util.Set;
 
 @Route("all")
+
 public class FindAllParts extends VerticalLayout {
     private final CarService carService;
     private TextField serialNumberField;
     private Grid<CarDto> carGrid;
 
     private int currentPage = 0;
-    int pageSize = 20;
+
 
 
 
@@ -45,8 +48,13 @@ public class FindAllParts extends VerticalLayout {
         Button nextButton = new Button("Next", e -> searchBySerialNumber(1));
 
         HorizontalLayout navigationLayout = new HorizontalLayout(prevButton, nextButton);
+        ButtonReturn buttonReturn = new ButtonReturn();
+        buttonReturn.returnToIndex();
 
-        add(serialNumberField, searchButton, carGrid,navigationLayout);
+        add(serialNumberField, searchButton, carGrid,navigationLayout, buttonReturn);
+
+
+
     }
 
     private void searchBySerialNumber(int direction) {
