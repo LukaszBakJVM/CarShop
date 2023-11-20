@@ -1,0 +1,17 @@
+{
+  "frontendFolder": "F:/Projekty/CarShop/frontend",
+  "themeFolder": "themes",
+  "themeResourceFolder": "F:/Projekty/CarShop/frontend/generated/jar-resources",
+  "staticOutput": "F:/Projekty/CarShop/target/classes/META-INF/VAADIN/webapp/VAADIN/static",
+  "generatedFolder": "generated",
+  "statsOutput": "F:\\Projekty\\CarShop\\target\\classes\\META-INF\\VAADIN\\config",
+  "frontendBundleOutput": "F:\\Projekty\\CarShop\\target\\classes\\META-INF\\VAADIN\\webapp",
+  "devBundleOutput": "F:/Projekty/CarShop/src/main/dev-bundle/webapp",
+  "devBundleStatsOutput": "F:/Projekty/CarShop/src/main/dev-bundle/config",
+  "jarResourcesFolder": "F:/Projekty/CarShop/frontend/generated/jar-resources",
+  "themeName": "",
+  "clientServiceWorkerSource": "F:\\Projekty\\CarShop\\target\\sw.ts",
+  "pwaEnabled": false,
+  "offlineEnabled": false,
+  "offlinePath": "'offline.html'"
+}
