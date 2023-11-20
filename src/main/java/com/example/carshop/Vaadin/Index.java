@@ -30,7 +30,7 @@ public class Index extends VerticalLayout {
         RouterLink categoryLink = new RouterLink("", NewCategory.class);
         categoryLink.add(addNewCategory);
 
-        Button sellPart = new Button("Sprzedaz");
+        Button sellPart = new Button("Sprzedaz  części samochodowej");
         sellPart.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         RouterLink sellLink = new RouterLink("", SellPart.class);
         sellLink.add(sellPart);
