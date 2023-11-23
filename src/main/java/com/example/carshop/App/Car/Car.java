@@ -9,9 +9,7 @@ public class Car extends Parts  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Lob
-    @Column(length = 500000000)
-  private   byte[] photo;
+
     @ManyToOne()
     private Category category;
 
@@ -39,11 +37,5 @@ public class Car extends Parts  {
         this.category = category;
     }
 
-    public byte[] getPhoto() {
-        return photo;
-    }
 
-    public void setPhoto(byte[] photo) {
-        this.photo = photo;
-    }
 }

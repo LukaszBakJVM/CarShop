@@ -13,6 +13,9 @@ public class Parts {
     private String partsBrand;
     private String price;
     private int quantity;
+    @Lob
+    @Column(length = 500000000)
+    private   byte[] photo;
 
 
 
@@ -64,7 +67,13 @@ public class Parts {
         this.quantity = quantity;
     }
 
+    public byte[] getPhoto() {
+        return photo;
+    }
 
+    public void setPhoto(byte[] photo) {
+        this.photo = photo;
+    }
 
     @Override
     public boolean equals(Object o) {

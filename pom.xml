@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>CarShop</artifactId>
+    <artifactId>carshop</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>CarShop</name>
-    <description>CarShop</description>
+    <description>carshop</description>
     <properties>
         <java.version>17</java.version>
         <vaadin.version>24.2.2</vaadin.version>
