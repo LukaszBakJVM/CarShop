@@ -21,7 +21,7 @@ import java.io.InputStream;
 
 
 @Route("car/newpart")
-public class AddNewPart extends VerticalLayout {
+public class AddNewCarPart extends VerticalLayout {
 
     private final CarService carService;
     private final CategoryService categoryService;
@@ -35,7 +35,7 @@ public class AddNewPart extends VerticalLayout {
     private final MemoryBuffer buffer = new MemoryBuffer();
     private final Upload upload = new Upload(buffer);
 
-    public AddNewPart(CarService carService, CategoryService categoryService) {
+    public AddNewCarPart(CarService carService, CategoryService categoryService) {
         this.carService = carService;
         this.categoryService = categoryService;
 

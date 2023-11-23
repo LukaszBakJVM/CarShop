@@ -20,7 +20,7 @@ import java.io.InputStream;
 
 @Route("moto/newpart")
 
-public class AddNewPart extends VerticalLayout {
+public class AddNewMotoPart extends VerticalLayout {
     private final MotoService motoService;
     private final CategoryService categoryService;
     private TextField brand;
@@ -34,7 +34,7 @@ public class AddNewPart extends VerticalLayout {
     private final MemoryBuffer buffer = new MemoryBuffer();
     private final Upload upload = new Upload(buffer);
 
-    public AddNewPart(MotoService motoService, CategoryService categoryService) {
+    public AddNewMotoPart(MotoService motoService, CategoryService categoryService) {
         this.motoService = motoService;
         this.categoryService = categoryService;
         FormLayout formLayout = new FormLayout();

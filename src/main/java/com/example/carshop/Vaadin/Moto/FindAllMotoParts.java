@@ -1,10 +1,10 @@
-package com.example.carshop.Vaadin.Car;
+package com.example.carshop.Vaadin.Moto;
 
-import com.example.carshop.App.Car.CarDto;
-import com.example.carshop.App.Car.CarService;
+
+import com.example.carshop.App.Moto.MotoDto;
+import com.example.carshop.App.Moto.MotoService;
 import com.example.carshop.Vaadin.ButtonReturn;
 import com.vaadin.flow.component.button.Button;
-
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -17,32 +17,25 @@ import com.vaadin.flow.server.StreamResource;
 import java.io.ByteArrayInputStream;
 import java.util.Set;
 
-@Route("car/all")
-
-public class FindAllParts extends VerticalLayout {
-    private final CarService carService;
+@Route("moto/all")
+public class FindAllMotoParts extends VerticalLayout {
+    private final MotoService motoService;
     private TextField serialNumberField;
-    private Grid<CarDto> carGrid;
-
+    private Grid<MotoDto> carGrid;
     private int currentPage = 0;
 
-
-
-
-
-    public FindAllParts(CarService carService) {
-        this.carService = carService;
-
+    public FindAllMotoParts(MotoService motoService) {
+        this.motoService = motoService;
 
         serialNumberField = new TextField("Enter Serial Number");
         Button searchButton = new Button("Search");
         searchButton.addClickListener(event -> searchBySerialNumber(currentPage));
 
-        carGrid = new Grid<>(CarDto.class);
+        carGrid = new Grid<>(MotoDto.class);
         carGrid.setColumns("mark", "model", "serialNumber", "partsBrand", "price", "quantity", "category");
         carGrid.addColumn(new ComponentRenderer<>(this::createImageComponent)).setHeader("Photo");
 
-        Set<CarDto> serialNumber = findAllCarsBySerialNumber("wpisz nr seryjny");
+        Set<MotoDto> serialNumber = findAllCarsBySerialNumber("wpisz nr seryjny");
         carGrid.setItems(serialNumber);
         Button prevButton = new Button("Previous", e -> searchBySerialNumber(-1));
         Button nextButton = new Button("Next", e -> searchBySerialNumber(1));
@@ -62,30 +55,30 @@ public class FindAllParts extends VerticalLayout {
         String serialNumber = serialNumberField.getValue();
 
         if (!serialNumber.isEmpty()) {
-            Set<CarDto> cars = findAllCarsBySerialNumber(serialNumber);
+            Set<MotoDto> moto = findAllCarsBySerialNumber(serialNumber);
 
             currentPage += direction;
-                carGrid.setItems(cars);
+            carGrid.setItems(moto);
 
         } else {
-            Set<CarDto> all = carService.findAll(currentPage);
+            Set<MotoDto> all = motoService.findAll(currentPage);
 
             currentPage += direction;
-               carGrid.setItems(all);
+            carGrid.setItems(all);
 
         }
     }
 
-    private Set<CarDto> findAllCarsBySerialNumber(String serialNumber) {
-        return carService.findAllBySerialNumber(serialNumber,currentPage);
+    private Set<MotoDto> findAllCarsBySerialNumber(String serialNumber) {
+        return motoService.findAllBySerialNumber(serialNumber,currentPage);
     }
 
 
 
-    private Image createImageComponent(CarDto carDto) {
+    private Image createImageComponent(MotoDto motoDto) {
         Image image = new Image();
-        if (carDto.getPhotoDto() != null) {
-            StreamResource resource = new StreamResource("image.jpg", () -> new ByteArrayInputStream(carDto.getPhotoDto()));
+        if (motoDto.getPhotoDto() != null) {
+            StreamResource resource = new StreamResource("image.jpg", () -> new ByteArrayInputStream(motoDto.getPhotoDto()));
             image.setSrc(resource);
         }
         image.setWidth("150px");

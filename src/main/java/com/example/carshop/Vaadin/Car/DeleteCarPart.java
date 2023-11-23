@@ -15,12 +15,12 @@ import java.util.Optional;
 
 
 @Route("car/delete")
-    public class DeletePart extends VerticalLayout {
+    public class DeleteCarPart extends VerticalLayout {
         private final CarService carService;
         private TextField serialNumber;
 
 
-        public DeletePart(CarService carService) {
+        public DeleteCarPart(CarService carService) {
             this.carService = carService;
 
             FormLayout formLayout = new FormLayout();
