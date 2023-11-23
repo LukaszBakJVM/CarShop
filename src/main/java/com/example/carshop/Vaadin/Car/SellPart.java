@@ -13,7 +13,7 @@ import com.vaadin.flow.router.Route;
 
 import java.util.Optional;
 
-@Route("sell")
+@Route("car/sell")
 
 public class SellPart extends VerticalLayout {
     private final CarService carService;

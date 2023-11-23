@@ -12,7 +12,7 @@ import com.vaadin.flow.router.Route;
 
 
 
-@Route("category")
+@Route("category/new")
 public class NewCategory extends VerticalLayout {
     private final CategoryService categoryService;
   private   TextField category;

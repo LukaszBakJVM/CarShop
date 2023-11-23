@@ -41,7 +41,13 @@ public class Index extends VerticalLayout {
         deleteCarPartLink.add(deleteCarPart);
 
 
-        add(allLink,addCarPartLink,categoryLink,sellLink,deleteCarPartLink);
+        Button addMotoPart = new Button("Dodaj częśc motocyklowa");
+        addMotoPart.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
+        RouterLink addMotoPartLink = new RouterLink("", com.example.carshop.Vaadin.Moto.AddNewPart.class);
+        addMotoPartLink.add(addMotoPart);
+
+
+        add(allLink,addCarPartLink,categoryLink,sellLink,deleteCarPartLink,addMotoPartLink);
 
 
 

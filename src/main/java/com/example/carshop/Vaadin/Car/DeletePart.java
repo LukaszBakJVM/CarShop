@@ -14,7 +14,7 @@ import java.util.Optional;
 
 
 
-@Route("delete")
+@Route("car/delete")
     public class DeletePart extends VerticalLayout {
         private final CarService carService;
         private TextField serialNumber;

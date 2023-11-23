@@ -17,7 +17,7 @@ import com.vaadin.flow.server.StreamResource;
 import java.io.ByteArrayInputStream;
 import java.util.Set;
 
-@Route("all")
+@Route("car/all")
 
 public class FindAllParts extends VerticalLayout {
     private final CarService carService;

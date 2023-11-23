@@ -9,6 +9,7 @@ public class Dto {
     private String price;
     private int quantity;
     private String category;
+    private byte[] photoDto;
 
     public long getId() {
         return id;
@@ -72,5 +73,13 @@ public class Dto {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public byte[] getPhotoDto() {
+        return photoDto;
+    }
+
+    public void setPhotoDto(byte[] photoDto) {
+        this.photoDto = photoDto;
     }
 }

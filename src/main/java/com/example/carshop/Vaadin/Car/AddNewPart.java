@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 
-@Route("newpart")
+@Route("car/newpart")
 public class AddNewPart extends VerticalLayout {
 
     private final CarService carService;
@@ -99,7 +99,7 @@ public class AddNewPart extends VerticalLayout {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-           ;
+
 
 
 
