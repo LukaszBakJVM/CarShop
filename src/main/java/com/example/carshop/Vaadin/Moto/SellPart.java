@@ -1,27 +1,26 @@
-package com.example.carshop.Vaadin.Car;
+package com.example.carshop.Vaadin.Moto;
 
-import com.example.carshop.App.Car.CarDto;
-import com.example.carshop.App.Car.CarService;
+
+import com.example.carshop.App.Moto.MotoDto;
+import com.example.carshop.App.Moto.MotoService;
 import com.example.carshop.Vaadin.ButtonReturn;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 
 import java.util.Optional;
 
-@Route("car/sell")
-
+@Route("moto/sell")
 public class SellPart extends VerticalLayout {
-    private final CarService carService;
+    private final MotoService motoService;
     private TextField serialNumber;
     private TextField quantity;
 
-    public SellPart(CarService carService) {
-        this.carService = carService;
+    public SellPart(MotoService motoService) {
+        this.motoService = motoService;
 
         FormLayout formLayout = new FormLayout();
         serialNumber = new TextField("Wpisz numer seryjny");
@@ -39,7 +38,7 @@ public class SellPart extends VerticalLayout {
     private void sellParts(){
         String value = serialNumber.getValue();
         int quantityUp  = Integer.parseInt(quantity.getValue());
-        Optional<CarDto> carDto = carService.sellParts(value, quantityUp);
+        Optional<MotoDto> carDto = motoService.sellParts(value, quantityUp);
         if (carDto.isPresent()) {
             Notification.show("Sprzedane");
         } else {
@@ -47,4 +46,5 @@ public class SellPart extends VerticalLayout {
         }
 
     }
+
 }
