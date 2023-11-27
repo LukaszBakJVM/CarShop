@@ -27,8 +27,8 @@ public class FindAllMotoParts extends VerticalLayout {
     public FindAllMotoParts(MotoService motoService) {
         this.motoService = motoService;
 
-        serialNumberField = new TextField("Enter Serial Number");
-        Button searchButton = new Button("Search");
+        serialNumberField = new TextField("Wpisz numer seryjny cześci");
+        Button searchButton = new Button("Szukaj");
         searchButton.addClickListener(event -> searchBySerialNumber(currentPage));
 
         carGrid = new Grid<>(MotoDto.class);
@@ -37,8 +37,8 @@ public class FindAllMotoParts extends VerticalLayout {
 
         Set<MotoDto> serialNumber = findAllCarsBySerialNumber("wpisz nr seryjny");
         carGrid.setItems(serialNumber);
-        Button prevButton = new Button("Previous", e -> searchBySerialNumber(-1));
-        Button nextButton = new Button("Next", e -> searchBySerialNumber(1));
+        Button prevButton = new Button("Poprzednia strona", e -> searchBySerialNumber(-1));
+        Button nextButton = new Button("Nastepna strona", e -> searchBySerialNumber(1));
 
         HorizontalLayout navigationLayout = new HorizontalLayout(prevButton, nextButton);
         ButtonReturn buttonReturn = new ButtonReturn();
