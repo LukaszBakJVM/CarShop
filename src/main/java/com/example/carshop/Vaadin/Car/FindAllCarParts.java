@@ -6,6 +6,7 @@ import com.example.carshop.Vaadin.ButtonReturn;
 import com.vaadin.flow.component.button.Button;
 
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -27,9 +28,6 @@ public class FindAllCarParts extends VerticalLayout {
     private int currentPage = 0;
 
 
-
-
-
     public FindAllCarParts(CarService carService) {
         this.carService = carService;
 
@@ -40,9 +38,31 @@ public class FindAllCarParts extends VerticalLayout {
 
         carGrid = new Grid<>(CarDto.class);
         carGrid.setColumns("mark", "model", "serialNumber", "partsBrand", "price", "quantity", "category");
-        carGrid.addColumn(new ComponentRenderer<>(this::createImageComponent)).setHeader("Pho");
+
+        carGrid.addColumn("photoDto").setHeader("File");
 
         Set<CarDto> serialNumber = findAllCarsBySerialNumber("wpisz nr seryjny");
+        for (CarDto c : serialNumber) {
+            String fileType = c.getFileType();
+            if (fileType.equals("image")) {
+                Image image = createImageComponent(c.getPhotoDto());
+                add(image);
+            } else if (fileType.equals("application/pdf")) {
+                Div pdfViewer = new Div();
+                pdfViewer.setWidth("100%");
+                pdfViewer.setHeight("500px");
+
+                pdfViewer.getElement().executeJs("this.data = new Uint8Array($0);", c.getPhotoDto());
+                add(pdfViewer);
+            } else if (fileType.equals("text")) {
+                String textContent = new String(c.getPhotoDto());
+                add(textContent);
+
+            } else {
+                add("Nieobsługiwany rodzaj pliku");
+            }
+
+        }
         carGrid.setItems(serialNumber);
         Button prevButton = new Button("Poprzednia strona", e -> searchBySerialNumber(-1));
         Button nextButton = new Button("Nastepna strona", e -> searchBySerialNumber(1));
@@ -51,8 +71,7 @@ public class FindAllCarParts extends VerticalLayout {
         ButtonReturn buttonReturn = new ButtonReturn();
         buttonReturn.returnToIndex();
 
-        add(serialNumberField, searchButton, carGrid,navigationLayout, buttonReturn);
-
+        add(serialNumberField, searchButton, carGrid, navigationLayout, buttonReturn);
 
 
     }
@@ -65,38 +84,59 @@ public class FindAllCarParts extends VerticalLayout {
             Set<CarDto> cars = findAllCarsBySerialNumber(serialNumber);
 
             currentPage += direction;
-                carGrid.setItems(cars);
+            carGrid.setItems(cars);
 
         } else {
             Set<CarDto> all = carService.findAll(currentPage);
 
             currentPage += direction;
-               carGrid.setItems(all);
+            carGrid.setItems(all);
 
         }
     }
 
     private Set<CarDto> findAllCarsBySerialNumber(String serialNumber) {
-        return carService.findAllBySerialNumber(serialNumber,currentPage);
+        return carService.findAllBySerialNumber(serialNumber, currentPage);
     }
 
 
-
-    private Image createImageComponent(CarDto carDto) {
+    private Image createImageComponent(byte[] photo) {
         Image image = new Image();
-        if (carDto.getPhotoDto() != null) {
-            StreamResource resource = new StreamResource("image.jpg", () -> new ByteArrayInputStream(carDto.getPhotoDto()));
+        if (photo != null) {
+            StreamResource resource = new StreamResource("image.jpg", () -> new ByteArrayInputStream(photo));
             image.setSrc(resource);
         }
         image.setWidth("150px");
         image.setHeight("150px");
         return image;
     }
-    private int numberOfPage(int pageSize ,int size) {
-        return size/pageSize;
+
+    private int numberOfPage(int pageSize, int size) {
+        return size / pageSize;
 
 
     }
 
 
+   /* private StreamResource createStreamResource(byte[] photo,String s) {
+
+        String fileName = "file"; // Domyślna nazwa pliku
+
+        if (isJpgImage(carDto.getPhotoDto())) {
+            fileName = "image.jpg";
+        } else if (isPdfDocument(carDto.getPhotoDto())) {
+            fileName = "document.pdf";
+        } else if (isTextFile(carDto.getPhotoDto())) {
+            fileName = "file.txt";
+        }
+
+        return new StreamResource(fileName, () -> new ByteArrayInputStream(photo));
+    }*/
+
+
 }
+
+
+
+
+

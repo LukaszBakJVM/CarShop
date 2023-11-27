@@ -10,6 +10,7 @@ public class Dto {
     private int quantity;
     private String category;
     private byte[] photoDto;
+    private String fileType;
 
     public long getId() {
         return id;
@@ -81,5 +82,13 @@ public class Dto {
 
     public void setPhotoDto(byte[] photoDto) {
         this.photoDto = photoDto;
+    }
+
+    public String getFileType() {
+        return fileType;
+    }
+
+    public void setFileType(String fileType) {
+        this.fileType = fileType;
     }
 }
