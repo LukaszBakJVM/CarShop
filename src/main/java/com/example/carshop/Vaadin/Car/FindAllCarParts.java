@@ -45,10 +45,7 @@ public class FindAllCarParts extends VerticalLayout {
 
         carGrid.addColumn(new ComponentRenderer<>(this::createImageComponent)).setHeader("File");
 
-        Set<CarDto> serialNumber = findAllCarsBySerialNumber("wpisz nr seryjny");
 
-
-        carGrid.setItems(serialNumber);
         Button prevButton = new Button("Poprzednia strona", e -> searchBySerialNumber(-1));
         Button nextButton = new Button("Nastepna strona", e -> searchBySerialNumber(1));
 
@@ -90,7 +87,7 @@ public class FindAllCarParts extends VerticalLayout {
     private Component createImageComponent(CarDto carDto) {
         String contentType = carDto.getFileType();
 
-        if (contentType.equals("image")) {
+        if (contentType.equals("image.jpg")) {
 
             Image image = new Image();
             if (carDto.getPhotoDto() != null) {
@@ -101,23 +98,23 @@ public class FindAllCarParts extends VerticalLayout {
             image.setHeight("150px");
             return image;
         } else if (contentType.equals("application/pdf")) {
-            // Jeśli to plik PDF, można użyć komponentu PDFBrowser (wymaga dodatkowej biblioteki)
-            // Przykład: https://vaadin.com/directory/component/pdf-browser
+
+
             Div pdfViewer = new Div();
             pdfViewer.setWidth("150px");
             pdfViewer.setHeight("150px");
-            // Ustaw dane PDF
+
             pdfViewer.getElement().executeJs("this.data = new Uint8Array($0);", carDto.getPhotoDto());
             return pdfViewer;
         } else if (contentType.equals("text")) {
-            // Jeśli to plik tekstowy, użyj komponentu TextArea
+
             TextArea textArea = new TextArea();
             textArea.setValue(new String(carDto.getPhotoDto(), StandardCharsets.UTF_8));
             textArea.setWidth("150px");
             textArea.setHeight("150px");
             return textArea;
         } else {
-            // Obsługa innych rodzajów plików
+
             return new Span("Nieobsługiwany rodzaj pliku");
         }
     }
@@ -129,43 +126,13 @@ public class FindAllCarParts extends VerticalLayout {
     }
 
 
-    private StreamResource createStreamResource(CarDto carDto) {
-        byte[] imageData = carDto.getPhotoDto(); // Załóżmy, że to są dane obrazu w formie bajtów
-        String fileName = "file"; // Domyślna nazwa pliku
-
-        if (isJpgImage(carDto.getPhotoDto())) {
-            fileName = "image.jpg";
-        } else if (isPdfDocument(carDto.getPhotoDto())) {
-            fileName = "document.pdf";
-        } else if (isTextFile(carDto.getPhotoDto())) {
-            fileName = "file.txt";
-        }
-
-        return new StreamResource(fileName, () -> new ByteArrayInputStream(imageData));
-    }
 
     private boolean isJpgImage(byte[] imageData) {
 
         return  (imageData[0] == (byte) 0xFF) && (imageData[1] == (byte) 0xD8);
     }
 
-    private boolean isPdfDocument(byte[] imageData) {
-        // Sprawdź, czy dane obrazu wskazują na plik PDF
-        // Możesz to zrobić na podstawie magicznych bajtów dla plików PDF
-        // Tu można wstawić kod sprawdzający, czy imageData to plik PDF
-        return (imageData[0] == (byte) 0x25) &&  // %
-                (imageData[1] == (byte) 0x50) &&  // P
-                (imageData[2] == (byte) 0x44) &&  // D
-                (imageData[3] == (byte) 0x46);
-    }
 
-    private boolean isTextFile(byte[] imageData) {
-        // Sprawdź, czy dane obrazu wskazują na plik tekstowy
-        // Możesz to zrobić na podstawie analizy zawartości imageData
-        // Tu można wstawić kod sprawdzający, czy imageData to plik tekstowy
-        return (imageData[0] >= 0x20 && imageData[0] <= 0x7E) &&
-                (imageData[1] >= 0x20 &&imageData[1] <= 0x7E);
-    }
 
 
 }
