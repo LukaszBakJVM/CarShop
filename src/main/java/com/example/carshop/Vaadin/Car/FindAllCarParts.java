@@ -34,18 +34,18 @@ public class FindAllCarParts extends VerticalLayout {
         this.carService = carService;
 
 
-        serialNumberField = new TextField("Enter Serial Number");
-        Button searchButton = new Button("Search");
+        serialNumberField = new TextField("Wpisz numer seryjny cześci");
+        Button searchButton = new Button("Szukaj");
         searchButton.addClickListener(event -> searchBySerialNumber(currentPage));
 
         carGrid = new Grid<>(CarDto.class);
         carGrid.setColumns("mark", "model", "serialNumber", "partsBrand", "price", "quantity", "category");
-        carGrid.addColumn(new ComponentRenderer<>(this::createImageComponent)).setHeader("Photo");
+        carGrid.addColumn(new ComponentRenderer<>(this::createImageComponent)).setHeader("Pho");
 
         Set<CarDto> serialNumber = findAllCarsBySerialNumber("wpisz nr seryjny");
         carGrid.setItems(serialNumber);
-        Button prevButton = new Button("Previous", e -> searchBySerialNumber(-1));
-        Button nextButton = new Button("Next", e -> searchBySerialNumber(1));
+        Button prevButton = new Button("Poprzednia strona", e -> searchBySerialNumber(-1));
+        Button nextButton = new Button("Nastepna strona", e -> searchBySerialNumber(1));
 
         HorizontalLayout navigationLayout = new HorizontalLayout(prevButton, nextButton);
         ButtonReturn buttonReturn = new ButtonReturn();
