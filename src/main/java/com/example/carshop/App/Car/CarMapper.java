@@ -2,6 +2,7 @@ package com.example.carshop.App.Car;
 
 import com.example.carshop.App.Car.Category.Category;
 import com.example.carshop.App.Car.Category.CategoryRepository;
+
 import org.springframework.stereotype.Service;
 
 
@@ -19,8 +20,10 @@ public class CarMapper {
     private final CategoryRepository categoryRepository;
 
 
+
     public CarMapper(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
+
     }
 
     Car map(CarDto dto) {
@@ -32,11 +35,10 @@ public class CarMapper {
         car.setPartsBrand(dto.getPartsBrand());
         car.setPrice(dto.getPrice());
         car.setQuantity(dto.getQuantity());
-        if (dto.getPhotoDto()!=null) {
-            byte[] bytes = compressImage(dto.getPhotoDto());
+        if (dto.getPhotoDto() != null) {
+            byte[] bytes = compressFile(dto.getPhotoDto());
             car.setPhoto(bytes);
         }
-
         Category category = categoryRepository.findById(dto.getCategory()).orElseThrow();
         car.setCategory(category);
 
@@ -52,8 +54,8 @@ public class CarMapper {
         dto.setPartsBrand(car.getPartsBrand());
         dto.setPrice(car.getPrice());
         dto.setQuantity(car.getQuantity());
-        if (car.getPhoto()!=null) {
-            byte[] bytes = decompressImage(car.getPhoto());
+        if (car.getPhoto() != null) {
+            byte[] bytes = decompressFile(car.getPhoto());
             dto.setPhotoDto(bytes);
         }
         dto.setCategory(car.getCategory().getName());
@@ -61,7 +63,7 @@ public class CarMapper {
     }
 
 
-    private byte[] compressImage(byte[] data) {
+    private byte[] compressFile(byte[] data) {
 
         Deflater deflater = new Deflater();
         deflater.setLevel(Deflater.BEST_SPEED);
@@ -77,11 +79,12 @@ public class CarMapper {
         try {
             outputStream.close();
         } catch (Exception e) {
+            e.getCause();
         }
         return outputStream.toByteArray();
     }
 
-    private byte[] decompressImage(byte[] data) {
+    private byte[] decompressFile(byte[] data) {
         Inflater inflater = new Inflater();
         inflater.setInput(data);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length);
@@ -92,7 +95,8 @@ public class CarMapper {
                 outputStream.write(tmp, 0, count);
             }
             outputStream.close();
-        } catch (Exception exception) {
+        } catch (Exception e) {
+            e.getCause();
         }
         return outputStream.toByteArray();
     }
