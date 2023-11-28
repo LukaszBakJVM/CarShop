@@ -45,7 +45,7 @@ public class FindAllCarParts extends VerticalLayout {
 
         carGrid = new Grid<>(CarDto.class);
         carGrid.setColumns("mark", "model", "serialNumber", "partsBrand", "price", "quantity", "category");
-        carGrid.addColumn(new ComponentRenderer<>(this::fileReader)).setHeader("Pho");
+        carGrid.addColumn(new ComponentRenderer<>(this::fileReader)).setHeader("File");
 
 
         Button prevButton = new Button("Poprzednia strona", e -> searchBySerialNumber(-1));
