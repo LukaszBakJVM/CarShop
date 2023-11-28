@@ -104,11 +104,11 @@ public class AddNewCarPart extends VerticalLayout {
 
 
 
-            }
-
-
-
         }
+
+
+
+    }
 
     private byte[] readBytes(InputStream inputStream) throws IOException {
         try (ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {

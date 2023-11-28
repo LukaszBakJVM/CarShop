@@ -19,6 +19,7 @@ public class Parts {
 
 
 
+
     public String getMark() {
         return mark;
     }
@@ -74,6 +75,8 @@ public class Parts {
     public void setPhoto(byte[] photo) {
         this.photo = photo;
     }
+
+
 
     @Override
     public boolean equals(Object o) {

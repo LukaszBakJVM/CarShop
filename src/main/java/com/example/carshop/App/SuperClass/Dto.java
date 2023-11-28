@@ -11,6 +11,7 @@ public class Dto {
     private String category;
     private byte[] photoDto;
 
+
     public long getId() {
         return id;
     }
@@ -82,4 +83,5 @@ public class Dto {
     public void setPhotoDto(byte[] photoDto) {
         this.photoDto = photoDto;
     }
+
 }
