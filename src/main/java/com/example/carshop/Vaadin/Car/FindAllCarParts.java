@@ -87,21 +87,20 @@ public class FindAllCarParts extends VerticalLayout {
 
 
     private Component fileReader(CarDto carDto) {
-
         byte[] photoDto = carDto.getPhotoDto();
+        String fileType = fileTyp(photoDto);
 
-        if ((photoDto[0] == (byte) 0xFF) && (photoDto[1] == (byte) 0xD8)) {
+        if (fileType.equals("image")) {
 
             Image image = new Image();
-            if (photoDto != null) {
+
                 StreamResource resource = new StreamResource("jpg", () -> new ByteArrayInputStream(photoDto));
                 image.setSrc(resource);
-            }
-            image.setWidth("150px");
+                image.setWidth("150px");
             image.setHeight("150px");
             return image;
-        } else if ((photoDto[0] == (byte) 0x25) && (photoDto[1] == (byte) 0x50) &&
-                (photoDto[2] == (byte) 0x44) && (photoDto[3] == (byte) 0x46)) {
+
+        } else if (fileType.equals("pdf")) {
 
             PdfViewer pdfViewer = new PdfViewer();
             StreamResource resource = new StreamResource("pdf", () -> new ByteArrayInputStream(photoDto));
@@ -111,8 +110,7 @@ public class FindAllCarParts extends VerticalLayout {
             return pdfViewer;
 
 
-        } else if ((photoDto[0] >= 0x20 && photoDto[0] <= 0x7E) &&
-                (photoDto[1] >= 0x20 && photoDto[1] <= 0x7E)) {
+        } else if (fileType.equals("txt")) {
 
             TextArea textArea = new TextArea();
             textArea.setValue(new String(photoDto, StandardCharsets.UTF_8));
@@ -124,10 +122,20 @@ public class FindAllCarParts extends VerticalLayout {
             return new Span("Nieobsługiwany rodzaj pliku");
         }
     }
-    private int numberOfPage(int pageSize ,int size) {
-        return size/pageSize;
+    private String fileTyp(byte[] photoByte){
+        String fileType = "unknown file type";
+        if ((photoByte[0] == (byte) 0xFF) && (photoByte[1] == (byte) 0xD8)) {
+            fileType = "image";
 
+         } else if ((photoByte[0] == (byte) 0x25) && (photoByte[1] == (byte) 0x50) &&
+            (photoByte[2] == (byte) 0x44) && (photoByte[3] == (byte) 0x46)) {
+            fileType = "pdf";
 
+        } else if ((photoByte[0] >= 0x20 && photoByte[0] <= 0x7E) &&
+            (photoByte[1] >= 0x20 && photoByte[1] <= 0x7E)) {
+            fileType = "txt";
+        }
+        return fileType;
     }
 
 
