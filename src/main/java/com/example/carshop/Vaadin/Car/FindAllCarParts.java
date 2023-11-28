@@ -28,11 +28,9 @@ public class FindAllCarParts extends VerticalLayout {
     private final CarService carService;
     private TextField serialNumberField;
     private Grid<CarDto> carGrid;
+    private final int PAGE_SIZE = 2;
 
     private int currentPage = 0;
-
-
-
 
 
     public FindAllCarParts(CarService carService) {
@@ -55,8 +53,7 @@ public class FindAllCarParts extends VerticalLayout {
         ButtonReturn buttonReturn = new ButtonReturn();
         buttonReturn.returnToIndex();
 
-        add(serialNumberField, searchButton, carGrid,navigationLayout, buttonReturn);
-
+        add(serialNumberField, searchButton, carGrid, navigationLayout, buttonReturn);
 
 
     }
@@ -69,74 +66,85 @@ public class FindAllCarParts extends VerticalLayout {
             Set<CarDto> cars = findAllCarsBySerialNumber(serialNumber);
 
             currentPage += direction;
-                carGrid.setItems(cars);
+            carGrid.setItems(cars);
 
         } else {
             Set<CarDto> all = carService.findAll(currentPage);
-
+            long countPage = carService.count();
+            int numberOfPage = numberOfPage(PAGE_SIZE, countPage);
             currentPage += direction;
-               carGrid.setItems(all);
+            if (currentPage > numberOfPage) {
+                currentPage = 0;
+            }
+            carGrid.setItems(all);
 
         }
     }
 
     private Set<CarDto> findAllCarsBySerialNumber(String serialNumber) {
-        return carService.findAllBySerialNumber(serialNumber,currentPage);
+        return carService.findAllBySerialNumber(serialNumber, currentPage);
     }
-
 
 
     private Component fileReader(CarDto carDto) {
         byte[] photoDto = carDto.getPhotoDto();
         String fileType = fileTyp(photoDto);
 
-        if (fileType.equals("image")) {
+        switch (fileType) {
+            case "image" -> {
 
-            Image image = new Image();
+                Image image = new Image();
 
                 StreamResource resource = new StreamResource("jpg", () -> new ByteArrayInputStream(photoDto));
                 image.setSrc(resource);
                 image.setWidth("150px");
-            image.setHeight("150px");
-            return image;
+                image.setHeight("150px");
+                return image;
+            }
 
-        } else if (fileType.equals("pdf")) {
+            case "pdf" -> {
 
-            PdfViewer pdfViewer = new PdfViewer();
-            StreamResource resource = new StreamResource("pdf", () -> new ByteArrayInputStream(photoDto));
-            pdfViewer.setSrc(resource);
-            pdfViewer.setWidth("150px");
-            pdfViewer.setHeight("150px");
-            return pdfViewer;
+                PdfViewer pdfViewer = new PdfViewer();
+                StreamResource resource = new StreamResource("pdf", () -> new ByteArrayInputStream(photoDto));
+                pdfViewer.setSrc(resource);
+                pdfViewer.setWidth("150px");
+                pdfViewer.setHeight("150px");
+                return pdfViewer;
 
 
-        } else if (fileType.equals("txt")) {
-
-            TextArea textArea = new TextArea();
-            textArea.setValue(new String(photoDto, StandardCharsets.UTF_8));
-            textArea.setWidth("150px");
-            textArea.setHeight("150px");
-            return textArea;
-        } else {
-
-            return new Span("Nieobsługiwany rodzaj pliku");
+            }
+            case "txt" -> {
+                TextArea textArea = new TextArea();
+                textArea.setValue(new String(photoDto, StandardCharsets.UTF_8));
+                textArea.setWidth("150px");
+                textArea.setHeight("150px");
+                return textArea;
+            }
+            default -> {
+                return new Span("Nieobsługiwany rodzaj pliku");
+            }
         }
     }
-    private String fileTyp(byte[] photoByte){
+
+    private String fileTyp(byte[] photoByte) {
         String fileType = "unknown file type";
         if ((photoByte[0] == (byte) 0xFF) && (photoByte[1] == (byte) 0xD8)) {
             fileType = "image";
 
-         } else if ((photoByte[0] == (byte) 0x25) && (photoByte[1] == (byte) 0x50) &&
-            (photoByte[2] == (byte) 0x44) && (photoByte[3] == (byte) 0x46)) {
+        } else if ((photoByte[0] == (byte) 0x25) && (photoByte[1] == (byte) 0x50) &&
+                (photoByte[2] == (byte) 0x44) && (photoByte[3] == (byte) 0x46)) {
             fileType = "pdf";
 
         } else if ((photoByte[0] >= 0x20 && photoByte[0] <= 0x7E) &&
-            (photoByte[1] >= 0x20 && photoByte[1] <= 0x7E)) {
+                (photoByte[1] >= 0x20 && photoByte[1] <= 0x7E)) {
             fileType = "txt";
         }
         return fileType;
     }
 
+    private int numberOfPage(int pageSize, long size) {
+        return (int)size/pageSize;
 
+
+    }
 }

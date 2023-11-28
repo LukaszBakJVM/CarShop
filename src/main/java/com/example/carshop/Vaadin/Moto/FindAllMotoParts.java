@@ -1,7 +1,7 @@
 package com.example.carshop.Vaadin.Moto;
 
 
-import com.example.carshop.App.Car.CarDto;
+
 import com.example.carshop.App.Moto.MotoDto;
 import com.example.carshop.App.Moto.MotoService;
 import com.example.carshop.Vaadin.ButtonReturn;
@@ -28,6 +28,7 @@ public class FindAllMotoParts extends VerticalLayout {
     private final MotoService motoService;
     private TextField serialNumberField;
     private Grid<MotoDto> carGrid;
+    private final int PAGE_SIZE = 2;
     private int currentPage = 0;
 
     public FindAllMotoParts(MotoService motoService) {
@@ -67,8 +68,13 @@ public class FindAllMotoParts extends VerticalLayout {
 
         } else {
             Set<MotoDto> all = motoService.findAll(currentPage);
+            long countPage = motoService.count();
+            int numberOfPage = numberOfPage(PAGE_SIZE, countPage);
+                    currentPage += direction;
+            if (currentPage > numberOfPage){
+                countPage = 0;
 
-            currentPage += direction;
+            }
             carGrid.setItems(all);
 
         }
@@ -84,36 +90,39 @@ public class FindAllMotoParts extends VerticalLayout {
         byte[] photoDto = motoDto.getPhotoDto();
         String fileType = fileTyp(photoDto);
 
-        if (fileType.equals("image")) {
+        switch (fileType) {
+            case "image" -> {
 
-            Image image = new Image();
+                Image image = new Image();
 
-            StreamResource resource = new StreamResource("jpg", () -> new ByteArrayInputStream(photoDto));
-            image.setSrc(resource);
-            image.setWidth("150px");
-            image.setHeight("150px");
-            return image;
+                StreamResource resource = new StreamResource("jpg", () -> new ByteArrayInputStream(photoDto));
+                image.setSrc(resource);
+                image.setWidth("150px");
+                image.setHeight("150px");
+                return image;
 
-        } else if (fileType.equals("pdf")) {
+            }
+            case "pdf" -> {
 
-            PdfViewer pdfViewer = new PdfViewer();
-            StreamResource resource = new StreamResource("pdf", () -> new ByteArrayInputStream(photoDto));
-            pdfViewer.setSrc(resource);
-            pdfViewer.setWidth("150px");
-            pdfViewer.setHeight("150px");
-            return pdfViewer;
+                PdfViewer pdfViewer = new PdfViewer();
+                StreamResource resource = new StreamResource("pdf", () -> new ByteArrayInputStream(photoDto));
+                pdfViewer.setSrc(resource);
+                pdfViewer.setWidth("150px");
+                pdfViewer.setHeight("150px");
+                return pdfViewer;
 
 
-        } else if (fileType.equals("txt")) {
-
-            TextArea textArea = new TextArea();
-            textArea.setValue(new String(photoDto, StandardCharsets.UTF_8));
-            textArea.setWidth("150px");
-            textArea.setHeight("150px");
-            return textArea;
-        } else {
-
-            return new Span("Nieobsługiwany rodzaj pliku");
+            }
+            case "txt" -> {
+                TextArea textArea = new TextArea();
+                textArea.setValue(new String(photoDto, StandardCharsets.UTF_8));
+                textArea.setWidth("150px");
+                textArea.setHeight("150px");
+                return textArea;
+            }
+            default -> {
+                return new Span("Nieobsługiwany rodzaj pliku");
+            }
         }
     }
     private String fileTyp(byte[] photoByte){
@@ -132,6 +141,7 @@ public class FindAllMotoParts extends VerticalLayout {
         return fileType;
 
     }
-
-
+    private int numberOfPage(int pageSize, long size) {
+        return (int) size / pageSize;
+    }
 }
