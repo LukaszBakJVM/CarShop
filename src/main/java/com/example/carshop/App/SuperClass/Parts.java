@@ -16,7 +16,7 @@ public class Parts {
     @Lob
     @Column(length = 500000000)
     private   byte[] photo;
-    private String fileType;
+
 
 
 
@@ -76,13 +76,7 @@ public class Parts {
         this.photo = photo;
     }
 
-    public String getFileType() {
-        return fileType;
-    }
 
-    public void setFileType(String fileType) {
-        this.fileType = fileType;
-    }
 
     @Override
     public boolean equals(Object o) {
