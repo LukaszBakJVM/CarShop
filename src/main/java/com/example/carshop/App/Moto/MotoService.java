@@ -77,4 +77,7 @@ public class MotoService {
         }
         return Optional.empty();
     }
+    public long count(){
+        return motoRepository.count();
+    }
 }

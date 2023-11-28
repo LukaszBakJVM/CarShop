@@ -83,11 +83,9 @@ public class CarService {
         return Optional.empty();
     }
 
-    private int numberOfPage(int pageSize, int size) {
-        return size / pageSize;
+
+    public long count(){
+        return carRepository.count();
     }
 
-    public int getPAGE_SIZE() {
-        return PAGE_SIZE;
-    }
 }
