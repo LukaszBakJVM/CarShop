@@ -45,9 +45,9 @@ public class FindAllCarParts extends VerticalLayout {
         carGrid.setColumns("mark", "model", "serialNumber", "partsBrand", "price", "quantity", "category");
         carGrid.addColumn(new ComponentRenderer<>(this::fileReader)).setHeader("File");
 
-
-        Button prevButton = new Button("Poprzednia strona", e -> searchBySerialNumber(-1));
         Button nextButton = new Button("Nastepna strona", e -> searchBySerialNumber(1));
+        Button prevButton = new Button("Poprzednia strona", e -> searchBySerialNumber(-1));
+
 
         HorizontalLayout navigationLayout = new HorizontalLayout(prevButton, nextButton);
         ButtonReturn buttonReturn = new ButtonReturn();
@@ -127,6 +127,9 @@ public class FindAllCarParts extends VerticalLayout {
     }
 
     private String fileTyp(byte[] photoByte) {
+        if (photoByte.length < 5){
+            photoByte = new byte[]{(byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF};
+        }
         String fileType = "unknown file type";
         if ((photoByte[0] == (byte) 0xFF) && (photoByte[1] == (byte) 0xD8)) {
             fileType = "image";

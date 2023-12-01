@@ -2,6 +2,7 @@ package com.example.carshop.Vaadin.Moto;
 
 
 
+
 import com.example.carshop.App.Moto.MotoDto;
 import com.example.carshop.App.Moto.MotoService;
 import com.example.carshop.Vaadin.ButtonReturn;
@@ -42,9 +43,9 @@ public class FindAllMotoParts extends VerticalLayout {
         carGrid.setColumns("mark", "model", "serialNumber", "partsBrand", "price", "quantity", "category");
         carGrid.addColumn(new ComponentRenderer<>(this::fileReader)).setHeader("File");
 
-
-        Button prevButton = new Button("Poprzednia strona", e -> searchBySerialNumber(-1));
         Button nextButton = new Button("Nastepna strona", e -> searchBySerialNumber(1));
+        Button prevButton = new Button("Poprzednia strona", e -> searchBySerialNumber(-1));
+
 
         HorizontalLayout navigationLayout = new HorizontalLayout(prevButton, nextButton);
         ButtonReturn buttonReturn = new ButtonReturn();
@@ -61,26 +62,25 @@ public class FindAllMotoParts extends VerticalLayout {
         String serialNumber = serialNumberField.getValue();
 
         if (!serialNumber.isEmpty()) {
-            Set<MotoDto> moto = findAllCarsBySerialNumber(serialNumber);
+            Set<MotoDto> moto = findAllMotoBySerialNumber(serialNumber);
 
             currentPage += direction;
             carGrid.setItems(moto);
-
         } else {
             Set<MotoDto> all = motoService.findAll(currentPage);
             long countPage = motoService.count();
             int numberOfPage = numberOfPage(PAGE_SIZE, countPage);
-                    currentPage += direction;
-            if (currentPage > numberOfPage){
-                countPage = 0;
-
+            currentPage += direction;
+            if (currentPage > numberOfPage) {
+                currentPage = 0;
             }
             carGrid.setItems(all);
+
 
         }
     }
 
-    private Set<MotoDto> findAllCarsBySerialNumber(String serialNumber) {
+    private Set<MotoDto> findAllMotoBySerialNumber(String serialNumber) {
         return motoService.findAllBySerialNumber(serialNumber,currentPage);
     }
 
@@ -126,6 +126,9 @@ public class FindAllMotoParts extends VerticalLayout {
         }
     }
     private String fileTyp(byte[] photoByte){
+        if (photoByte.length < 5){
+            photoByte = new byte[]{(byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF};
+        }
         String fileType = "unknown file type";
         if ((photoByte[0] == (byte) 0xFF) && (photoByte[1] == (byte) 0xD8)) {
             fileType = "image";

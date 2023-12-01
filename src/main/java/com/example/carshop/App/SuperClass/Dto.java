@@ -1,12 +1,14 @@
 package com.example.carshop.App.SuperClass;
 
+import java.math.BigDecimal;
+
 public class Dto {
     private long id;
     private String mark;
     private String model;
     private String serialNumber;
     private String partsBrand;
-    private String price;
+    private BigDecimal price;
     private int quantity;
     private String category;
     private byte[] photoDto;
@@ -52,11 +54,11 @@ public class Dto {
         this.partsBrand = partsBrand;
     }
 
-    public String getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
