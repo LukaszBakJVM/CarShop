@@ -2,6 +2,7 @@ package com.example.carshop.App.SuperClass;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 @MappedSuperclass
@@ -11,7 +12,7 @@ public class Parts {
     private String model;
     private String serialnumber;
     private String partsBrand;
-    private String price;
+    private BigDecimal price;
     private int quantity;
     @Lob
     @Column(length = 500000000)
@@ -52,11 +53,11 @@ public class Parts {
         this.partsBrand = partsBrand;
     }
 
-    public String getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

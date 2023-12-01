@@ -18,6 +18,7 @@ import com.vaadin.flow.router.Route;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 
 
 @Route("car/newpart")
@@ -25,6 +26,7 @@ public class AddNewCarPart extends VerticalLayout {
 
     private final CarService carService;
     private final CategoryService categoryService;
+    private final BigDecimal priceValue;
     private TextField brand;
     private TextField model;
     private TextField serialnumber;
@@ -35,9 +37,10 @@ public class AddNewCarPart extends VerticalLayout {
     private final MemoryBuffer buffer = new MemoryBuffer();
     private final Upload upload = new Upload(buffer);
 
-    public AddNewCarPart(CarService carService, CategoryService categoryService) {
+    public AddNewCarPart(CarService carService, CategoryService categoryService, BigDecimal priceValue) {
         this.carService = carService;
         this.categoryService = categoryService;
+        this.priceValue = priceValue;
 
         FormLayout formLayout = new FormLayout();
         brand = new TextField("Marka");
@@ -75,12 +78,14 @@ public class AddNewCarPart extends VerticalLayout {
         if (brand.isEmpty() || model.isEmpty() || category == null) {
             Notification.show("Uzupełnij wszystkie pola");
         } else {
+
             CarDto carDto = new CarDto();
             carDto.setMark(value);
             carDto.setModel(value1);
             carDto.setSerialNumber(value2);
             carDto.setPartsBrand(value3);
-            carDto.setPrice(value4);
+
+            carDto.setPrice(priceValue.add(new BigDecimal(value4)));
             carDto.setQuantity(Integer.parseInt(value5));
             carDto.setCategory(category);
 

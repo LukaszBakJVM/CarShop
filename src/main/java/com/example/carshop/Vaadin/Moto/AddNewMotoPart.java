@@ -17,12 +17,13 @@ import com.vaadin.flow.router.Route;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 
 @Route("moto/newpart")
 
 public class AddNewMotoPart extends VerticalLayout {
     private final MotoService motoService;
-    private final CategoryService categoryService;
+    private final BigDecimal priceValue;
     private TextField brand;
     private TextField model;
     private TextField serialnumber;
@@ -34,9 +35,9 @@ public class AddNewMotoPart extends VerticalLayout {
     private final MemoryBuffer buffer = new MemoryBuffer();
     private final Upload upload = new Upload(buffer);
 
-    public AddNewMotoPart(MotoService motoService, CategoryService categoryService) {
+    public AddNewMotoPart(MotoService motoService, CategoryService categoryService, BigDecimal priceValue) {
         this.motoService = motoService;
-        this.categoryService = categoryService;
+        this.priceValue = priceValue;
         FormLayout formLayout = new FormLayout();
         brand = new TextField("Marka");
         model = new TextField("Model");
@@ -75,7 +76,7 @@ public class AddNewMotoPart extends VerticalLayout {
             motoDto.setModel(value1);
             motoDto.setSerialNumber(value2);
             motoDto.setPartsBrand(value3);
-            motoDto.setPrice(value4);
+            motoDto.setPrice(priceValue.add(new BigDecimal(value4)));
             motoDto.setQuantity(Integer.parseInt(value5));
             motoDto.setCategory(category);
             try {
