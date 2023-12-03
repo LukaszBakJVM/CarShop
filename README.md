@@ -22,4 +22,4 @@ Dockerfile
 ################################################
 
 
-docker run -d -p yourPort:8080   --restart=unless-stopped --name yourAppName carshop
+# docker run -d -p yourPort:8080   --restart=unless-stopped --name yourAppName carshop
