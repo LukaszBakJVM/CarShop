@@ -5,10 +5,10 @@ https://carshop.freeddns.org
 
 You need to enter login and  password in application.properties.
 To run application 
-clon https://github.com/LukaszBakJVM/CarShop
-maven clean
-maven install 
-java - jar /file path
+# clon https://github.com/LukaszBakJVM/CarShop
+# maven clean
+# maven install 
+# java - jar /file path
 
 or 
 
