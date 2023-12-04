@@ -23,7 +23,7 @@ public class CarService {
 
     public CarDto save(CarDto carDto) {
         Car car = carMapper.map(carDto);
-        Optional<Car> bySerialnumber = carRepository.findBySerialnumber(car.getSerialnumber());
+       Optional<Car> bySerialnumber = carRepository.findBySerialnumber(car.getSerialnumber());
         if (bySerialnumber.isPresent()) {
             Car quantity = bySerialnumber.get();
             int i = quantity.getQuantity() + car.getQuantity();
