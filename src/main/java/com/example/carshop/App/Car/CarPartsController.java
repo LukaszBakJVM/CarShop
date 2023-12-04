@@ -37,12 +37,14 @@ public class CarPartsController {
         service.delete(serialNumber);
         return ResponseEntity.noContent().build();
     }
-    @GetMapping("/{serialNumber}")
-    ResponseEntity<Set<CarDto>>findAllBySerialNumber(@PathVariable (required = false) String serialNumber){
+    @GetMapping("")
+    ResponseEntity<Set<CarDto>>findAllBySerialNumber(@RequestParam (required = false) String serialNumber,
+      @RequestParam(defaultValue = "0") int page){
         if (serialNumber==null){
-            return ResponseEntity.ok(service.findAll(0));
+
+            return   ResponseEntity.ok(service.findAll(page));
         }
-        return ResponseEntity.ok(service.findAllBySerialNumber(serialNumber,0));
+        return ResponseEntity.ok(service.findAllBySerialNumber(serialNumber,page));
     }
     @PatchMapping("/{serialNumber}/{quantity}")
     ResponseEntity<?> sellPart(@PathVariable String serialNumber,@PathVariable int quantity,
