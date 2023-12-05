@@ -1,4 +1,5 @@
-package com.example.carshop.App.Car;
+package com.example.carshop.App.Moto;
+
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -14,20 +15,18 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/car")
-
-public class CarPartsController {
-    private final CarService service;
+@RequestMapping("/moto")
+public class MotoController {
+    private final MotoService service;
     private final ObjectMapper objectMapper;
 
-    public CarPartsController(CarService service, ObjectMapper objectMapper) {
+    public MotoController(MotoService service, ObjectMapper objectMapper) {
         this.service = service;
         this.objectMapper = objectMapper;
     }
-
     @PostMapping("/newPart")
-    ResponseEntity<CarDto> save(@RequestBody CarDto part) {
-        CarDto save = service.save(part);
+    ResponseEntity<MotoDto> save(@RequestBody MotoDto part) {
+        MotoDto save = service.save(part);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}").buildAndExpand(save.getId()).toUri();
         return ResponseEntity.created(uri).body(save);
@@ -38,21 +37,21 @@ public class CarPartsController {
         return ResponseEntity.noContent().build();
     }
     @GetMapping("")
-    ResponseEntity<Set<CarDto>>findAllBySerialNumber(@RequestParam (required = false) String serialNumber,
-      @RequestParam(defaultValue = "1") int page){
+    ResponseEntity<Set<MotoDto>>findAllBySerialNumber(@RequestParam (required = false) String serialNumber,
+                                                     @RequestParam(defaultValue = "0") int page){
         if (serialNumber==null){
 
             return   ResponseEntity.ok(service.findAll(page));
         }
         return ResponseEntity.ok(service.findAllBySerialNumber(serialNumber,page));
     }
-    @PatchMapping("/sell")
-    ResponseEntity<?> sellPart(@RequestParam String serialNumber,@RequestParam int quantity,
+    @PatchMapping("/{serialNumber}/{quantity}")
+    ResponseEntity<?> sellPart(@PathVariable String serialNumber,@PathVariable int quantity,
                                @RequestBody JsonMergePatch patch) {
         try {
 
-            CarDto carDto = service.findBySerialNumber(serialNumber).orElseThrow();
-            CarDto update = applyPatch(carDto, patch);
+            MotoDto motoDto = service.findBySerialNumber(serialNumber).orElseThrow();
+            MotoDto update = applyPatch(motoDto, patch);
             service.sellParts(update.getSerialNumber(),quantity);
         } catch (JsonPatchException | JsonProcessingException e) {
             return ResponseEntity.internalServerError().build();
@@ -62,13 +61,11 @@ public class CarPartsController {
         return ResponseEntity.noContent().build();
     }
 
-    private CarDto applyPatch(CarDto carDto, JsonMergePatch patch) throws JsonPatchException, JsonProcessingException {
-        JsonNode jsonNode = objectMapper.valueToTree(carDto);
+    private MotoDto applyPatch(MotoDto motoDto, JsonMergePatch patch) throws JsonPatchException, JsonProcessingException {
+        JsonNode jsonNode = objectMapper.valueToTree(motoDto);
 
         JsonNode jobOfferPatchedNode = patch.apply(jsonNode);
-        return objectMapper.treeToValue(jobOfferPatchedNode, CarDto.class);
+        return objectMapper.treeToValue(jobOfferPatchedNode, MotoDto.class);
     }
 
-
 }
-
