@@ -39,15 +39,15 @@ public class CarPartsController {
     }
     @GetMapping("")
     ResponseEntity<Set<CarDto>>findAllBySerialNumber(@RequestParam (required = false) String serialNumber,
-      @RequestParam(defaultValue = "0") int page){
+      @RequestParam(defaultValue = "1") int page){
         if (serialNumber==null){
 
             return   ResponseEntity.ok(service.findAll(page));
         }
         return ResponseEntity.ok(service.findAllBySerialNumber(serialNumber,page));
     }
-    @PatchMapping("/{serialNumber}/{quantity}")
-    ResponseEntity<?> sellPart(@PathVariable String serialNumber,@PathVariable int quantity,
+    @PatchMapping("/sell")
+    ResponseEntity<?> sellPart(@RequestParam String serialNumber,@RequestParam int quantity,
                                @RequestBody JsonMergePatch patch) {
         try {
 

@@ -10,7 +10,7 @@ public class Parts {
 
     private String mark;
     private String model;
-    private String serialnumber;
+    private String serialNumber;
     private String partsBrand;
     private BigDecimal price;
     private int quantity;
@@ -37,12 +37,12 @@ public class Parts {
         this.model = model;
     }
 
-    public String getSerialnumber() {
-        return serialnumber;
+    public String getSerialNumber() {
+        return serialNumber;
     }
 
-    public void setSerialnumber(String serialnumber) {
-        this.serialnumber = serialnumber;
+    public void setSerialNumber(String serialnumber) {
+        this.serialNumber = serialnumber;
     }
 
     public String getPartsBrand() {
@@ -84,11 +84,11 @@ public class Parts {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Parts parts = (Parts) o;
-        return Objects.equals(mark, parts.mark) && Objects.equals(model, parts.model) && Objects.equals(serialnumber, parts.serialnumber) && Objects.equals(partsBrand, parts.partsBrand);
+        return Objects.equals(mark, parts.mark) && Objects.equals(model, parts.model) && Objects.equals(serialNumber, parts.serialNumber) && Objects.equals(partsBrand, parts.partsBrand);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(mark, model, serialnumber, partsBrand);
+        return Objects.hash(mark, model, serialNumber, partsBrand);
     }
 }

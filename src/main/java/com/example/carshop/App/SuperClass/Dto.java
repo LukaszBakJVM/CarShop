@@ -13,6 +13,8 @@ public class Dto {
     private String category;
     private byte[] photoDto;
 
+    public Dto() {
+    }
 
     public long getId() {
         return id;
