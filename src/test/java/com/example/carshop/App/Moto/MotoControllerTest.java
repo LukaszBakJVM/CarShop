@@ -1,14 +1,11 @@
-package com.example.carshop.App.Car;
-
+package com.example.carshop.App.Moto;
 
 
 import com.example.carshop.CarShopApplication;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -22,13 +19,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 
 @SpringBootTest(classes = CarShopApplication.class)
 @AutoConfigureMockMvc
-class CarPartsControllerTest {
+class MotoControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
-    private final String END_POINT = "/car";
-
+    private final String END_POINT = "/moto";
 
     @Test
     void saveIfExist() throws Exception {
@@ -45,7 +41,7 @@ class CarPartsControllerTest {
     void save() throws Exception {
 
         mockMvc.perform(MockMvcRequestBuilders.post(END_POINT + "/newPart")
-                        .content(objectMapper.writeValueAsString(carDto()))
+                        .content(objectMapper.writeValueAsString(motoDto()))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.header().exists("Location"))
@@ -56,7 +52,7 @@ class CarPartsControllerTest {
     void deleteBySerialNumber() throws Exception {
         String serialNumber = "1";
         mockMvc.perform(MockMvcRequestBuilders.delete(END_POINT+"/{serialNumber}",serialNumber)
-                .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isNoContent());
 
     }
@@ -91,35 +87,36 @@ class CarPartsControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.patch(END_POINT + "/sell")
                         .param("serialNumber", serialNumber)
                         .param("quantity", String.valueOf(quantity))
-                        .content(objectMapper.writeValueAsString(carDto()))
+                        .content(objectMapper.writeValueAsString(motoDto()))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 
 
-    private CarDto exist() {
-        CarDto carDto = new CarDto();
+    private MotoDto exist() {
+       MotoDto motoDto = new MotoDto();
 
-        carDto.setMark("Opel");
-        carDto.setModel("Corsa");
-        carDto.setSerialNumber("111");
-        carDto.setPartsBrand("Febi");
-        carDto.setPrice(BigDecimal.valueOf(10));
-        carDto.setQuantity(3);
-        carDto.setCategory("Opony");
-        return carDto;
+        motoDto.setMark("Opel");
+        motoDto.setModel("Corsa");
+        motoDto.setSerialNumber("111");
+        motoDto.setPartsBrand("Febi");
+        motoDto.setPrice(BigDecimal.valueOf(10));
+        motoDto.setQuantity(3);
+        motoDto.setCategory("Opony");
+        return motoDto;
     }
 
-    private CarDto carDto() {
-        CarDto carDto = new CarDto();
+    private MotoDto motoDto() {
+        MotoDto motoDto = new MotoDto();
 
-        carDto.setMark("Opel");
-        carDto.setModel("Corsa");
-        carDto.setSerialNumber("1111");
-        carDto.setPartsBrand("Febi");
-        carDto.setPrice(BigDecimal.valueOf(10));
-        carDto.setQuantity(2);
-        carDto.setCategory("Opony");
-        return carDto;
+        motoDto.setMark("Opel");
+        motoDto.setModel("Corsa");
+        motoDto.setSerialNumber("1111");
+        motoDto.setPartsBrand("Febi");
+        motoDto.setPrice(BigDecimal.valueOf(10));
+        motoDto.setQuantity(2);
+        motoDto.setCategory("Opony");
+        return motoDto;
     }
+
 }
