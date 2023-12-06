@@ -39,8 +39,9 @@ public class MotoService {
         if (bySerialNumber.isPresent()){
             MotoParts motoParts = bySerialNumber.get();
             motoRepository.delete(motoParts);
+        }else {
+            throw new NotFoundException();
         }
-        throw new NotFoundException();
 
     }
 

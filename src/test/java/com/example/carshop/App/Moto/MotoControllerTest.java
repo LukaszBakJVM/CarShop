@@ -48,7 +48,7 @@ class MotoControllerTest {
 
     @Test
     void deleteBySerialNumber() throws Exception {
-        String serialNumber = "1";
+        String serialNumber = "1111";
         mockMvc.perform(MockMvcRequestBuilders.delete(END_POINT+"/{serialNumber}",serialNumber)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isNoContent());
@@ -88,7 +88,7 @@ class MotoControllerTest {
 
     @Test
     void sellPart() throws Exception {
-        String serialNumber = "111";
+        String serialNumber = "1111";
         int quantity = 2;
 
         mockMvc.perform(MockMvcRequestBuilders.patch(END_POINT + "/sell")
@@ -96,7 +96,8 @@ class MotoControllerTest {
                         .param("quantity", String.valueOf(quantity))
                         .content(objectMapper.writeValueAsString(motoDto()))
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isNoContent());
+                .andExpect(MockMvcResultMatchers.status().isNoContent())
+                .andDo(print());
     }
 
 

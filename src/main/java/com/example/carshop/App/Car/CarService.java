@@ -41,8 +41,9 @@ public class CarService {
      if (bySerialNumber.isPresent()){
          Car car = bySerialNumber.get();
          carRepository.delete(car);
+     }else {
+         throw new NotFoundException();
      }
-    throw new NotFoundException();
 
     }
 

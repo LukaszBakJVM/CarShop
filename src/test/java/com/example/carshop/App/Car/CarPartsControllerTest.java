@@ -90,7 +90,7 @@ class CarPartsControllerTest {
 
     @Test
     void sellPart() throws Exception {
-        String serialNumber = "111";
+        String serialNumber = "1111";
         int quantity = 2;
 
         mockMvc.perform(MockMvcRequestBuilders.patch(END_POINT + "/sell")
