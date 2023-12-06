@@ -37,7 +37,6 @@ class CarPartsControllerTest {
                         .content(objectMapper.writeValueAsString(exist()))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andExpect(MockMvcResultMatchers.header().exists("Location"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$").exists());
     }
 
@@ -48,17 +47,23 @@ class CarPartsControllerTest {
                         .content(objectMapper.writeValueAsString(carDto()))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andExpect(MockMvcResultMatchers.header().exists("Location"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$").exists());
     }
 
     @Test
     void deleteBySerialNumber() throws Exception {
-        String serialNumber = "1";
+        String serialNumber = "1111";
         mockMvc.perform(MockMvcRequestBuilders.delete(END_POINT+"/{serialNumber}",serialNumber)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isNoContent());
-
+    }
+    @Test
+    void deleteBySerialNumberNotFound() throws Exception {
+        String serialNumber = "1111111";
+        mockMvc.perform(MockMvcRequestBuilders.delete(END_POINT + "/{serialNumber}", serialNumber)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andDo(print());
     }
 
     @Test

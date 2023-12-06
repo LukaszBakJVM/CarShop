@@ -11,6 +11,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -67,6 +68,10 @@ public class CarPartsController {
 
         JsonNode jobOfferPatchedNode = patch.apply(jsonNode);
         return objectMapper.treeToValue(jobOfferPatchedNode, CarDto.class);
+    }
+    @GetMapping("/{serialNumber}")
+    ResponseEntity<Optional<CarDto>>findBySerialNumber(@PathVariable String serialNumber){
+       return ResponseEntity.ok(service.findBySerialNumber(serialNumber));
     }
 
 
