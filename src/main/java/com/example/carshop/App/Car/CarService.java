@@ -1,6 +1,7 @@
 package com.example.carshop.App.Car;
 
 
+import com.example.carshop.App.Exception.NotFoundException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,7 @@ public class CarService {
 
     public CarDto save(CarDto carDto) {
         Car car = carMapper.map(carDto);
-        Optional<Car> bySerialnumber = carRepository.findBySerialnumber(car.getSerialnumber());
+        Optional<Car> bySerialnumber = carRepository.findBySerialNumber(car.getSerialNumber());
         if (bySerialnumber.isPresent()) {
             Car quantity = bySerialnumber.get();
             int i = quantity.getQuantity() + car.getQuantity();
@@ -36,14 +37,19 @@ public class CarService {
     }
 
     public void delete(String serial) {
-        Optional<Car> bySerialnumber = carRepository.findBySerialnumber(serial);
-        bySerialnumber.ifPresent(carRepository::delete);
+        Optional<Car> bySerialNumber = carRepository.findBySerialNumber(serial);
+     if (bySerialNumber.isPresent()){
+         Car car = bySerialNumber.get();
+         carRepository.delete(car);
+     }else {
+         throw new NotFoundException();
+     }
 
     }
 
     public Set<CarDto> findAllBySerialNumber(String serialNumber, int page) {
         PageRequest pageRequest = PageRequest.of(page, PAGE_SIZE);
-        return carRepository.findCarBySerialnumberContainingIgnoreCase(serialNumber, pageRequest)
+        return carRepository.findCarBySerialNumberContainingIgnoreCase(serialNumber, pageRequest)
                 .getContent()
                 .stream().map(carMapper::map)
                 .collect(Collectors.toSet());
@@ -60,7 +66,7 @@ public class CarService {
     }
 
     public Optional<CarDto> sellParts(String serialNumber, int quantity) {
-        Optional<Car> bySerialnumber = carRepository.findBySerialnumber(serialNumber);
+        Optional<Car> bySerialnumber = carRepository.findBySerialNumber(serialNumber);
         if (bySerialnumber.isPresent()) {
             Car q = bySerialnumber.get();
             if (q.getQuantity() > 0 && q.getQuantity() >= quantity) {
@@ -74,7 +80,7 @@ public class CarService {
     }
 
     public Optional<CarDto> findBySerialNumber(String serialNumber) {
-        Optional<Car> bySerialnumber = carRepository.findBySerialnumber(serialNumber);
+        Optional<Car> bySerialnumber = carRepository.findBySerialNumber(serialNumber);
         if (bySerialnumber.isPresent()) {
             Car car = bySerialnumber.get();
             CarDto map = carMapper.map(car);

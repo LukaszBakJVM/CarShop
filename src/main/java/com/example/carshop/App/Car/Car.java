@@ -19,8 +19,6 @@ public class Car extends Parts  {
 
     }
 
-
-
     public long getId() {
         return id;
     }

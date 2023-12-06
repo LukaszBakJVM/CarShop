@@ -9,5 +9,4 @@ public class CarDto extends Dto {
     public CarDto() {
     }
 
-
 }

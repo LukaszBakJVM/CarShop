@@ -2,6 +2,8 @@ package com.example.carshop.App.Moto;
 
 
 
+
+import com.example.carshop.App.Exception.NotFoundException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
@@ -20,7 +22,7 @@ public class MotoService {
     }
     public MotoDto save(MotoDto motoDto){
         MotoParts motoParts = motoMapper.map(motoDto);
-        Optional<MotoParts> bySerialnumber = motoRepository.findBySerialnumber(motoParts.getSerialnumber());
+        Optional<MotoParts> bySerialnumber = motoRepository.findBySerialNumber(motoParts.getSerialNumber());
         if (bySerialnumber.isPresent()){
             MotoParts quantity = bySerialnumber.get();
             int i = quantity.getQuantity() + motoParts.getQuantity();
@@ -33,14 +35,19 @@ public class MotoService {
 
     }
     public void delete(String serial) {
-        Optional<MotoParts> bySerialnumber = motoRepository.findBySerialnumber(serial);
-        bySerialnumber.ifPresent(motoRepository::delete);
+        Optional<MotoParts> bySerialNumber = motoRepository.findBySerialNumber(serial);
+        if (bySerialNumber.isPresent()){
+            MotoParts motoParts = bySerialNumber.get();
+            motoRepository.delete(motoParts);
+        }else {
+            throw new NotFoundException();
+        }
 
     }
 
     public Set<MotoDto> findAllBySerialNumber(String serialNumber, int page) {
         PageRequest pageRequest = PageRequest.of(page, PAGE_SIZE);
-        return motoRepository.findCarBySerialnumberContainingIgnoreCase(serialNumber, pageRequest)
+        return motoRepository.findCarBySerialNumberContainingIgnoreCase(serialNumber, pageRequest)
                 .getContent()
                 .stream().map(motoMapper::map)
                 .collect(Collectors.toSet());
@@ -56,7 +63,7 @@ public class MotoService {
     }
 
     public Optional<MotoDto> sellParts(String serialNumber, int quantity) {
-        Optional<MotoParts> bySerialnumber = motoRepository.findBySerialnumber(serialNumber);
+        Optional<MotoParts> bySerialnumber = motoRepository.findBySerialNumber(serialNumber);
         if (bySerialnumber.isPresent()) {
             MotoParts q = bySerialnumber.get();
             if (q.getQuantity() > 0 && q.getQuantity() >= quantity) {
@@ -70,7 +77,7 @@ public class MotoService {
     }
 
     public Optional<MotoDto> findBySerialNumber(String serialNumber) {
-        Optional<MotoParts> bySerialnumber = motoRepository.findBySerialnumber(serialNumber);
+        Optional<MotoParts> bySerialnumber = motoRepository.findBySerialNumber(serialNumber);
         if (bySerialnumber.isPresent()) {
             MotoParts motoParts = bySerialnumber.get();
             MotoDto map = motoMapper.map(motoParts);
