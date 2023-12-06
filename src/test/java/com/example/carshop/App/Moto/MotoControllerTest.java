@@ -56,6 +56,15 @@ class MotoControllerTest {
     }
 
     @Test
+    void deleteBySerialNumberNotFound() throws Exception {
+        String serialNumber = "1111111";
+        mockMvc.perform(MockMvcRequestBuilders.delete(END_POINT + "/{serialNumber}", serialNumber)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andDo(print());
+    }
+
+    @Test
     void findAllBySerialNumber() throws Exception {
         String serialNumber = "11";
         int page = 0;

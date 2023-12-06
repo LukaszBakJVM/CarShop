@@ -2,6 +2,8 @@ package com.example.carshop.App.Moto;
 
 
 
+
+import com.example.carshop.App.Exception.NotFoundException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
@@ -33,8 +35,12 @@ public class MotoService {
 
     }
     public void delete(String serial) {
-        Optional<MotoParts> bySerialnumber = motoRepository.findBySerialNumber(serial);
-        bySerialnumber.ifPresent(motoRepository::delete);
+        Optional<MotoParts> bySerialNumber = motoRepository.findBySerialNumber(serial);
+        if (bySerialNumber.isPresent()){
+            MotoParts motoParts = bySerialNumber.get();
+            motoRepository.delete(motoParts);
+        }
+        throw new NotFoundException();
 
     }
 
