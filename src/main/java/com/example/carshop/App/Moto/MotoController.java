@@ -45,8 +45,8 @@ public class MotoController {
         }
         return ResponseEntity.ok(service.findAllBySerialNumber(serialNumber,page));
     }
-    @PatchMapping("/{serialNumber}/{quantity}")
-    ResponseEntity<?> sellPart(@PathVariable String serialNumber,@PathVariable int quantity,
+    @PatchMapping("/sell")
+    ResponseEntity<?> sellPart(@RequestParam String serialNumber,@RequestParam int quantity,
                                @RequestBody JsonMergePatch patch) {
         try {
 
