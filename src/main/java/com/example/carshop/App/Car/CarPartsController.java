@@ -39,7 +39,7 @@ public class CarPartsController {
     }
     @GetMapping("")
     ResponseEntity<Set<CarDto>>findAllBySerialNumber(@RequestParam (required = false) String serialNumber,
-      @RequestParam(defaultValue = "1") int page){
+      @RequestParam(defaultValue = "0") int page){
         if (serialNumber==null){
 
             return   ResponseEntity.ok(service.findAll(page));

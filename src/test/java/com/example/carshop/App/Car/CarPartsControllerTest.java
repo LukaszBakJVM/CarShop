@@ -20,7 +20,6 @@ import java.math.BigDecimal;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
-
 @SpringBootTest(classes = CarShopApplication.class)
 @AutoConfigureMockMvc
 class CarPartsControllerTest {
@@ -32,29 +31,54 @@ class CarPartsControllerTest {
 
 
     @Test
+    void saveIfExist() throws Exception {
+
+        mockMvc.perform(MockMvcRequestBuilders.post(END_POINT + "/newPart")
+                        .content(objectMapper.writeValueAsString(exist()))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(MockMvcResultMatchers.header().exists("Location"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$").exists());
+    }
+
+    @Test
     void save() throws Exception {
 
-        mockMvc.perform(MockMvcRequestBuilders.post(END_POINT+"/newPart")
+        mockMvc.perform(MockMvcRequestBuilders.post(END_POINT + "/newPart")
                         .content(objectMapper.writeValueAsString(carDto()))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.header().exists("Location"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$").exists());
-
     }
 
     @Test
-    void deleteBySerialNumber() {
+    void deleteBySerialNumber() throws Exception {
+        String serialNumber = "1";
+        mockMvc.perform(MockMvcRequestBuilders.delete(END_POINT+"/{serialNumber}",serialNumber)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
+
     }
 
     @Test
     void findAllBySerialNumber() throws Exception {
-        String serialNumber= "11";
-        int page = 1;
+        String serialNumber = "11";
+        int page = 0;
         mockMvc.perform(MockMvcRequestBuilders.get(END_POINT)
-                .param("serialnumber",serialNumber)
-                .param("page",String.valueOf(page))
-                .contentType(MediaType.APPLICATION_JSON))
+                        .param("serialnumber", serialNumber)
+                        .param("page", String.valueOf(page))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(print());
+    }
+    @Test
+    void findAllAll() throws Exception {
+
+        int page = 0;
+        mockMvc.perform(MockMvcRequestBuilders.get(END_POINT)
+                        .param("page", String.valueOf(page))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(print());
     }
@@ -64,29 +88,38 @@ class CarPartsControllerTest {
         String serialNumber = "1";
         int quantity = 2;
 
-        mockMvc.perform(MockMvcRequestBuilders.patch(END_POINT+"/sell")
-                .param("serialNumber",serialNumber)
-                .param("quantity",String.valueOf(quantity))
-                .content(objectMapper.writeValueAsString(carDto()))
+        mockMvc.perform(MockMvcRequestBuilders.patch(END_POINT + "/sell")
+                        .param("serialNumber", serialNumber)
+                        .param("quantity", String.valueOf(quantity))
+                        .content(objectMapper.writeValueAsString(carDto()))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 
 
-    CarDto carDto(){
-        CarDto car = new CarDto();
+    private CarDto exist() {
+        CarDto carDto = new CarDto();
 
-        car.setMark("Opel");
-        car.setModel("Corsa");
-        car.setSerialNumber("111");
-        car.setPartsBrand("Febi");
-        car.setPrice(BigDecimal.valueOf(10));
-        car.setQuantity(2);
-        car.setCategory("Opony");
-        return car;
+        carDto.setMark("Opel");
+        carDto.setModel("Corsa");
+        carDto.setSerialNumber("111");
+        carDto.setPartsBrand("Febi");
+        carDto.setPrice(BigDecimal.valueOf(10));
+        carDto.setQuantity(2);
+        carDto.setCategory("Opony");
+        return carDto;
+    }
 
+    private CarDto carDto() {
+        CarDto carDto = new CarDto();
 
-
-
+        carDto.setMark("Opel");
+        carDto.setModel("Corsa");
+        carDto.setSerialNumber("1111");
+        carDto.setPartsBrand("Febi");
+        carDto.setPrice(BigDecimal.valueOf(10));
+        carDto.setQuantity(2);
+        carDto.setCategory("Opony");
+        return carDto;
     }
 }
