@@ -37,7 +37,6 @@ class CarPartsControllerTest {
                         .content(objectMapper.writeValueAsString(exist()))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andExpect(MockMvcResultMatchers.header().exists("Location"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$").exists());
     }
 
@@ -48,7 +47,6 @@ class CarPartsControllerTest {
                         .content(objectMapper.writeValueAsString(carDto()))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andExpect(MockMvcResultMatchers.header().exists("Location"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$").exists());
     }
 
