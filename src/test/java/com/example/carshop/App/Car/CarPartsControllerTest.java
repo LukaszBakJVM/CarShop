@@ -52,11 +52,18 @@ class CarPartsControllerTest {
 
     @Test
     void deleteBySerialNumber() throws Exception {
-        String serialNumber = "1";
+        String serialNumber = "1111";
         mockMvc.perform(MockMvcRequestBuilders.delete(END_POINT+"/{serialNumber}",serialNumber)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isNoContent());
-
+    }
+    @Test
+    void deleteBySerialNumberNotFound() throws Exception {
+        String serialNumber = "1111111";
+        mockMvc.perform(MockMvcRequestBuilders.delete(END_POINT + "/{serialNumber}", serialNumber)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andDo(print());
     }
 
     @Test

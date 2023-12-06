@@ -1,6 +1,7 @@
 package com.example.carshop.App.Car;
 
 
+import com.example.carshop.App.Exception.NotFoundException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -36,8 +37,12 @@ public class CarService {
     }
 
     public void delete(String serial) {
-        Optional<Car> bySerialnumber = carRepository.findBySerialNumber(serial);
-        bySerialnumber.ifPresent(carRepository::delete);
+        Optional<Car> bySerialNumber = carRepository.findBySerialNumber(serial);
+     if (bySerialNumber.isPresent()){
+         Car car = bySerialNumber.get();
+         carRepository.delete(car);
+     }
+    throw new NotFoundException();
 
     }
 
