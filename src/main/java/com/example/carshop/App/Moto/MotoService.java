@@ -46,6 +46,7 @@ public class MotoService {
                 .collect(Collectors.toSet());
     }
 
+
     public Set<MotoDto> findAll(int page) {
         PageRequest pageRequest = PageRequest.of(page, PAGE_SIZE);
         return motoRepository.findAll(pageRequest).getContent()
