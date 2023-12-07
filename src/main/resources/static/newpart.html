@@ -9,28 +9,28 @@
 <h2>Dodaj nową część</h2>
 
 <form id="newPartForm" enctype="multipart/form-data">
-    <label for="mark">Marka:</label>
+    <label for=>Marka:</label>
     <input type="text" name="mark" required><br>
 
-    <label for="model">Model:</label>
+    <label for=>Model:</label>
     <input type="text" name="model" required><br>
 
-    <label for="serialNumber">Numer seryjny:</label>
+    <label for=>Numer seryjny:</label>
     <input type="text" name="serialNumber" required><br>
 
-    <label for="partsBrand">Marka części:</label>
+
     <input type="text" name="partsBrand" required><br>
 
-    <label for="price">Cena:</label>
+
     <input type="number" name="price" required><br>
 
-    <label for="quantity">Ilość:</label>
+
     <input type="number" name="quantity" required><br>
 
-    <label for="category">Kategoria:</label>
+
     <select name="category" id="categorySelect" required></select><br>
 
-    <label for="photoDto">Zdjęcie/Plik:</label>
+
     <input type="file" name="photoDto" accept=".txt, .pdf, .jpg" ><br>
 
     <button type="button" onclick="submitForm()">Dodaj część</button>
@@ -61,7 +61,7 @@
         const form = document.getElementById('newPartForm');
         const formData = new FormData(form);
 
-        // Sprawdź, czy obiekt FormData zawiera plik
+
         console.log(formData.get('photoDto'));
 
         fetch('/car/newPart', {
