@@ -18,16 +18,16 @@
     <label for=>Numer seryjny:</label>
     <input type="text" name="serialNumber" required><br>
 
-
+    <label for=>Marka części:</label>
     <input type="text" name="partsBrand" required><br>
 
-
+    <label for=>Cena:</label>
     <input type="number" name="price" required><br>
 
-
+    <label for=>Ilość:</label>
     <input type="number" name="quantity" required><br>
 
-
+    <label for=>Kategoria:</label>
     <select name="category" id="categorySelect" required></select><br>
 
 
@@ -62,7 +62,6 @@
         const formData = new FormData(form);
 
 
-        console.log(formData.get('photoDto'));
 
         fetch('/car/newPart', {
             method: 'POST',
