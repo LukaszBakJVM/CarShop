@@ -93,5 +93,22 @@ public class CarService {
     public long count(){
         return carRepository.count();
     }
+    CarDto savePhoto(CarDto carDto,byte[]photo){
+        CarDto dto = new CarDto();
+        dto.setId(carDto.getId());
+        dto.setMark(carDto.getMark());
+        dto.setModel(carDto.getModel());
+        dto.setSerialNumber(carDto.getSerialNumber());
+        dto.setPartsBrand(carDto.getPartsBrand());
+        dto.setPrice(carDto.getPrice());
+        dto.setQuantity(carDto.getQuantity());
+        if (carDto.getPhotoDto() != null) {
+            //byte[] bytes = decompressFile(car.getPhoto());
+            dto.setPhotoDto(photo);
+        }
+        dto.setCategory(carDto.getCategory());
+        return dto;
+
+    }
 
 }

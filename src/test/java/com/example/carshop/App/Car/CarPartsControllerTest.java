@@ -120,7 +120,7 @@ class CarPartsControllerTest {
 
         carDto.setMark("Opel");
         carDto.setModel("Corsa");
-        carDto.setSerialNumber("1111");
+        carDto.setSerialNumber("1111155");
         carDto.setPartsBrand("Febi");
         carDto.setPrice(BigDecimal.valueOf(10));
         carDto.setQuantity(2);

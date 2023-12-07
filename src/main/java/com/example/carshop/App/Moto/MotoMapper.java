@@ -29,8 +29,8 @@ public class MotoMapper {
         motoParts.setPrice(dto.getPrice());
         motoParts.setQuantity(dto.getQuantity());
         if (dto.getPhotoDto()!=null) {
-            byte[] bytes = compressImage(dto.getPhotoDto());
-            motoParts.setPhoto(bytes);
+
+            motoParts.setPhoto(dto.getPhotoDto());
         }
         Category category = categoryRepository.findById(dto.getCategory()).orElseThrow();
         motoParts.setCategory(category);
@@ -47,8 +47,8 @@ public class MotoMapper {
         dto.setPrice(parts.getPrice());
         dto.setQuantity(parts.getQuantity());
         if (parts.getPhoto()!=null) {
-            byte[] bytes = decompressImage(parts.getPhoto());
-            dto.setPhotoDto(bytes);
+          //  byte[] bytes = decompressImage(parts.getPhoto());
+            dto.setPhotoDto(parts.getPhoto());
         }
         dto.setCategory(parts.getCategory().getName());
         return dto;

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <title>Car Parts Management</title>
+</head>
+<body>
+
+<div class="container mt-5">
+    <h1>Car Parts Management</h1>
+
+
+    <form id="searchForm">
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="serialNumber">Numer Seryjny:</label>
+                <input type="text" class="form-control" id="serialNumber" name="serialNumber">
+            </div>
+            <div class="form-group col-md-4">
+                <button type="button" class="btn btn-primary" onclick="searchParts()">Szukaj</button>
+            </div>
+        </div>
+    </form>
+
+
+    <button class="btn btn-success" onclick="goToNewPart()">Wprowadź Część</button>
+    <button class="btn btn-info mt-3" onclick="showPreviousResults()">Poprzednie Wyniki</button>
+    <button class="btn btn-info mt-3" onclick="showNextResults()">Następne Wyniki</button>
+    <a href="/index.html" class="btn btn-primary mt-3">Powrót do Strony Głównej</a>
+
+
+    <div id="searchResults"></div>
+
+</div>
+
+
+
+<script>
+
+    let currentPage = 0;
+
+
+    function searchParts() {
+
+        const serialNumber = document.getElementById('serialNumber').value;
+
+
+        const url = `car?serialNumber=${serialNumber}&page=${currentPage}`;
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+
+                displaySearchResults(data);
+            })
+            .catch(error => console.error('Błąd:', error));
+    }
+
+
+    function deletePart(serialNumber) {
+        if (confirm("Czy na pewno chcesz usunąć część o numerze seryjnym " + serialNumber + "?")) {
+
+            fetch('/car/' + serialNumber, {
+                method: 'DELETE'
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Część została usunięta.');
+
+                        searchParts();
+                    } else {
+                        alert('Błąd podczas usuwania części.');
+                    }
+                })
+                .catch(error => console.error('Błąd:', error));
+        }
+    }
+
+
+    function sellPart(serialNumber, quantity, fileUrl) {
+        const sellQuantity = prompt(`Podaj ilość sztuk do sprzedaży dla części o numerze seryjnym ${serialNumber}:`);
+        if (sellQuantity !== null) { // Obsługa anulowania okna prompt
+
+
+
+                fetch(`/car/sell?serialNumber=${serialNumber}&quantity=${sellQuantity}`, {
+                    method: 'PATCH'
+
+                })
+                    .then(response => {
+                        if (response.ok) {
+
+
+                            searchParts();
+                        } else {
+                            alert('Błąd podczas sprzedaży części.');
+                        }
+                    })
+                    .catch(error => console.error('Błąd:', error));
+            }
+
+    }
+
+
+    function goToNewPart() {
+        window.location.href = 'newpart.html';
+    }
+
+
+    function displaySearchResults(data) {
+        const searchResultsDiv = document.getElementById('searchResults');
+        searchResultsDiv.innerHTML = '';
+
+
+        const table = document.createElement('table');
+        table.classList.add('table', 'mt-3');
+
+        const thead = document.createElement('thead');
+        thead.innerHTML = `
+            <tr>
+                <th scope="col">Marka</th>
+                <th scope="col">Model</th>
+                <th scope="col">Numer Seryjny</th>
+                <th scope="col">Cena</th>
+                <th scope="col">Ilość</th>
+                <th scope="col">Kategoria</th>
+                <th scope="col">Plik</th>
+                <th scope="col">Akcje</th>
+
+            </tr>
+        `;
+
+        const tbody = document.createElement('tbody');
+        data.forEach(carDto => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${carDto.mark}</td>
+                <td>${carDto.model}</td>
+                <td>${carDto.serialNumber}</td>
+                <td>${carDto.price}</td>
+                <td>${carDto.quantity}</td>
+                <td>${carDto.category}</td>
+                <td>
+                    ${carDto.photoDto ? `<img src="${carDto.photoDto}" alt="Zdjęcie" style="max-width: 50px;">` : 'Brak pliku'}
+                </td>
+                <td>
+                    <button class="btn btn-danger" onclick="deletePart('${carDto.serialNumber}')">Usuń</button>
+                    <button class="btn btn-warning" onclick="sellPart('${carDto.serialNumber}', ${carDto.quantity}, '${carDto.photoDto}')">Sprzedaj</button>
+                </td>
+
+            `;
+            tbody.appendChild(tr);
+        });
+
+        table.appendChild(thead);
+        table.appendChild(tbody);
+
+        searchResultsDiv.appendChild(table);
+    }
+
+
+    function showPreviousResults() {
+
+            currentPage--;
+
+            searchParts();
+
+    }
+
+
+    function showNextResults() {
+        currentPage++;
+
+        searchParts();
+    }
+</script>
+
+</body>
+</html>
