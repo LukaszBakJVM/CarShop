@@ -22,9 +22,9 @@ public class MotoService {
     }
     public MotoDto save(MotoDto motoDto){
         MotoParts motoParts = motoMapper.map(motoDto);
-        Optional<MotoParts> bySerialnumber = motoRepository.findBySerialNumber(motoParts.getSerialNumber());
-        if (bySerialnumber.isPresent()){
-            MotoParts quantity = bySerialnumber.get();
+        Optional<MotoParts> bySerialNumber = motoRepository.findBySerialNumber(motoParts.getSerialnumber());
+        if (bySerialNumber.isPresent()){
+            MotoParts quantity = bySerialNumber.get();
             int i = quantity.getQuantity() + motoParts.getQuantity();
             quantity.setQuantity(i);
             MotoParts saveFound = motoRepository.save(quantity);
@@ -32,7 +32,6 @@ public class MotoService {
         }
         MotoParts save = motoRepository.save(motoParts);
         return motoMapper.map(save);
-
     }
     public void delete(String serial) {
         Optional<MotoParts> bySerialNumber = motoRepository.findBySerialNumber(serial);

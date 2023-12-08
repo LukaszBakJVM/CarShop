@@ -6,9 +6,7 @@ import com.example.carshop.App.Car.Category.CategoryRepository;
 import org.springframework.stereotype.Service;
 
 
-
 import java.io.ByteArrayOutputStream;
-
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
@@ -26,12 +24,12 @@ public class CarMapper {
 
     }
 
-    Car map(CarDto dto) {
+    Car map(CarDto dto)  {
         Car car = new Car();
         car.setId(dto.getId());
         car.setMark(dto.getMark());
         car.setModel(dto.getModel());
-        car.setSerialNumber(dto.getSerialNumber());
+        car.setSerialnumber(dto.getSerialNumber());
         car.setPartsBrand(dto.getPartsBrand());
         car.setPrice(dto.getPrice());
         car.setQuantity(dto.getQuantity());
@@ -50,7 +48,7 @@ public class CarMapper {
         dto.setId(car.getId());
         dto.setMark(car.getMark());
         dto.setModel(car.getModel());
-        dto.setSerialNumber(car.getSerialNumber());
+        dto.setSerialNumber(car.getSerialnumber());
         dto.setPartsBrand(car.getPartsBrand());
         dto.setPrice(car.getPrice());
         dto.setQuantity(car.getQuantity());

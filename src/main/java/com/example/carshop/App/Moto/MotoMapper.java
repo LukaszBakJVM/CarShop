@@ -24,13 +24,13 @@ public class MotoMapper {
         motoParts.setId(dto.getId());
         motoParts.setMark(dto.getMark());
         motoParts.setModel(dto.getModel());
-        motoParts.setSerialNumber(dto.getSerialNumber());
+        motoParts.setSerialnumber(dto.getSerialNumber());
         motoParts.setPartsBrand(dto.getPartsBrand());
         motoParts.setPrice(dto.getPrice());
         motoParts.setQuantity(dto.getQuantity());
         if (dto.getPhotoDto()!=null) {
-
-            motoParts.setPhoto(dto.getPhotoDto());
+            byte[] bytes = compressImage(dto.getPhotoDto());
+            motoParts.setPhoto(bytes);
         }
         Category category = categoryRepository.findById(dto.getCategory()).orElseThrow();
         motoParts.setCategory(category);
@@ -42,13 +42,13 @@ public class MotoMapper {
         dto.setId(parts.getId());
         dto.setMark(parts.getMark());
         dto.setModel(parts.getModel());
-        dto.setSerialNumber(parts.getSerialNumber());
+        dto.setSerialNumber(parts.getSerialnumber());
         dto.setPartsBrand(parts.getPartsBrand());
         dto.setPrice(parts.getPrice());
         dto.setQuantity(parts.getQuantity());
         if (parts.getPhoto()!=null) {
-          //  byte[] bytes = decompressImage(parts.getPhoto());
-            dto.setPhotoDto(parts.getPhoto());
+            byte[] bytes = decompressImage(parts.getPhoto());
+            dto.setPhotoDto(bytes);
         }
         dto.setCategory(parts.getCategory().getName());
         return dto;
@@ -70,6 +70,7 @@ public class MotoMapper {
         try {
             outputStream.close();
         } catch (Exception e) {
+            e.getCause();
         }
         return outputStream.toByteArray();
     }
@@ -85,7 +86,8 @@ public class MotoMapper {
                 outputStream.write(tmp, 0, count);
             }
             outputStream.close();
-        } catch (Exception exception) {
+        } catch (Exception e) {
+            e.getCause();
         }
         return outputStream.toByteArray();
     }

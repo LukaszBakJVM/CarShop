@@ -37,11 +37,11 @@ public class Parts {
         this.model = model;
     }
 
-    public String getSerialNumber() {
+    public String getSerialnumber() {
         return serialNumber;
     }
 
-    public void setSerialNumber(String serialnumber) {
+    public void setSerialnumber(String serialnumber) {
         this.serialNumber = serialnumber;
     }
 

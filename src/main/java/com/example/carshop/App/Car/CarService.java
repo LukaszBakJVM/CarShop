@@ -22,11 +22,11 @@ public class CarService {
         this.carMapper = carMapper;
     }
 
-    public CarDto save(CarDto carDto) {
+    public CarDto save(CarDto carDto)  {
         Car car = carMapper.map(carDto);
-        Optional<Car> bySerialnumber = carRepository.findBySerialNumber(car.getSerialNumber());
-        if (bySerialnumber.isPresent()) {
-            Car quantity = bySerialnumber.get();
+        Optional<Car> bySerialNumber = carRepository.findBySerialNumber(car.getSerialnumber());
+        if (bySerialNumber.isPresent()) {
+            Car quantity = bySerialNumber.get();
             int i = quantity.getQuantity() + car.getQuantity();
             quantity.setQuantity(i);
             Car save = carRepository.save(quantity);
@@ -93,22 +93,6 @@ public class CarService {
     public long count(){
         return carRepository.count();
     }
-    CarDto savePhoto(CarDto carDto,byte[]photo){
-        CarDto dto = new CarDto();
-        dto.setId(carDto.getId());
-        dto.setMark(carDto.getMark());
-        dto.setModel(carDto.getModel());
-        dto.setSerialNumber(carDto.getSerialNumber());
-        dto.setPartsBrand(carDto.getPartsBrand());
-        dto.setPrice(carDto.getPrice());
-        dto.setQuantity(carDto.getQuantity());
-        if (carDto.getPhotoDto() != null) {
-            //byte[] bytes = decompressFile(car.getPhoto());
-            dto.setPhotoDto(photo);
-        }
-        dto.setCategory(carDto.getCategory());
-        return dto;
 
-    }
 
 }

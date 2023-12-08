@@ -5,12 +5,9 @@ package com.example.carshop.App.Car;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import java.io.IOException;
 import java.net.URI;
-
 import java.util.Optional;
 import java.util.Set;
 
@@ -27,11 +24,11 @@ public class CarPartsController {
     }
 
     @PostMapping( "/newPart")
-    ResponseEntity<?> save(@RequestBody CarDto part ) throws IOException {
+    ResponseEntity<CarDto> save(@RequestBody CarDto carDto)  {
 
 
 
-        CarDto save = service.save(part);
+        CarDto save = service.save(carDto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}").buildAndExpand(save.getId()).toUri();
         return ResponseEntity.created(uri).body(save);
