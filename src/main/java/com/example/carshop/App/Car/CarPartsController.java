@@ -6,6 +6,7 @@ package com.example.carshop.App.Car;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.Optional;
@@ -24,13 +25,15 @@ public class CarPartsController {
     }
 
     @PostMapping( "/newPart")
-    ResponseEntity<CarDto> save(@RequestBody CarDto carDto)  {
+    ResponseEntity<?> save(@RequestPart("carDto")CarDto carDto,@RequestPart("photoDto")MultipartFile file
+                                )  {
 
 
 
         CarDto save = service.save(carDto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}").buildAndExpand(save.getId()).toUri();
+
         return ResponseEntity.created(uri).body(save);
     }
     @DeleteMapping("/{serialNumber}")

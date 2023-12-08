@@ -31,10 +31,12 @@
     <select name="category" id="categorySelect" required></select><br>
 
 
-    <input type="file" name="photoDto" accept=".txt, .pdf, .jpg" ><br>
+    <input type="file" class="form-control" id="formFileMultiple" multiple />
+    <button type="button" onclick="submitForm()">Dodaj część</button>
 
     <button type="button" onclick="submitForm()">Dodaj część</button>
 </form>
+<p id="message"></p>
 
 <script>
     function fetchCategories() {
@@ -59,16 +61,32 @@
 
     function submitForm() {
         const form = document.getElementById('newPartForm');
-        const formData = new FormData(form);
+        const formData = new FormData();
+        const fileFields = document.querySelector('input[type="file"]');
 
 
+        let carDto = {
+            mark: form.mark.value,
+            model: form.model.value,
+            serialNumber: form.serialNumber.value,
+            partsBrand: form.partsBrand.value,
+            price: form.price.value,
+            quantity: form.quantity.value,
+            category: form.category.value,
+
+        };
+
+
+        formData.append('carDto', JSON.stringify(carDto));
+
+
+        if (fileFields.files.length > 0) {
+            formData.append('photoDto', fileFields.files[0]);
+        }
 
         fetch('/car/newPart', {
             method: 'POST',
             body: formData,
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
         })
             .then(response => response.json())
             .then(data => {
