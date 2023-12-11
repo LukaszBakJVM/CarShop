@@ -11,108 +11,78 @@
 <div class="container mt-5">
     <h1>Car Parts Management</h1>
 
-
-    <form id="searchForm">
+    <form id="searchForm" onsubmit="event.preventDefault(); searchForParts();">
         <div class="form-row">
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-6">
                 <label for="serialNumber">Numer Seryjny:</label>
                 <input type="text" class="form-control" id="serialNumber" name="serialNumber">
             </div>
-            <div class="form-group col-md-4">
-                <button type="button" class="btn btn-primary" onclick="searchParts()">Szukaj</button>
+            <div class="form-group col-md-6 mt-4">
+                <button type="submit" class="btn btn-primary">Szukaj</button>
             </div>
         </div>
     </form>
 
-
-    <button class="btn btn-success" onclick="goToNewPart()">Wprowadź Część</button>
+    <button class="btn btn-success mt-3 mb-3" onclick="goToNewPart()">Wprowadź Część</button>
+    <div id="searchResults"></div>
     <button class="btn btn-info mt-3" onclick="showPreviousResults()">Poprzednie Wyniki</button>
     <button class="btn btn-info mt-3" onclick="showNextResults()">Następne Wyniki</button>
     <a href="/index.html" class="btn btn-primary mt-3">Powrót do Strony Głównej</a>
-
-
-    <div id="searchResults"></div>
-
 </div>
 
 
 
 <script>
-
     let currentPage = 0;
 
-
-    function searchParts() {
-
+    async function searchForParts() {
         const serialNumber = document.getElementById('serialNumber').value;
-
-
         const url = `car?serialNumber=${serialNumber}&page=${currentPage}`;
-        fetch(url)
-            .then(response => response.json())
-            .then(data => {
-
-                displaySearchResults(data);
-            })
-            .catch(error => console.error('Błąd:', error));
+        const response = await fetch(url);
+        const data = await response.json();
+        displaySearchResults(data);
     }
 
+    async function searchParts() {
+        const url = `car?page=${currentPage}`;
+        const response = await fetch(url);
+        const data = await response.json();
+        displaySearchResults(data);
+    }
 
-    function deletePart(serialNumber) {
+    async function deletePart(serialNumber) {
         if (confirm("Czy na pewno chcesz usunąć część o numerze seryjnym " + serialNumber + "?")) {
-
-            fetch('/car/' + serialNumber, {
-                method: 'DELETE'
-            })
-                .then(response => {
-                    if (response.ok) {
-                        alert('Część została usunięta.');
-
-                        searchParts();
-                    } else {
-                        alert('Błąd podczas usuwania części.');
-                    }
-                })
-                .catch(error => console.error('Błąd:', error));
+            const url = '/car/' + serialNumber;
+            const response = await fetch(url, { method: 'DELETE' });
+            if (response.ok) {
+                alert('Część została usunięta.');
+                searchParts();
+            } else {
+                alert('Błąd podczas usuwania części.');
+            }
         }
     }
 
-
-    function sellPart(serialNumber, quantity, fileUrl) {
+    async function sellPart(serialNumber) {
         const sellQuantity = prompt(`Podaj ilość sztuk do sprzedaży dla części o numerze seryjnym ${serialNumber}:`);
-        if (sellQuantity !== null) { // Obsługa anulowania okna prompt
-
-
-
-                fetch(`/car/sell?serialNumber=${serialNumber}&quantity=${sellQuantity}`, {
-                    method: 'PATCH'
-
-                })
-                    .then(response => {
-                        if (response.ok) {
-
-
-                            searchParts();
-                        } else {
-                            alert('Błąd podczas sprzedaży części.');
-                        }
-                    })
-                    .catch(error => console.error('Błąd:', error));
+        if (sellQuantity !== null) {
+            const url = `/car/sell?serialNumber=${serialNumber}&quantity=${sellQuantity}`;
+            const response = await fetch(url, { method: 'PATCH' });
+            if (response.ok) {
+                searchParts();
+            } else {
+                alert('Błąd podczas sprzedaży części.');
             }
-
+        }
     }
-
 
     function goToNewPart() {
         window.location.href = 'newpart.html';
     }
 
-
     function displaySearchResults(data) {
         const searchResultsDiv = document.getElementById('searchResults');
         searchResultsDiv.innerHTML = '';
-
-
         const table = document.createElement('table');
         table.classList.add('table', 'mt-3');
 
@@ -124,57 +94,45 @@
                 <th scope="col">Numer Seryjny</th>
                 <th scope="col">Cena</th>
                 <th scope="col">Ilość</th>
-                <th scope="col">Kategoria</th>
-                <th scope="col">Plik</th>
                 <th scope="col">Akcje</th>
-
             </tr>
         `;
 
         const tbody = document.createElement('tbody');
-        data.forEach(carDto => {
+        data.forEach(carPart => {
             const tr = document.createElement('tr');
             tr.innerHTML = `
-                <td>${carDto.mark}</td>
-                <td>${carDto.model}</td>
-                <td>${carDto.serialNumber}</td>
-                <td>${carDto.price}</td>
-                <td>${carDto.quantity}</td>
-                <td>${carDto.category}</td>
+                <td>${carPart.mark}</td>
+                <td>${carPart.model}</td>
+                <td>${carPart.serialNumber}</td>
+                <td>${carPart.price}</td>
+                <td>${carPart.quantity}</td>
                 <td>
-                    ${carDto.photoDto ? `<img src="${carDto.photoDto}" alt="Zdjęcie" style="max-width: 50px;">` : 'Brak pliku'}
+                    <button class="btn btn-danger" onclick="deletePart('${carPart.serialNumber}')">Usuń</button>
+                    <button class="btn btn-warning" onclick="sellPart('${carPart.serialNumber}')">Sprzedaj</button>
                 </td>
-                <td>
-                    <button class="btn btn-danger" onclick="deletePart('${carDto.serialNumber}')">Usuń</button>
-                    <button class="btn btn-warning" onclick="sellPart('${carDto.serialNumber}', ${carDto.quantity}, '${carDto.photoDto}')">Sprzedaj</button>
-                </td>
-
             `;
             tbody.appendChild(tr);
         });
-
         table.appendChild(thead);
         table.appendChild(tbody);
-
         searchResultsDiv.appendChild(table);
     }
 
-
     function showPreviousResults() {
-
+        if (currentPage > 0) {
             currentPage--;
-
             searchParts();
-
+        }
     }
-
 
     function showNextResults() {
         currentPage++;
-
         searchParts();
     }
-</script>
 
+    // Call searchParts when the page loads
+    window.onload = searchParts;
+</script>
 </body>
 </html>
