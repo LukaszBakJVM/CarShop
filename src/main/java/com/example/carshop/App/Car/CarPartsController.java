@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.math.BigDecimal;
 import java.net.URI;
 import java.util.Optional;
 import java.util.Set;
@@ -25,8 +27,11 @@ public class CarPartsController {
     }
 
     @PostMapping( "/newPart")
-    ResponseEntity<?> save(@RequestPart("carDto")CarDto carDto,@RequestPart("photoDto")MultipartFile file
-                                )  {
+    ResponseEntity<?> save(@RequestParam String mark, @RequestParam String model,@RequestParam String serialNumber,
+        @RequestParam String partBrands,@RequestParam BigDecimal price,@RequestParam int quantity ,
+                           @RequestParam String category,@RequestParam ("file") MultipartFile file){
+
+        CarDto carDto = service.saveParam(mark, model, serialNumber, partBrands, price, quantity, category, file);
 
 
 

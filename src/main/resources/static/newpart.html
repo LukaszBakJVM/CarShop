@@ -1,101 +1,93 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dodaj nową część</title>
+    <title>Add New Part</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $.get("/category", function(data) {
+                data.forEach(function(categoryName) {
+                    $("#category").append(`<option value="${categoryName}">${categoryName}</option>`);
+                });
+            });
+        });
+    </script>
 </head>
+
 <body>
-<h2>Dodaj nową część</h2>
+<div class="container">
+    <h1>Add New Part</h1>
 
-<form id="newPartForm" enctype="multipart/form-data">
-    <label for=>Marka:</label>
-    <input type="text" name="mark" required><br>
+    <form id="newPartForm" enctype="multipart/form-data">
+        <div class="form-group">
+            <label>Mark:</label>
+            <input type="text" class="form-control" id="mark" required>
+        </div>
+        <div class="form-group">
+            <label>Model:</label>
+            <input type="text" class="form-control" id="model" required>
+        </div>
+        <div class="form-group">
+            <label>Serial Number:</label>
+            <input type="text" class="form-control" id="serialNumber" required>
+        </div>
+        <div class="form-group">
+            <label>Part Brands:</label>
+            <input type="text" class="form-control" id="partBrands" required>
+        </div>
+        <div class="form-group">
+            <label>Price:</label>
+            <input type="number" class="form-control" id="price" required>
+        </div>
+        <div class="form-group">
+            <label>Quantity:</label>
+            <input type="number" class="form-control" id="quantity" required>
+        </div>
+        <div class="form-group">
+            <label>Category:</label>
+            <select class="form-control" id="category" required>
 
-    <label for=>Model:</label>
-    <input type="text" name="model" required><br>
-
-    <label for=>Numer seryjny:</label>
-    <input type="text" name="serialNumber" required><br>
-
-    <label for=>Marka części:</label>
-    <input type="text" name="partsBrand" required><br>
-
-    <label for=>Cena:</label>
-    <input type="number" name="price" required><br>
-
-    <label for=>Ilość:</label>
-    <input type="number" name="quantity" required><br>
-
-    <label for=>Kategoria:</label>
-    <select name="category" id="categorySelect" required></select><br>
-
-
-    <input type="file" class="form-control" id="formFileMultiple" multiple />
-    <button type="button" onclick="submitForm()">Dodaj część</button>
-
-    <button type="button" onclick="submitForm()">Dodaj część</button>
-</form>
-<p id="message"></p>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>File:</label>
+            <input type="file" class="form-control" id="file" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
 
 <script>
-    function fetchCategories() {
-        fetch('/category')
-            .then(response => response.json())
-            .then(data => {
-                const categorySelect = document.getElementById('categorySelect');
+    $("#newPartForm").submit(function(e) {
+        e.preventDefault();
 
-                data.forEach(category => {
-                    const option = document.createElement('option');
-                    option.value = category;
-                    option.textContent = category;
-                    categorySelect.appendChild(option);
-                });
-            })
-            .catch(error => {
-                console.error('Błąd podczas pobierania kategorii:', error);
-            });
-    }
+        let formData = new FormData();
+        formData.append("mark", $("#mark").val());
+        formData.append("model", $("#model").val());
+        formData.append("serialNumber", $("#serialNumber").val());
+        formData.append("partBrands", $("#partBrands").val());
+        formData.append("price", $("#price").val());
+        formData.append("quantity", $("#quantity").val());
+        formData.append("category", $("#category").val());
+        formData.append("file", $("#file")[0].files[0]);
 
-    document.addEventListener('DOMContentLoaded', fetchCategories);
+        $.ajax({
+            type: "POST",
+            url: "/car/newPart",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                console.log(response);
 
-    function submitForm() {
-        const form = document.getElementById('newPartForm');
-        const formData = new FormData();
-        const fileFields = document.querySelector('input[type="file"]');
+            },
+            error: function(error) {
+                console.log(error);
 
-
-        let carDto = {
-            mark: form.mark.value,
-            model: form.model.value,
-            serialNumber: form.serialNumber.value,
-            partsBrand: form.partsBrand.value,
-            price: form.price.value,
-            quantity: form.quantity.value,
-            category: form.category.value,
-
-        };
-
-
-        formData.append('carDto', JSON.stringify(carDto));
-
-
-        if (fileFields.files.length > 0) {
-            formData.append('photoDto', fileFields.files[0]);
-        }
-
-        fetch('/car/newPart', {
-            method: 'POST',
-            body: formData,
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Część została dodana:', data);
-            })
-            .catch(error => {
-                console.error('Błąd podczas dodawania części:', error);
-            });
-    }
+            }
+        });
+    });
 </script>
 </body>
 </html>

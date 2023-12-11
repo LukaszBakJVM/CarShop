@@ -5,8 +5,11 @@ import com.example.carshop.App.Exception.NotFoundException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import org.springframework.web.multipart.MultipartFile;
 
 
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -92,6 +95,26 @@ public class CarService {
 
     public long count(){
         return carRepository.count();
+    }
+    CarDto saveParam( String mark,  String model, String serialNumber,
+                      String partBrands,  BigDecimal price,  int quantity ,
+                      String category,  MultipartFile file){
+        CarDto dto = new CarDto();
+
+        dto.setMark(mark);
+        dto.setModel(model);
+        dto.setSerialNumber(serialNumber);
+        dto.setPartsBrand(partBrands);
+        dto.setPrice(price);
+        dto.setQuantity(quantity);
+        try {
+            dto.setPhotoDto(file.getBytes());
+        } catch (IOException e) {
+           e.getCause();
+        }
+        dto.setCategory(category);
+        return dto;
+
     }
 
 
