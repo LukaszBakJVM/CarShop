@@ -80,43 +80,125 @@
         window.location.href = 'newpart.html';
     }
 
-    function displaySearchResults(data) {
+    async function displaySearchResults(data) {
         const searchResultsDiv = document.getElementById('searchResults');
         searchResultsDiv.innerHTML = '';
+
         const table = document.createElement('table');
         table.classList.add('table', 'mt-3');
 
         const thead = document.createElement('thead');
         thead.innerHTML = `
-            <tr>
-                <th scope="col">Marka</th>
-                <th scope="col">Model</th>
-                <th scope="col">Numer Seryjny</th>
-                <th scope="col">Cena</th>
-                <th scope="col">Ilość</th>
-                <th scope="col">Akcje</th>
-            </tr>
-        `;
+        <tr>
+            <th scope="col">Marka</th>
+            <th scope="col">Model</th>
+            <th scope="col">Numer Seryjny</th>
+            <th scope="col">Cena</th>
+            <th scope="col">Ilość</th>
+            <th scope="col">Plik</th>
+            <th scope="col">Akcje</th>
+        </tr>
+    `;
 
         const tbody = document.createElement('tbody');
-        data.forEach(carPart => {
+        for (const carPart of data) {
             const tr = document.createElement('tr');
             tr.innerHTML = `
-                <td>${carPart.mark}</td>
-                <td>${carPart.model}</td>
-                <td>${carPart.serialNumber}</td>
-                <td>${carPart.price}</td>
-                <td>${carPart.quantity}</td>
-                <td>
-                    <button class="btn btn-danger" onclick="deletePart('${carPart.serialNumber}')">Usuń</button>
-                    <button class="btn btn-warning" onclick="sellPart('${carPart.serialNumber}')">Sprzedaj</button>
-                </td>
-            `;
+            <td>${carPart.mark}</td>
+            <td>${carPart.model}</td>
+            <td>${carPart.serialNumber}</td>
+            <td>${carPart.price}</td>
+            <td>${carPart.quantity}</td>
+            <td>${await getFileDisplay(carPart)}</td>
+            <td>
+                <button class="btn btn-danger" onclick="deletePart('${carPart.serialNumber}')">Usuń</button>
+                <button class="btn btn-warning" onclick="sellPart('${carPart.serialNumber}')">Sprzedaj</button>
+            </td>
+        `;
             tbody.appendChild(tr);
-        });
+        }
+
         table.appendChild(thead);
         table.appendChild(tbody);
         searchResultsDiv.appendChild(table);
+    }
+
+    async function getFileDisplay(carPart) {
+        if (carPart.photoDto) {
+            const base64String = btoa(new Uint8Array(carPart.photoDto).reduce(function (data, byte) {
+                return data + String.fromCharCode(byte);
+            }, ''));
+
+            try {
+                const fileType = await getFileType(carPart.serialNumber);
+
+                if (fileType === "image") {
+                    const imgBlob = base64ToBlob(base64String, 'image/jpeg');
+                    const imgUrl = URL.createObjectURL(imgBlob);
+                    return `<img src="${imgUrl}" alt="Zdjęcie" style="max-width: 50px;">`;
+                } else if (fileType === "pdf" || fileType === "txt") {
+                    return `<a href="#" onclick="openFile('${base64String}', '${fileType}')">Otwórz plik</a>`;
+                }
+            } catch (error) {
+                console.error("Błąd podczas pobierania typu pliku:", error);
+            }
+        }
+
+        return "Brak pliku";
+    }
+
+    async function openFile(base64String, fileType) {
+        const blob = base64ToBlob(base64String, fileType);
+        const blobUrl = URL.createObjectURL(blob);
+
+        const formData = new FormData();
+        formData.append("file", blob);
+
+        const response = await fetch("car/tmp", {
+            method: "POST",
+            body: formData
+        });
+
+        if (response.ok) {
+            // Jeśli plik został pomyślnie zapisany na serwerze, otwieramy go w nowym oknie/przeglądarce
+            window.open(blobUrl, "_blank");
+        } else {
+            console.error("Błąd podczas zapisywania pliku tymczasowego na serwerze");
+        }
+
+    }
+
+    async function getFileType(serialNumber) {
+        const url = `/car/filetyp/${serialNumber}`;
+        const response = await fetch(url);
+        const fileType = await response.text();
+        return fileType.trim().toLowerCase();
+    }
+
+    function base64ToBlob(base64String, type) {
+        const binaryString = atob(base64String);
+        const length = binaryString.length;
+        const binaryArray = new Uint8Array(length);
+
+        for (let i = 0; i < length; i++) {
+            binaryArray[i] = binaryString.charCodeAt(i);
+        }
+
+        return new Blob([binaryArray], { type: type });
+    }
+    async function openFile(base64String, fileType) {
+        const blob = base64ToBlob(base64String, fileType);
+
+        // Tworzymy URL z bloba
+        const blobUrl = URL.createObjectURL(blob);
+
+        // Tworzymy nowe okno przeglądarki
+        const newWindow = window.open(blobUrl, "_blank");
+
+        if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+            // Jeśli okno nie zostało otwarte (może być zablokowane przez przeglądarkę), informujemy użytkownika
+            alert("Nie udało się otworzyć nowego okna. Spróbuj wyłączyć blokowanie okien popup w przeglądarce.");
+        }
     }
 
     function showPreviousResults() {
@@ -131,7 +213,7 @@
         searchParts();
     }
 
-    // Call searchParts when the page loads
+
     window.onload = searchParts;
 </script>
 </body>
