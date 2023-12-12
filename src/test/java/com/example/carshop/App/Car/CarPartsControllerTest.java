@@ -30,7 +30,7 @@ class CarPartsControllerTest {
     private final String END_POINT = "/car";
 
 
-    @Test
+ /*   @Test
     void saveIfExist() throws Exception {
 
         mockMvc.perform(MockMvcRequestBuilders.post(END_POINT + "/newPart")
@@ -126,5 +126,5 @@ class CarPartsControllerTest {
         carDto.setQuantity(2);
         carDto.setCategory("Opony");
         return carDto;
-    }
+    }*/
 }

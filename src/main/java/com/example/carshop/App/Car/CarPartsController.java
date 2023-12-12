@@ -10,12 +10,15 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.File;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.util.Optional;
 import java.util.Set;
+
+import static java.io.File.createTempFile;
 
 @RestController
 @RequestMapping("/car")
@@ -80,20 +83,26 @@ public class CarPartsController {
 
     @PostMapping("/tmp")
     public ResponseEntity<String> saveTempFile(@RequestParam("file") MultipartFile file) {
+        File tempFile;
         try {
-
-            File tempFile = File.createTempFile("C:\\Users\\Lukasz", ".pdf");
-
-            try (FileOutputStream fos = new FileOutputStream(tempFile)) {
-                fos.write(file.getBytes());
-            }
-
-
-            return ResponseEntity.ok(tempFile.getAbsolutePath());
+            tempFile = createTempFile("/tmp", ".pdf");
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        try(var fos =  new FileOutputStream(tempFile)) {
+
+            fos.write(file.getBytes());
+            return ResponseEntity.ok(tempFile.getAbsolutePath());
+            } catch (IOException e) {
+            e.getCause();
             return ResponseEntity.status(500).body("Błąd podczas zapisywania pliku tymczasowego");
+
+        }
+
+
+
+
         }
     }
-}
+
 

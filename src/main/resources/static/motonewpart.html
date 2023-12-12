@@ -55,7 +55,7 @@
             <input type="file" class="form-control" id="file" required>
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
-        <button class="btn btn-warning" onclick="window.location.href='car.html'">Powrot do wyszukiwania</button>
+        <button class="btn btn-warning" onclick="window.location.href='moto.html'">Powrot do wyszukiwania</button>
     </form>
 </div>
 
@@ -75,7 +75,7 @@
 
         $.ajax({
             type: "POST",
-            url: "/car/newPart",
+            url: "/moto/newPart",
             data: formData,
             processData: false,
             contentType: false,

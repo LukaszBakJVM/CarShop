@@ -35,14 +35,14 @@
 
     async function searchForParts() {
         const serialNumber = document.getElementById('serialNumber').value;
-        const url = `car?serialNumber=${serialNumber}&page=${currentPage}`;
+        const url = `moto?serialNumber=${serialNumber}&page=${currentPage}`;
         const response = await fetch(url);
         const data = await response.json();
         displaySearchResults(data);
     }
 
     async function searchParts() {
-        const url = `car?page=${currentPage}`;
+        const url = `moto?page=${currentPage}`;
         const response = await fetch(url);
         const data = await response.json();
         displaySearchResults(data);
@@ -50,7 +50,7 @@
 
     async function deletePart(serialNumber) {
         if (confirm("Czy na pewno chcesz usunąć część o numerze seryjnym " + serialNumber + "?")) {
-            const url = '/car/' + serialNumber;
+            const url = '/moto/' + serialNumber;
             const response = await fetch(url, { method: 'DELETE' });
             if (response.ok) {
                 alert('Część została usunięta.');
@@ -64,7 +64,7 @@
     async function sellPart(serialNumber) {
         const sellQuantity = prompt(`Podaj ilość sztuk do sprzedaży dla części o numerze seryjnym ${serialNumber}:`);
         if (sellQuantity !== null) {
-            const url = `/car/sell?serialNumber=${serialNumber}&quantity=${sellQuantity}`;
+            const url = `/moto/sell?serialNumber=${serialNumber}&quantity=${sellQuantity}`;
             const response = await fetch(url, { method: 'PATCH' });
             if (response.ok) {
                 searchParts();
@@ -75,7 +75,7 @@
     }
 
     function goToNewPart() {
-        window.location.href = 'newpart.html';
+        window.location.href = 'motonewpart.html';
     }
 
     async function displaySearchResults(data) {
@@ -135,7 +135,7 @@
                     const imgUrl = URL.createObjectURL(imgBlob);
                     return `<img src="${imgUrl}" alt="Zdjęcie" style="max-width: 50px;">`;
                 } else if (fileType === "pdf" || fileType === "txt") {
-                    // Dodaj bezpośredni link do otwarcia pliku w kolumnie
+
                     return `<a href="#" onclick="openFile('${base64String}', '${fileType}')">Otwórz plik</a>`;
                 }
             } catch (error) {
@@ -153,13 +153,13 @@
         const formData = new FormData();
         formData.append("file", blob);
 
-        const response = await fetch("car/tmp", {
+        const response = await fetch("moto/tmp", {
             method: "POST",
             body: formData
         });
 
         if (response.ok) {
-            // Jeśli plik został pomyślnie zapisany na serwerze, otwieramy go w nowym oknie/przeglądarce
+
             window.open(blobUrl, "_blank");
         } else {
             console.error("Błąd podczas zapisywania pliku tymczasowego na serwerze");
@@ -167,7 +167,7 @@
     }
 
     async function getFileType(serialNumber) {
-        const url = `/car/filetyp/${serialNumber}`;
+        const url = `/moto/filetyp/${serialNumber}`;
         const response = await fetch(url);
         const fileType = await response.text();
         return fileType.trim().toLowerCase();
