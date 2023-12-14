@@ -1,8 +1,12 @@
 package com.example.carshop.App.LoginAndRegistration.Registration;
 
 
+import jakarta.servlet.http.HttpServletResponse;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.io.IOException;
 
 
 @RestController
@@ -14,9 +18,10 @@ public class RegistrationController {
     }
 
     @PostMapping("/register")
-    String register(RegistrationDto dto) {
+    void register(RegistrationDto dto, HttpServletResponse response) throws IOException {
        service.register(dto);
 
-        return  "ok";
+        response.sendRedirect("/login");
     }
+
 }
