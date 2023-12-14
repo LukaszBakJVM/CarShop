@@ -27,11 +27,12 @@ public class Configuration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         PathRequest.H2ConsoleRequestMatcher h2Console = PathRequest.toH2Console();
         http.csrf(h2->h2.ignoringRequestMatchers(h2Console));
-        http.formLogin(AbstractAuthenticationFilterConfigurer::permitAll);
+        //http.formLogin(AbstractAuthenticationFilterConfigurer::permitAll);
+        http.formLogin(e->e.loginPage("/login").permitAll());
 
-        http.authorizeHttpRequests(a -> a.requestMatchers("/", "/img/**", "/register.html","/register")
+        http.authorizeHttpRequests(a -> a.requestMatchers("/", "/img/**", "/register.html","/register","/login.html")
                 .permitAll().requestMatchers(h2Console).permitAll().anyRequest().authenticated());
-        http.csrf(i->i.ignoringRequestMatchers("/register"));
+        http.csrf(i->i.ignoringRequestMatchers("/register","/login"));
 
         http.headers(httpSecurityHeadersConfigurer -> httpSecurityHeadersConfigurer
        .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
