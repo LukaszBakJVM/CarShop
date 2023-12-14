@@ -1,9 +1,9 @@
 package com.example.carshop.App.LoginAndRegistration;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Role {
@@ -12,6 +12,8 @@ public class Role {
     private long id;
     private String name;
     private String description;
+    @ManyToMany
+    private Set<Person>people = new HashSet<>();
 
     public long getId() {
         return id;
@@ -35,5 +37,13 @@ public class Role {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Set<Person> getPeople() {
+        return people;
+    }
+
+    public void setPeople(Set<Person> people) {
+        this.people = people;
     }
 }

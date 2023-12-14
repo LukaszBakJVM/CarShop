@@ -1,7 +1,7 @@
 package com.example.carshop.App.LoginAndRegistration.Registration;
 
 public class RegistrationDto {
-    private Long userId;
+    private long userId;
     private String firstName;
     private String lastName;
     private String email;
@@ -13,11 +13,11 @@ public class RegistrationDto {
     private String street;
     private String houseNumber;
 
-    public Long getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 

@@ -21,6 +21,7 @@ public class RegistrationService {
         Person person = mapper.map(dto);
         Address address = person.getAddress();
         Address save = addressRepository.save(address);
+        address.setPerson(person);
         person.setAddress(save);
         Person savePerson = repository.save(person);
 

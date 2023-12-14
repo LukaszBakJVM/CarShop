@@ -20,7 +20,7 @@ public class Person {
     private String password;
     @OneToOne
     private Address address;
-    @ManyToMany()
+    @ManyToMany(mappedBy = "people",fetch = FetchType.EAGER)
     private Set<Role> roles = new HashSet<>();
 
     public Person() {

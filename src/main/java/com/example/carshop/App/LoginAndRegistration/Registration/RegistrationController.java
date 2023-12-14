@@ -1,7 +1,9 @@
 package com.example.carshop.App.LoginAndRegistration.Registration;
 
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 
 @RestController
 public class RegistrationController {
@@ -13,7 +15,8 @@ public class RegistrationController {
 
     @PostMapping("/register")
     String register(RegistrationDto dto) {
-        service.register(dto);
-        return "redirect:/index";
+       service.register(dto);
+
+        return  "ok";
     }
 }

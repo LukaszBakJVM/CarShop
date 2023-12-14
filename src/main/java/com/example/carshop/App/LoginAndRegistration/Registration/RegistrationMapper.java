@@ -32,6 +32,7 @@ public class RegistrationMapper {
         person.getRoles().add(role);
         address.setId(dto.getAddressId());
         address.setCity(dto.getCity());
+        address.setZipCode(dto.getZipCode());
         address.setStreet(dto.getStreet());
         address.setHouseNumber(dto.getHouseNumber());
         person.setAddress(address);
@@ -47,6 +48,7 @@ public class RegistrationMapper {
         dto.setEmail(person.getEmail());
         dto.setAddressId(person.getAddress().getId());
         dto.setCity(person.getAddress().getCity());
+        dto.setZipCode(person.getAddress().getZipCode());
         dto.setStreet(person.getAddress().getStreet());
         dto.setHouseNumber(person.getAddress().getHouseNumber());
         return dto;

@@ -1,0 +1,1 @@
+insert into role (name,description) values ('User','Uzytkownik')
