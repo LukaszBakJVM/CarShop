@@ -30,7 +30,7 @@ public class Configuration {
         http.formLogin(AbstractAuthenticationFilterConfigurer::permitAll);
 
         http.authorizeHttpRequests(a -> a.requestMatchers("/", "/img/**", "/register.html","/register")
-                .permitAll().requestMatchers(h2Console).permitAll());
+                .permitAll().requestMatchers(h2Console).permitAll().anyRequest().authenticated());
         http.csrf(i->i.ignoringRequestMatchers("/register"));
 
         http.headers(httpSecurityHeadersConfigurer -> httpSecurityHeadersConfigurer
