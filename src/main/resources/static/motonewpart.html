@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dodaj czesc</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $.get("/category", function(data) {
+                data.forEach(function(categoryName) {
+                    $("#category").append(`<option value="${categoryName}">${categoryName}</option>`);
+                });
+            });
+        });
+    </script>
+</head>
+
+<body>
+<div class="container">
+    <h1>Dodaj czesc</h1>
+
+    <form id="newPartForm" enctype="multipart/form-data">
+        <div class="form-group">
+            <label>Mark:</label>
+            <input type="text" class="form-control" id="mark" required>
+        </div>
+        <div class="form-group">
+            <label>Model:</label>
+            <input type="text" class="form-control" id="model" required>
+        </div>
+        <div class="form-group">
+            <label>Serial Number:</label>
+            <input type="text" class="form-control" id="serialNumber" required>
+        </div>
+        <div class="form-group">
+            <label>Part Brands:</label>
+            <input type="text" class="form-control" id="partBrands" required>
+        </div>
+        <div class="form-group">
+            <label>Price:</label>
+            <input type="number" class="form-control" id="price" required>
+        </div>
+        <div class="form-group">
+            <label>Quantity:</label>
+            <input type="number" class="form-control" id="quantity" required>
+        </div>
+        <div class="form-group">
+            <label>Category:</label>
+            <select class="form-control" id="category" required>
+
+            </select>
+        </div>
+        <div class="form-group">
+            <label>File:</label>
+            <input type="file" class="form-control" id="file" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <button class="btn btn-warning" onclick="window.location.href='moto.html'">Powrot do wyszukiwania</button>
+    </form>
+</div>
+
+<script>
+    $("#newPartForm").submit(function(e) {
+        e.preventDefault();
+
+        let formData = new FormData();
+        formData.append("mark", $("#mark").val());
+        formData.append("model", $("#model").val());
+        formData.append("serialNumber", $("#serialNumber").val());
+        formData.append("partBrands", $("#partBrands").val());
+        formData.append("price", $("#price").val());
+        formData.append("quantity", $("#quantity").val());
+        formData.append("category", $("#category").val());
+        formData.append("file", $("#file")[0].files[0]);
+
+        $.ajax({
+            type: "POST",
+            url: "/moto/newPart",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                console.log(response);
+
+            },
+            error: function(error) {
+                console.log(error);
+
+            }
+        });
+    });
+</script>
+</body>
+</html>

@@ -8,11 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -24,35 +27,83 @@ class MotoControllerTest {
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
+    private final String filePatch= "F:/Projekty/CarShop/src/main/resources/static/img/samochod.jpg";
+
     private final String END_POINT = "/moto";
 
     @Test
     void saveIfExist() throws Exception {
+        byte[] bytes = Files.readAllBytes(Path.of(filePatch));
 
-        mockMvc.perform(MockMvcRequestBuilders.post(END_POINT + "/newPart")
-                        .content(objectMapper.writeValueAsString(exist()))
-                        .contentType(MediaType.APPLICATION_JSON))
+        String mark = "mark";
+        String model = "model";
+        String serialNumber = "serialNumber";
+        String partBrands = "partBrands";
+        BigDecimal price = new BigDecimal("100");
+        int quantity = 10;
+        String category = "Opony";
+        MockMultipartFile file = new MockMultipartFile("file", bytes);
+
+        mockMvc.perform(MockMvcRequestBuilders.multipart(END_POINT + "/newPart")
+                        .file(file)
+                        .param("mark",mark)
+                        .param("model",model)
+                        .param("serialNumber",serialNumber)
+                        .param("partBrands",partBrands)
+                        .param("price",price.toString())
+                        .param("quantity",String.valueOf(quantity))
+                        .param("category",category)
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .content(file.getBytes())
+                        .characterEncoding("utf-8"))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath("$").exists());
     }
 
     @Test
     void save() throws Exception {
+        byte[] bytes = Files.readAllBytes(Path.of(filePatch));
 
-        mockMvc.perform(MockMvcRequestBuilders.post(END_POINT + "/newPart")
-                        .content(objectMapper.writeValueAsString(motoDto()))
-                        .contentType(MediaType.APPLICATION_JSON))
+        String mark = "mark";
+        String model = "model";
+        String serialNumber = "serialNumberNotExist";
+        String partBrands = "partBrands";
+        BigDecimal price = new BigDecimal("100");
+        int quantity = 10;
+        String category = "Opony";
+        MockMultipartFile file = new MockMultipartFile("file", bytes);
+
+        mockMvc.perform(MockMvcRequestBuilders.multipart(END_POINT + "/newPart")
+                        .file(file)
+                        .param("mark",mark)
+                        .param("model",model)
+                        .param("serialNumber",serialNumber)
+                        .param("partBrands",partBrands)
+                        .param("price",price.toString())
+                        .param("quantity",String.valueOf(quantity))
+                        .param("category",category)
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .content(file.getBytes())
+                        .characterEncoding("utf-8"))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath("$").exists());
     }
-
     @Test
     void deleteBySerialNumber() throws Exception {
-        String serialNumber = "1";
+        String serialNumber = "serialNumber";
         mockMvc.perform(MockMvcRequestBuilders.delete(END_POINT+"/{serialNumber}",serialNumber)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isNoContent());
 
+    }
+
+    @Test
+    void deleteBySerialNumberNotFound() throws Exception {
+        String serialNumber = "1111111";
+        mockMvc.perform(MockMvcRequestBuilders.delete(END_POINT + "/{serialNumber}", serialNumber)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andDo(print());
     }
 
     @Test
@@ -79,7 +130,7 @@ class MotoControllerTest {
 
     @Test
     void sellPart() throws Exception {
-        String serialNumber = "111";
+        String serialNumber = "1111";
         int quantity = 2;
 
         mockMvc.perform(MockMvcRequestBuilders.patch(END_POINT + "/sell")
@@ -87,22 +138,11 @@ class MotoControllerTest {
                         .param("quantity", String.valueOf(quantity))
                         .content(objectMapper.writeValueAsString(motoDto()))
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isNoContent());
+                .andExpect(MockMvcResultMatchers.status().isNoContent())
+                .andDo(print());
     }
 
 
-    private MotoDto exist() {
-       MotoDto motoDto = new MotoDto();
-
-        motoDto.setMark("Opel");
-        motoDto.setModel("Corsa");
-        motoDto.setSerialNumber("111");
-        motoDto.setPartsBrand("Febi");
-        motoDto.setPrice(BigDecimal.valueOf(10));
-        motoDto.setQuantity(3);
-        motoDto.setCategory("Opony");
-        return motoDto;
-    }
 
     private MotoDto motoDto() {
         MotoDto motoDto = new MotoDto();

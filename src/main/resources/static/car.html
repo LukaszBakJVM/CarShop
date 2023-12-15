@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <title>Sklep</title>
+</head>
+<body>
+
+<div class="container mt-5">
+    <h1>Sklep</h1>
+
+    <form id="searchForm" onsubmit="event.preventDefault(); searchForParts();">
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="serialNumber">Numer Seryjny:</label>
+                <input type="text" class="form-control" id="serialNumber" name="serialNumber">
+            </div>
+            <div class="form-group col-md-6 mt-4">
+                <button type="submit" class="btn btn-primary">Szukaj</button>
+            </div>
+        </div>
+    </form>
+
+    <button class="btn btn-success mt-3 mb-3" onclick="goToNewPart()">Wprowadź Część</button>
+    <div id="searchResults"></div>
+    <button class="btn btn-info mt-3" onclick="showPreviousResults()">Poprzednie Wyniki</button>
+    <button class="btn btn-info mt-3" onclick="showNextResults()">Następne Wyniki</button>
+    <a href="/index.html" class="btn btn-primary mt-3">Powrót do Strony Głównej</a>
+</div>
+
+<script>
+    let currentPage = 0;
+
+    async function searchForParts() {
+        const serialNumber = document.getElementById('serialNumber').value;
+        const url = `car?serialNumber=${serialNumber}&page=${currentPage}`;
+        const response = await fetch(url);
+        const data = await response.json();
+        displaySearchResults(data);
+    }
+
+    async function searchParts() {
+        const url = `car?page=${currentPage}`;
+        const response = await fetch(url);
+        const data = await response.json();
+        displaySearchResults(data);
+    }
+
+    async function deletePart(serialNumber) {
+        if (confirm("Czy na pewno chcesz usunąć część o numerze seryjnym " + serialNumber + "?")) {
+            const url = '/car/' + serialNumber;
+            const response = await fetch(url, { method: 'DELETE' });
+            if (response.ok) {
+                alert('Część została usunięta.');
+                searchParts();
+            } else {
+                alert('Błąd podczas usuwania części.');
+            }
+        }
+    }
+
+    async function sellPart(serialNumber) {
+        const sellQuantity = prompt(`Podaj ilość sztuk do sprzedaży dla części o numerze seryjnym ${serialNumber}:`);
+        if (sellQuantity !== null) {
+            const url = `/car/sell?serialNumber=${serialNumber}&quantity=${sellQuantity}`;
+            const response = await fetch(url, { method: 'PATCH' });
+            if (response.ok) {
+                searchParts();
+            } else {
+                alert('Błąd podczas sprzedaży części.');
+            }
+        }
+    }
+
+    function goToNewPart() {
+        window.location.href = 'newpart.html';
+    }
+
+    async function displaySearchResults(data) {
+        const searchResultsDiv = document.getElementById('searchResults');
+        searchResultsDiv.innerHTML = '';
+
+        const table = document.createElement('table');
+        table.classList.add('table', 'mt-3');
+
+        const thead = document.createElement('thead');
+        thead.innerHTML = `
+        <tr>
+            <th scope="col">Marka</th>
+            <th scope="col">Model</th>
+            <th scope="col">Numer Seryjny</th>
+            <th scope="col">Cena</th>
+            <th scope="col">Ilość</th>
+            <th scope="col">Plik</th>
+            <th scope="col">Akcje</th>
+        </tr>
+    `;
+        table.appendChild(thead);
+
+        const tbody = document.createElement('tbody');
+        for (const carPart of data) {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+            <td>${carPart.mark}</td>
+            <td>${carPart.model}</td>
+            <td>${carPart.serialNumber}</td>
+            <td>${carPart.price}</td>
+            <td>${carPart.quantity}</td>
+            <td>${await getFileDisplay(carPart)}</td>
+            <td>
+                <button class="btn btn-danger" onclick="deletePart('${carPart.serialNumber}')">Usuń</button>
+                <button class="btn btn-warning" onclick="sellPart('${carPart.serialNumber}')">Sprzedaj</button>
+            </td>
+        `;
+            tbody.appendChild(tr);
+        }
+        table.appendChild(tbody);
+
+        searchResultsDiv.appendChild(table);
+    }
+
+    async function getFileDisplay(carPart) {
+        if (carPart.photoDto) {
+            const base64String = btoa(new Uint8Array(carPart.photoDto).reduce(function (data, byte) {
+                return data + String.fromCharCode(byte);
+            }, ''));
+
+            try {
+                const fileType = await getFileType(carPart.serialNumber);
+
+                if (fileType === "image") {
+                    const imgBlob = base64ToBlob(base64String, 'image/jpeg');
+                    const imgUrl = URL.createObjectURL(imgBlob);
+                    return `<img src="${imgUrl}" alt="Zdjęcie" style="max-width: 50px;">`;
+                } else if (fileType === "pdf" || fileType === "txt") {
+                    // Dodaj bezpośredni link do otwarcia pliku w kolumnie
+                    return `<a href="#" onclick="openFile('${base64String}', '${fileType}')">Otwórz plik</a>`;
+                }
+            } catch (error) {
+                console.error("Błąd podczas pobierania typu pliku:", error);
+            }
+        }
+
+        return "Brak pliku";
+    }
+
+    async function openFile(base64String, fileType) {
+        const blob = base64ToBlob(base64String, fileType);
+        const blobUrl = URL.createObjectURL(blob);
+
+        const formData = new FormData();
+        formData.append("file", blob);
+
+        const response = await fetch("car/tmp", {
+            method: "POST",
+            body: formData
+        });
+
+        if (response.ok) {
+            // Jeśli plik został pomyślnie zapisany na serwerze, otwieramy go w nowym oknie/przeglądarce
+            window.open(blobUrl, "_blank");
+        } else {
+            console.error("Błąd podczas zapisywania pliku tymczasowego na serwerze");
+        }
+    }
+
+    async function getFileType(serialNumber) {
+        const url = `/car/filetyp/${serialNumber}`;
+        const response = await fetch(url);
+        const fileType = await response.text();
+        return fileType.trim().toLowerCase();
+    }
+
+    function base64ToBlob(base64String, type) {
+        const binaryString = atob(base64String);
+        const length = binaryString.length;
+        const binaryArray = new Uint8Array(length);
+
+        for (let i = 0; i < length; i++) {
+            binaryArray[i] = binaryString.charCodeAt(i);
+        }
+
+        return new Blob([binaryArray], { type: type });
+    }
+
+    function showPreviousResults() {
+        if (currentPage > 0) {
+            currentPage--;
+            searchParts();
+        }
+    }
+
+    function showNextResults() {
+        currentPage++;
+        searchParts();
+    }
+
+    window.onload = searchParts;
+</script>
+</body>
+</html>

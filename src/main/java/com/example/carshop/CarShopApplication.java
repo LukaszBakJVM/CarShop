@@ -4,10 +4,10 @@ package com.example.carshop;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration;
 
 
-
-@SpringBootApplication
+@SpringBootApplication(exclude = {SecurityFilterAutoConfiguration.class})
 public class CarShopApplication {
 
     public static void main(String[] args) {

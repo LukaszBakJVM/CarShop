@@ -2,8 +2,15 @@ package com.example.carshop.App.Moto;
 
 
 
+
+import com.example.carshop.App.Car.CarDto;
+import com.example.carshop.App.Exception.NotFoundException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -20,9 +27,9 @@ public class MotoService {
     }
     public MotoDto save(MotoDto motoDto){
         MotoParts motoParts = motoMapper.map(motoDto);
-        Optional<MotoParts> bySerialnumber = motoRepository.findBySerialNumber(motoParts.getSerialNumber());
-        if (bySerialnumber.isPresent()){
-            MotoParts quantity = bySerialnumber.get();
+        Optional<MotoParts> bySerialNumber = motoRepository.findBySerialNumber(motoParts.getSerialnumber());
+        if (bySerialNumber.isPresent()){
+            MotoParts quantity = bySerialNumber.get();
             int i = quantity.getQuantity() + motoParts.getQuantity();
             quantity.setQuantity(i);
             MotoParts saveFound = motoRepository.save(quantity);
@@ -30,11 +37,15 @@ public class MotoService {
         }
         MotoParts save = motoRepository.save(motoParts);
         return motoMapper.map(save);
-
     }
     public void delete(String serial) {
-        Optional<MotoParts> bySerialnumber = motoRepository.findBySerialNumber(serial);
-        bySerialnumber.ifPresent(motoRepository::delete);
+        Optional<MotoParts> bySerialNumber = motoRepository.findBySerialNumber(serial);
+        if (bySerialNumber.isPresent()){
+            MotoParts motoParts = bySerialNumber.get();
+            motoRepository.delete(motoParts);
+        }else {
+            throw new NotFoundException();
+        }
 
     }
 
@@ -44,7 +55,9 @@ public class MotoService {
                 .getContent()
                 .stream().map(motoMapper::map)
                 .collect(Collectors.toSet());
+
     }
+
 
     public Set<MotoDto> findAll(int page) {
         PageRequest pageRequest = PageRequest.of(page, PAGE_SIZE);
@@ -79,5 +92,44 @@ public class MotoService {
     }
     public long count(){
         return motoRepository.count();
+    }
+
+    MotoDto saveParam(String mark, String model, String serialNumber,
+                     String partBrands, BigDecimal price, int quantity ,
+                     String category, MultipartFile file){
+        MotoDto dto = new MotoDto();
+
+        dto.setMark(mark);
+        dto.setModel(model);
+        dto.setSerialNumber(serialNumber);
+        dto.setPartsBrand(partBrands);
+        dto.setPrice(price);
+        dto.setQuantity(quantity);
+        try {
+            dto.setPhotoDto(file.getBytes());
+        } catch (IOException e) {
+            e.getCause();
+        }
+        dto.setCategory(category);
+        return dto;
+
+    }
+    String fileTyp(byte[] photoByte) {
+        if (photoByte.length < 5){
+            photoByte = new byte[]{(byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF};
+        }
+        String fileType = "unknown file type";
+        if ((photoByte[0] == (byte) 0xFF) && (photoByte[1] == (byte) 0xD8)) {
+            fileType = "image";
+
+        } else if ((photoByte[0] == (byte) 0x25) && (photoByte[1] == (byte) 0x50) &&
+                (photoByte[2] == (byte) 0x44) && (photoByte[3] == (byte) 0x46)) {
+            fileType = "pdf";
+
+        } else if ((photoByte[0] >= 0x20 && photoByte[0] <= 0x7E) &&
+                (photoByte[1] >= 0x20 && photoByte[1] <= 0x7E)) {
+            fileType = "txt";
+        }
+        return fileType;
     }
 }
