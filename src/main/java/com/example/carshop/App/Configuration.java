@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
+
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,7 +30,8 @@ public class Configuration {
         //http.formLogin(AbstractAuthenticationFilterConfigurer::permitAll);
         http.formLogin(e->e.loginPage("/login").permitAll());
 
-        http.authorizeHttpRequests(a -> a.requestMatchers("/", "/img/**", "/register.html","/register","/login.html")
+        http.authorizeHttpRequests(a -> a.requestMatchers("/", "/img/**", "/register.html",
+                        "/register","/login.html","/index.html")
                 .permitAll().requestMatchers(h2Console).permitAll().anyRequest().authenticated());
         http.csrf(i->i.ignoringRequestMatchers("/register","/login"));
 
