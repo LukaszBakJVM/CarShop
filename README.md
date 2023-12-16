@@ -5,7 +5,7 @@ https://carshop.freeddns.org
 
 You need to enter login and  password  to MYsql database application.properties.
 To run application 
-# clon https://github.com/LukaszBakJVM/CarShop
+# clon https://github.com/LukaszBakJVM/CarShop](https://github.com/LukaszBakJVM/CarShop/tree/Vaadin
 # maven clean
 # maven install 
 # java - jar /file path
