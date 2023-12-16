@@ -4,6 +4,7 @@ package com.example.carshop.App.Moto;
 
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -29,6 +30,7 @@ public class MotoController {
 
     }
     @PostMapping("/newPart")
+    @PreAuthorize("hasRole('Moderator')")
 
     ResponseEntity<MotoDto> save(@RequestParam String mark, @RequestParam String model, @RequestParam String serialNumber,
     @RequestParam String partBrands, @RequestParam BigDecimal price, @RequestParam int quantity,

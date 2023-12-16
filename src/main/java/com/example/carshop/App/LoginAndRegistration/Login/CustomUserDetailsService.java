@@ -29,7 +29,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         return User.builder()
                 .username(login.email())
                 .password(login.password())
-                .roles(String.valueOf(login.role().stream().collect(Collectors.toUnmodifiableSet())))
+                .roles(login.role().toArray(String[]::new))
                 .build();
     }
 
