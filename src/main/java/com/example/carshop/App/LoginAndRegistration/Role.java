@@ -12,7 +12,8 @@ public class Role {
     private long id;
     private String name;
     private String description;
-    @ManyToMany
+    @ManyToMany(mappedBy = "roles")
+
     private Set<Person>people = new HashSet<>();
 
     public long getId() {

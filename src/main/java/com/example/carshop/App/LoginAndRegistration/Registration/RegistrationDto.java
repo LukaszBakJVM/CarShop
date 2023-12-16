@@ -13,6 +13,7 @@ public class RegistrationDto {
     private String street;
     private String houseNumber;
 
+
     public long getUserId() {
         return userId;
     }
@@ -92,4 +93,5 @@ public class RegistrationDto {
     public void setHouseNumber(String houseNumber) {
         this.houseNumber = houseNumber;
     }
+
 }
