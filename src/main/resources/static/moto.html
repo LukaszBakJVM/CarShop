@@ -4,30 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <title>Sklep</title>
+    <title>Parts Store</title>
 </head>
 <body>
 
 <div class="container mt-5">
-    <h1>Sklep</h1>
+    <h1>Parts Store</h1>
 
     <form id="searchForm" onsubmit="event.preventDefault(); searchForParts();">
         <div class="form-row">
             <div class="form-group col-md-6">
-                <label for="serialNumber">Numer Seryjny:</label>
+                <label for="serialNumber">Serial Number:</label>
                 <input type="text" class="form-control" id="serialNumber" name="serialNumber">
             </div>
             <div class="form-group col-md-6 mt-4">
-                <button type="submit" class="btn btn-primary">Szukaj</button>
+                <button type="submit" class="btn btn-primary">Search</button>
             </div>
         </div>
     </form>
 
-    <button class="btn btn-success mt-3 mb-3" onclick="goToNewPart()">Wprowadź Część</button>
+    <button class="btn btn-success mt-3 mb-3" onclick="goToNewPart()">Enter Part</button>
     <div id="searchResults"></div>
-    <button class="btn btn-info mt-3" onclick="showPreviousResults()">Poprzednie Wyniki</button>
-    <button class="btn btn-info mt-3" onclick="showNextResults()">Następne Wyniki</button>
-    <a href="/index.html" class="btn btn-primary mt-3">Powrót do Strony Głównej</a>
+    <button class="btn btn-info mt-3" onclick="showPreviousResults()">Previous page</button>
+    <button class="btn btn-info mt-3" onclick="showNextResults()">Next page</button>
+    <a href="/index.html" class="btn btn-primary mt-3">Back to main page</a>
 </div>
 
 <script>

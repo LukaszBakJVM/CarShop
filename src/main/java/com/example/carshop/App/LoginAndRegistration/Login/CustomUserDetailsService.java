@@ -6,6 +6,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.stream.Collectors;
+
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
     private final LoginService loginService;
@@ -27,7 +29,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         return User.builder()
                 .username(login.email())
                 .password(login.password())
-                .roles(login.role().toArray(String[]::new))
+                .roles(String.valueOf(login.role().stream().collect(Collectors.toUnmodifiableSet())))
                 .build();
     }
 
