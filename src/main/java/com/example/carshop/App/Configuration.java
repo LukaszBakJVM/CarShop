@@ -1,9 +1,10 @@
 package com.example.carshop.App;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+
 
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -13,6 +14,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import java.math.BigDecimal;
 
 @org.springframework.context.annotation.Configuration
+
 
 public class Configuration {
     @Bean
@@ -45,5 +47,7 @@ public class Configuration {
     PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
+
+
 
 }

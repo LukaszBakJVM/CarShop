@@ -4,7 +4,7 @@ package com.example.carshop.App.Car;
 
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -34,7 +34,7 @@ public class CarPartsController {
     }
 
     @PostMapping("/newPart")
-    @PreAuthorize("hasRole('Admin')")
+
 
     ResponseEntity<?> save(@RequestParam String mark, @RequestParam String model, @RequestParam String serialNumber,
                            @RequestParam String partBrands, @RequestParam BigDecimal price, @RequestParam int quantity,
