@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class MotoService {
     private final MotoRepository motoRepository;
     private final MotoMapper motoMapper;
-    private final int PAGE_SIZE = 2;
+    private final int PAGE_SIZE = 5;
 
     public MotoService(MotoRepository motoRepository, MotoMapper motoMapper) {
         this.motoRepository = motoRepository;

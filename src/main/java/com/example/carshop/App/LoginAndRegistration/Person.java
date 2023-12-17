@@ -18,9 +18,16 @@ public class Person {
     private String lastName;
     private String email;
     private String password;
-    @OneToOne
+    @OneToOne()
     private Address address;
-    @ManyToMany(mappedBy = "people",fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+
+
+
     private Set<Role> roles = new HashSet<>();
 
     public Person() {

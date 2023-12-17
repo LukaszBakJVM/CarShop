@@ -3,6 +3,8 @@ package com.example.carshop.App.Moto;
 
 
 import org.springframework.http.ResponseEntity;
+
+
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -28,6 +30,8 @@ public class MotoController {
 
     }
     @PostMapping("/newPart")
+
+
     ResponseEntity<MotoDto> save(@RequestParam String mark, @RequestParam String model, @RequestParam String serialNumber,
     @RequestParam String partBrands, @RequestParam BigDecimal price, @RequestParam int quantity,
     @RequestParam String category, @RequestParam("file") MultipartFile file) {

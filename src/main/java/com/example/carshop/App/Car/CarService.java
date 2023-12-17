@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class CarService {
     private final CarRepository carRepository;
     private final CarMapper carMapper;
-    private final int PAGE_SIZE = 2;
+    private final int PAGE_SIZE = 5;
 
     public CarService(CarRepository carRepository, CarMapper carMapper) {
         this.carRepository = carRepository;

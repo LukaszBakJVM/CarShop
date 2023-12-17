@@ -7,6 +7,8 @@ import com.example.carshop.App.LoginAndRegistration.RoleRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+
+
 @Service
 public class RegistrationMapper {
 
@@ -30,6 +32,8 @@ public class RegistrationMapper {
         person.setPassword(password);
         Role role = roleRepository.findByName(USER).orElseThrow();
         person.getRoles().add(role);
+
+
         address.setId(dto.getAddressId());
         address.setCity(dto.getCity());
         address.setZipCode(dto.getZipCode());
