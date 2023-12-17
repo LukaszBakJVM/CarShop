@@ -6,26 +6,27 @@ insert into  address (city,zip_code,street,house_number) values ('Lublin','23-25
 insert into address (city,zip_code,street,house_number) values ('Lublin','23-250','Poludniowa','4');
 insert into address (city,zip_code,street,house_number) values ('Lublin','23-250','Poludniowa','4');
 
+--lukasz
 insert into person ( first_name,last_name, email ,password) values ('Lukasz','Bak','lukasz.bak@interiowy.pl'
-,'{bcrypt}$2a$10$S9SF2iYav0bUpVL1iTjlrO5xGFHpO8crWTbr7CDhs6O5qhIvRn2nq');
+                                                                   ,'{bcrypt}$2a$10$S9SF2iYav0bUpVL1iTjlrO5xGFHpO8crWTbr7CDhs6O5qhIvRn2nq');
 
 --lukasz
-insert into person ( first_name,last_name, email ,password) values ('Lukasz','Bak','bbzzyyczczeek@interia.pl	'
-            ,'{bcrypt}$2a$10$kcseLLQa.jhaQboKpUKjSeWiRmO3xJNmi3m34iTia/fqKZl4CgHw.');
+insert into person ( first_name,last_name, email ,password) values ('Lukasz','Bak','bbzzyyczczeek@interia.pl'
+                                                                   ,'{bcrypt}$2a$10$kcseLLQa.jhaQboKpUKjSeWiRmO3xJNmi3m34iTia/fqKZl4CgHw.');
 
 --lukasz
-insert into person ( first_name,last_name, email ,password) values ('Lukasz','Bak','bbzzyyczczeekk@interia.pl	'
-,'{bcrypt}$2a$10$kcseLLQa.jhaQboKpUKjSeWiRmO3xJNmi3m34iTia/fqKZl4CgHw.');
+insert into person ( first_name,last_name, email ,password) values ('Lukasz','Bak','bbzzyyczczeekk@interia.pl'
+                                                                   ,'{bcrypt}$2a$10$kcseLLQa.jhaQboKpUKjSeWiRmO3xJNmi3m34iTia/fqKZl4CgHw.');
 
 
-insert into user_roles (user_id,role_id) values (1,1);
+insert into user_role (user_id,role_id) values (1,1);
 
-insert into user_roles (user_id,role_id) values (2,1);
-insert into user_roles (user_id,role_id) values (2,2);
+insert into user_role (user_id,role_id) values (2,1);
+insert into user_role (user_id,role_id) values (2,2);
 
-insert into user_roles (user_id,role_id) values (3,1);
-insert into user_roles (user_id,role_id) values (3,2);
-insert into user_roles (user_id,role_id) values (3,3);
+insert into user_role (user_id,role_id) values (3,1);
+insert into user_role (user_id,role_id) values (3,2);
+insert into user_role (user_id,role_id) values (3,3);
 
 insert into category (name) values('silnik');
 insert into category (name) values('opony');

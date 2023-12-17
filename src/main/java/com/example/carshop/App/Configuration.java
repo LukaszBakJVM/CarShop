@@ -2,6 +2,7 @@ package com.example.carshop.App;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 
@@ -27,14 +28,14 @@ public class Configuration {
     }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-      //  PathRequest.H2ConsoleRequestMatcher h2Console = PathRequest.toH2Console();
-//http.csrf(h2->h2.ignoringRequestMatchers(h2Console));
-        //http.formLogin(AbstractAuthenticationFilterConfigurer::permitAll);
+        PathRequest.H2ConsoleRequestMatcher h2Console = PathRequest.toH2Console();
+       http.csrf(h2->h2.ignoringRequestMatchers(h2Console));
+
         http.formLogin(e->e.loginPage("/login").permitAll());
 
         http.authorizeHttpRequests(a -> a.requestMatchers("/", "/img/**", "/register.html",
                         "/register","/login.html","/index.html")
-                .permitAll().anyRequest().authenticated());
+                .permitAll().requestMatchers(h2Console).permitAll().anyRequest().authenticated());
         http.csrf(i->i.ignoringRequestMatchers("/**"));
 
         http.headers(httpSecurityHeadersConfigurer -> httpSecurityHeadersConfigurer
