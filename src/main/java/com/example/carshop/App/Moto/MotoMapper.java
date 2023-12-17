@@ -19,7 +19,7 @@ public class MotoMapper {
         this.categoryRepository = categoryRepository;
     }
 
-    MotoParts map(MotoDto dto) {
+   public MotoParts map(MotoDto dto) {
         MotoParts motoParts = new MotoParts();
         motoParts.setId(dto.getId());
         motoParts.setMark(dto.getMark());
@@ -37,7 +37,7 @@ public class MotoMapper {
         return motoParts;
     }
 
-    MotoDto map(MotoParts parts) {
+  public   MotoDto map(MotoParts parts) {
         MotoDto dto = new MotoDto();
         dto.setId(parts.getId());
         dto.setMark(parts.getMark());

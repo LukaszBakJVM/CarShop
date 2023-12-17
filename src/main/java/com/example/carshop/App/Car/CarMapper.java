@@ -24,7 +24,7 @@ public class CarMapper {
 
     }
 
-    Car map(CarDto dto)  {
+   public Car map(CarDto dto)  {
         Car car = new Car();
         car.setId(dto.getId());
         car.setMark(dto.getMark());
@@ -43,7 +43,7 @@ public class CarMapper {
         return car;
     }
 
-    CarDto map(Car car) {
+  public   CarDto map(Car car) {
         CarDto dto = new CarDto();
         dto.setId(car.getId());
         dto.setMark(car.getMark());
