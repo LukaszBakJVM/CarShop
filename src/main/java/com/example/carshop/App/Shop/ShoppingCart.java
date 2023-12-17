@@ -13,7 +13,6 @@ public class ShoppingCart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @OneToOne
-
     private Person person;
     @ManyToMany
     @JoinTable(

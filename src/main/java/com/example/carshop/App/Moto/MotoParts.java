@@ -1,8 +1,11 @@
 package com.example.carshop.App.Moto;
 
 import com.example.carshop.App.Car.Category.Category;
+import com.example.carshop.App.Shop.ShoppingCart;
 import com.example.carshop.App.SuperClass.Parts;
 import jakarta.persistence.*;
+
+import java.util.Set;
 
 @Entity
 public class MotoParts extends Parts {
@@ -11,6 +14,9 @@ public class MotoParts extends Parts {
     private long id;
     @ManyToOne()
     private Category category;
+
+    @ManyToMany(mappedBy = "motoParts")
+    private Set<ShoppingCart>shoppingCarts;
 
     public MotoParts() {
     }
@@ -29,5 +35,13 @@ public class MotoParts extends Parts {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public Set<ShoppingCart> getShoppingCarts() {
+        return shoppingCarts;
+    }
+
+    public void setShoppingCarts(Set<ShoppingCart> shoppingCarts) {
+        this.shoppingCarts = shoppingCarts;
     }
 }
