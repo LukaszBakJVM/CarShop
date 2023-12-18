@@ -69,9 +69,9 @@ public class CarService {
     }
 
     public Optional<CarDto> sellParts(String serialNumber, int quantity) {
-        Optional<Car> bySerialnumber = carRepository.findBySerialNumber(serialNumber);
-        if (bySerialnumber.isPresent()) {
-            Car q = bySerialnumber.get();
+        Optional<Car> bySerialNumber = carRepository.findBySerialNumber(serialNumber);
+        if (bySerialNumber.isPresent()) {
+            Car q = bySerialNumber.get();
             if (q.getQuantity() > 0 && q.getQuantity() >= quantity) {
                 int update = q.getQuantity() - quantity;
                 q.setQuantity(update);
@@ -83,9 +83,9 @@ public class CarService {
     }
 
     public Optional<CarDto> findBySerialNumber(String serialNumber) {
-        Optional<Car> bySerialnumber = carRepository.findBySerialNumber(serialNumber);
-        if (bySerialnumber.isPresent()) {
-            Car car = bySerialnumber.get();
+        Optional<Car> bySerialNumber = carRepository.findBySerialNumber(serialNumber);
+        if (bySerialNumber.isPresent()) {
+            Car car = bySerialNumber.get();
             CarDto map = carMapper.map(car);
             return Optional.of(map);
         }

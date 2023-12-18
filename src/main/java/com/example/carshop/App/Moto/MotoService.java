@@ -3,7 +3,7 @@ package com.example.carshop.App.Moto;
 
 
 
-import com.example.carshop.App.Car.CarDto;
+
 import com.example.carshop.App.Exception.NotFoundException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -68,9 +68,9 @@ public class MotoService {
     }
 
     public Optional<MotoDto> sellParts(String serialNumber, int quantity) {
-        Optional<MotoParts> bySerialnumber = motoRepository.findBySerialNumber(serialNumber);
-        if (bySerialnumber.isPresent()) {
-            MotoParts q = bySerialnumber.get();
+        Optional<MotoParts> bySerialNumber = motoRepository.findBySerialNumber(serialNumber);
+        if (bySerialNumber.isPresent()) {
+            MotoParts q = bySerialNumber.get();
             if (q.getQuantity() > 0 && q.getQuantity() >= quantity) {
                 int update = q.getQuantity() - quantity;
                 q.setQuantity(update);
@@ -82,9 +82,9 @@ public class MotoService {
     }
 
     public Optional<MotoDto> findBySerialNumber(String serialNumber) {
-        Optional<MotoParts> bySerialnumber = motoRepository.findBySerialNumber(serialNumber);
-        if (bySerialnumber.isPresent()) {
-            MotoParts motoParts = bySerialnumber.get();
+        Optional<MotoParts> bySerialNumber = motoRepository.findBySerialNumber(serialNumber);
+        if (bySerialNumber.isPresent()) {
+            MotoParts motoParts = bySerialNumber.get();
             MotoDto map = motoMapper.map(motoParts);
             return Optional.of(map);
         }
