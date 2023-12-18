@@ -8,7 +8,7 @@ To run application
 # git clone -b Vaadin https://github.com/LukaszBakJVM/CarShop
 # maven clean
 # maven install 
-# java - jar /file path
+# java -jar /file path
 
 or 
 
