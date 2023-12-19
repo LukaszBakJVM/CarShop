@@ -2,6 +2,8 @@ package com.example.carshop.App.Car;
 
 
 import com.example.carshop.App.Exception.NotFoundException;
+import com.example.carshop.App.Shop.ShoppingCartDto;
+import com.example.carshop.App.Shop.ShoppingCartService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +20,13 @@ import java.util.stream.Collectors;
 public class CarService {
     private final CarRepository carRepository;
     private final CarMapper carMapper;
+    private final ShoppingCartService shoppingCartService;
     private final int PAGE_SIZE = 5;
 
-    public CarService(CarRepository carRepository, CarMapper carMapper) {
+    public CarService(CarRepository carRepository, CarMapper carMapper, ShoppingCartService shoppingCartService) {
         this.carRepository = carRepository;
         this.carMapper = carMapper;
+        this.shoppingCartService = shoppingCartService;
     }
 
     public CarDto save(CarDto carDto)  {
@@ -68,18 +72,20 @@ public class CarService {
 
     }
 
-    public Optional<CarDto> sellParts(String serialNumber, int quantity) {
+    public void sellParts(String serialNumber, int quantity , String email) {
+        ShoppingCartDto basketByPersonId = shoppingCartService.findBasketByPersonId(email);
+
         Optional<Car> bySerialNumber = carRepository.findBySerialNumber(serialNumber);
         if (bySerialNumber.isPresent()) {
             Car q = bySerialNumber.get();
             if (q.getQuantity() > 0 && q.getQuantity() >= quantity) {
                 int update = q.getQuantity() - quantity;
                 q.setQuantity(update);
-                carRepository.save(q);
-                return Optional.of(carMapper.map(q));
+                Car save = carRepository.save(q);
+                CarDto map = carMapper.map(save);
+                basketByPersonId.getCarDto().add(map);
             }
         }
-        return Optional.empty();
     }
 
     public Optional<CarDto> findBySerialNumber(String serialNumber) {

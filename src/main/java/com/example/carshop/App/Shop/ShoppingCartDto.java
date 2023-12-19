@@ -7,6 +7,7 @@ import java.util.Set;
 
 public class ShoppingCartDto {
     private long basketId;
+    private String personEmail;
      private Set<CarDto>carDto;
      private Set<MotoDto>motoDto;
 
@@ -32,5 +33,13 @@ public class ShoppingCartDto {
 
     public void setMotoDto(Set<MotoDto> motoDto) {
         this.motoDto = motoDto;
+    }
+
+    public String getPersonEmail() {
+        return personEmail;
+    }
+
+    public void setPersonEmail(String personEmail) {
+        this.personEmail = personEmail;
     }
 }

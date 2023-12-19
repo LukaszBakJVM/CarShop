@@ -1,6 +1,8 @@
 package com.example.carshop.App.Shop;
 
 import com.example.carshop.App.Car.*;
+import com.example.carshop.App.LoginAndRegistration.Person;
+import com.example.carshop.App.LoginAndRegistration.PersonRepository;
 import com.example.carshop.App.Moto.*;
 import org.springframework.stereotype.Service;
 
@@ -11,14 +13,13 @@ import java.util.stream.Collectors;
 @Service
 public class ShoppingCartMapper {
 
-private final CarService carService;
-private final MotoService motoService;
+
+private final PersonRepository personRepository;
 private final CarMapper carMapper;
 private final MotoMapper motoMapper;
 
-    public ShoppingCartMapper(CarService carService, MotoService motoService, CarMapper carMapper, MotoMapper motoMapper) {
-        this.carService = carService;
-        this.motoService = motoService;
+    public ShoppingCartMapper(PersonRepository personRepository, CarMapper carMapper, MotoMapper motoMapper) {
+        this.personRepository = personRepository;
         this.carMapper = carMapper;
         this.motoMapper = motoMapper;
     }
@@ -27,6 +28,9 @@ private final MotoMapper motoMapper;
     ShoppingCart map(ShoppingCartDto dto){
         ShoppingCart shoppingCart = new ShoppingCart();
         shoppingCart.setId(dto.getBasketId());
+        Person person = personRepository.findByEmail(dto.getPersonEmail()).orElseThrow();
+        shoppingCart.setPerson(person);
+
         Set<Car> carParts = new HashSet<>(shoppingCart.getCarsParts());
         shoppingCart.setCarsParts(carParts);
 
@@ -40,6 +44,7 @@ private final MotoMapper motoMapper;
     ShoppingCartDto map(ShoppingCart shoppingCart){
         ShoppingCartDto dto = new ShoppingCartDto();
         dto.setBasketId(shoppingCart.getId());
+        dto.setPersonEmail(shoppingCart.getPerson().getEmail());
 
         Set<CarDto> carDto = shoppingCart.getCarsParts().stream().map(carMapper::map).collect(Collectors.toSet());
         dto.setCarDto(carDto);
