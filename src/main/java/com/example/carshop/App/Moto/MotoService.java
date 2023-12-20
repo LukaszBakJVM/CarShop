@@ -5,6 +5,8 @@ package com.example.carshop.App.Moto;
 
 
 import com.example.carshop.App.Exception.NotFoundException;
+import com.example.carshop.App.Shop.ShoppingCartDto;
+import com.example.carshop.App.Shop.ShoppingCartService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,11 +21,13 @@ import java.util.stream.Collectors;
 public class MotoService {
     private final MotoRepository motoRepository;
     private final MotoMapper motoMapper;
+    private final ShoppingCartService shoppingCartService;
     private final int PAGE_SIZE = 5;
 
-    public MotoService(MotoRepository motoRepository, MotoMapper motoMapper) {
+    public MotoService(MotoRepository motoRepository, MotoMapper motoMapper, ShoppingCartService shoppingCartService) {
         this.motoRepository = motoRepository;
         this.motoMapper = motoMapper;
+        this.shoppingCartService = shoppingCartService;
     }
     public MotoDto save(MotoDto motoDto){
         MotoParts motoParts = motoMapper.map(motoDto);
@@ -67,18 +71,20 @@ public class MotoService {
 
     }
 
-    public Optional<MotoDto> sellParts(String serialNumber, int quantity) {
+    public void sellParts(String serialNumber, int quantity , String email) {
+        ShoppingCartDto basketByPersonEmail = shoppingCartService.findBasketByPersonEmail(email);
+
         Optional<MotoParts> bySerialNumber = motoRepository.findBySerialNumber(serialNumber);
         if (bySerialNumber.isPresent()) {
             MotoParts q = bySerialNumber.get();
             if (q.getQuantity() > 0 && q.getQuantity() >= quantity) {
                 int update = q.getQuantity() - quantity;
                 q.setQuantity(update);
-                motoRepository.save(q);
-                return Optional.of(motoMapper.map(q));
+                MotoParts save = motoRepository.save(q);
+                MotoDto map = motoMapper.map(save);
+                basketByPersonEmail.getMotoDto().add(map);
             }
         }
-        return Optional.empty();
     }
 
     public Optional<MotoDto> findBySerialNumber(String serialNumber) {

@@ -73,7 +73,7 @@ public class CarService {
     }
 
     public void sellParts(String serialNumber, int quantity , String email) {
-        ShoppingCartDto basketByPersonId = shoppingCartService.findBasketByPersonId(email);
+        ShoppingCartDto basketByPersonEmail = shoppingCartService.findBasketByPersonEmail(email);
 
         Optional<Car> bySerialNumber = carRepository.findBySerialNumber(serialNumber);
         if (bySerialNumber.isPresent()) {
@@ -83,7 +83,7 @@ public class CarService {
                 q.setQuantity(update);
                 Car save = carRepository.save(q);
                 CarDto map = carMapper.map(save);
-                basketByPersonId.getCarDto().add(map);
+                basketByPersonEmail.getCarDto().add(map);
             }
         }
     }

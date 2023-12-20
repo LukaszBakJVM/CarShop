@@ -15,7 +15,7 @@ public class ShoppingCartService {
         this.shoppingCartMapper = shoppingCartMapper;
 
     }
- public ShoppingCartDto  findBasketByPersonId(String email){
+ public ShoppingCartDto  findBasketByPersonEmail(String email){
      ShoppingCart shoppingCart = shoppingCartRepository.findByPersonEmail(email).orElseThrow();
    return shoppingCartMapper.map(shoppingCart);
     }
