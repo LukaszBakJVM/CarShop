@@ -12,6 +12,7 @@ public class RegistrationDto {
     private String zipCode;
     private String street;
     private String houseNumber;
+    private long basketId;
 
 
     public long getUserId() {
@@ -94,4 +95,11 @@ public class RegistrationDto {
         this.houseNumber = houseNumber;
     }
 
+    public long getBasketId() {
+        return basketId;
+    }
+
+    public void setBasketId(long basketId) {
+        this.basketId = basketId;
+    }
 }

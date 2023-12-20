@@ -21,7 +21,7 @@ public class Person {
     private String password;
     @OneToOne()
     private Address address;
-    @OneToOne
+    @OneToOne( mappedBy = "person" ,cascade = CascadeType.ALL)
     private ShoppingCart shoppingCart;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -29,9 +29,9 @@ public class Person {
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
 
-
-
     private Set<Role> roles = new HashSet<>();
+
+
 
     public Person() {
     }
