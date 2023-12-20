@@ -32,6 +32,11 @@ insert into category (name) values('silnik');
 insert into category (name) values('opony');
 insert into category (name) values('hamulce');
 
+
+insert into  shopping_cart(person_id) values ('1');
+insert into  shopping_cart(person_id) values ('2');
+insert into  shopping_cart(person_id) values ('3');
+
 insert into car (mark, model, serial_number, parts_brand, price, quantity, photo, category_name) values ('Volkswagen', 'Jetta III', '2FMDK3GC4AB016773', 'French Pastry - Mini Chocolate', 95, 1, null, 'silnik');
 insert into car (mark, model, serial_number, parts_brand, price, quantity, photo, category_name) values ('Land Rover', 'Range Rover', 'WAUEF48H17K898335', 'Wine - George Duboeuf Rose', 90, 2, null, 'silnik');
 insert into car (mark, model, serial_number, parts_brand, price, quantity, photo, category_name) values ('Bentley', 'Continental Flying Spur', '2D4RN4DE9AR409291', 'Juice - Clam, 46 Oz', 91, 3, null, 'silnik');

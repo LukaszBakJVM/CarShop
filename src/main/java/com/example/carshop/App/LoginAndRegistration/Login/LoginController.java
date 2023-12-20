@@ -3,8 +3,9 @@ package com.example.carshop.App.LoginAndRegistration.Login;
 
 
 
+
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+
 
 
 
@@ -14,10 +15,9 @@ public class LoginController {
 
 
 
+  //  @GetMapping("/login")
+  //  String loginForm(){
 
-    @GetMapping("/login")
-    String loginForm(){
-
-        return "login.html";
-        }
+     //   return "login.html";
+      //  }
 }
