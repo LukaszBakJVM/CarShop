@@ -33,6 +33,7 @@ public class ShoppingCartController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         BigDecimal sum = BigDecimal.ZERO;
 
+
         String email = authentication.getName();
         ShoppingCartDto basketByPersonEmail = shoppingCartService.findBasketByPersonEmail(email);
         Set<CarDto> carDto = basketByPersonEmail.getCarDto();
@@ -40,10 +41,16 @@ public class ShoppingCartController {
             BigDecimal price = suming.getPrice();
             BigDecimal multiply = price.multiply(BigDecimal.valueOf(suming.getQuantity()));
             sum=sum.add(multiply);
-
         }
-
-return sum;
+        return sum;
 
     }
+    @GetMapping("/email")
+    ResponseEntity<ShoppingCartDto>allBasket(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+      return ResponseEntity.ok(  shoppingCartService.findBasketByPersonEmail(email));
+    }
+
+
 }

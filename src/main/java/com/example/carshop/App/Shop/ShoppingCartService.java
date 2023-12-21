@@ -28,18 +28,13 @@ public class ShoppingCartService {
      ShoppingCart shoppingCart = shoppingCartRepository.findByPersonEmail(email).orElseThrow();
    return shoppingCartMapper.map(shoppingCart);
     }
-  public   ShoppingCartDto save(ShoppingCartDto dto){
-        ShoppingCart map = shoppingCartMapper.map(dto);
-        ShoppingCart save = shoppingCartRepository.save(map);
-        return shoppingCartMapper.map(save);
-    }
 
     ShoppingCartDto findById(long id) {
         ShoppingCart shoppingCart = shoppingCartRepository.findById(id).orElseThrow();
         return shoppingCartMapper.map(shoppingCart);
     }
 
-    public ShoppingCartDto sell(Set<CarDto>sell,ShoppingCartDto dto) {
+    public void sell(Set<CarDto>sell, ShoppingCartDto dto) {
         ShoppingCart shoppingCart = shoppingCartRepository.findByPersonEmail(dto.getPersonEmail()).orElseThrow();
 
 
@@ -49,7 +44,7 @@ public class ShoppingCartService {
         ShoppingCart save = shoppingCartRepository.save(shoppingCart);
 
 
-        return shoppingCartMapper.map(save);
+        shoppingCartMapper.map(save);
 
     }
 
