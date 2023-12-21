@@ -32,13 +32,13 @@ public class Configuration {
         PathRequest.H2ConsoleRequestMatcher h2Console = PathRequest.toH2Console();
        http.csrf(h2->h2.ignoringRequestMatchers(h2Console));
 
-      //  http.formLogin(e->e.loginPage("/login").permitAll());
-        http.formLogin(AbstractAuthenticationFilterConfigurer::permitAll);
+        http.formLogin(e->e.loginPage("/login").permitAll());
+       // http.formLogin(AbstractAuthenticationFilterConfigurer::permitAll);
 
         http.authorizeHttpRequests(a -> a.requestMatchers("/", "/img/**", "/register.html",
                         "/register","/login.html","/index.html")
                 .permitAll().requestMatchers(h2Console).permitAll().anyRequest().authenticated());
-
+        http.csrf(i->i.ignoringRequestMatchers("/**")).formLogin(AbstractAuthenticationFilterConfigurer::permitAll);
 
 
         http.headers(httpSecurityHeadersConfigurer -> httpSecurityHeadersConfigurer
