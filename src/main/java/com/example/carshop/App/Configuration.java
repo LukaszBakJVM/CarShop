@@ -36,7 +36,7 @@ public class Configuration {
        // http.formLogin(AbstractAuthenticationFilterConfigurer::permitAll);
 
         http.authorizeHttpRequests(a -> a.requestMatchers("/", "/img/**", "/register.html",
-                        "/register","/login.html","/index.html")
+                        "/register","/login.html","/index.html","/basket")
                 .permitAll().requestMatchers(h2Console).permitAll().anyRequest().authenticated());
         http.csrf(i->i.ignoringRequestMatchers("/**")).formLogin(AbstractAuthenticationFilterConfigurer::permitAll);
 

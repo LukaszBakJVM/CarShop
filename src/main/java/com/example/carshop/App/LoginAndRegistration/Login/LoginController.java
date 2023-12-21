@@ -25,7 +25,10 @@ public class LoginController {
     @PostMapping("/login")
     String loginForm(Authentication authentication, Model model){
         String name = authentication.getName();
+        System.out.println(name);
         ShoppingCartDto basket = shoppingCartService.findBasketByPersonEmail(name);
+        System.out.println(name+"   "+basket.getBasketId());
+
         model.addAttribute("basket",basket);
         return "/";
         }

@@ -31,10 +31,10 @@ private final MotoMapper motoMapper;
         Person person = personRepository.findByEmail(dto.getPersonEmail()).orElseThrow();
         shoppingCart.setPerson(person);
 
-        Set<Car> carParts = new HashSet<>(shoppingCart.getCarsParts());
+        Set<Car> carParts = shoppingCart.getCarsParts();
         shoppingCart.setCarsParts(carParts);
 
-        Set<MotoParts> motoParts = new HashSet<>(shoppingCart.getMotoParts());
+        Set<MotoParts> motoParts = shoppingCart.getMotoParts();
         shoppingCart.setMotoParts(motoParts);
 
 
