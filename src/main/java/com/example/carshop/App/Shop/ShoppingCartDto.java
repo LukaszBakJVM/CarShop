@@ -8,8 +8,6 @@ import java.util.Set;
 
 public class ShoppingCartDto {
     private long basketId;
-    private int quantity;
-    private BigDecimal sum;
     private String personEmail;
      private Set<CarDto>carDto;
      private Set<MotoDto>motoDto;
@@ -46,19 +44,5 @@ public class ShoppingCartDto {
         this.personEmail = personEmail;
     }
 
-    public int getQuantity() {
-        return quantity;
-    }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public BigDecimal getSum() {
-        return sum;
-    }
-
-    public void setSum(BigDecimal sum) {
-        this.sum = sum;
-    }
 }
