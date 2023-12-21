@@ -5,6 +5,7 @@ import com.example.carshop.App.LoginAndRegistration.Person;
 import com.example.carshop.App.Moto.MotoParts;
 import jakarta.persistence.*;
 
+
 import java.util.Set;
 
 @Entity
@@ -17,14 +18,14 @@ public class ShoppingCart {
     @ManyToMany
     @JoinTable(
             name = "shop_car_part",
-            joinColumns = @JoinColumn(name = "car_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "shopping_cart_id", referencedColumnName = "id"))
+            joinColumns = @JoinColumn(name = "shopping_cart_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "car_id", referencedColumnName = "id"))
    private Set<Car>carsParts;
     @ManyToMany
     @JoinTable(
             name = "shop_moto_part",
-            joinColumns = @JoinColumn(name = "moto_part_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "shopping_cart_id", referencedColumnName = "id"))
+            joinColumns = @JoinColumn(name = "Shoping_moto_part_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "parts_id", referencedColumnName = "id"))
     private Set<MotoParts>motoParts;
 
     public long getId() {

@@ -8,10 +8,12 @@ import com.example.carshop.App.Shop.ShoppingCart;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 
 
 @Service
 public class RegistrationMapper {
+    private final BigDecimal bigDecimal;
 
     private final String USER = "User";
     private final PasswordEncoder passwordEncoder;
@@ -20,7 +22,8 @@ public class RegistrationMapper {
 
 
 
-    public RegistrationMapper(PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
+    public RegistrationMapper(BigDecimal bigDecimal, PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
+        this.bigDecimal = bigDecimal;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
 
@@ -47,6 +50,7 @@ public class RegistrationMapper {
         address.setHouseNumber(dto.getHouseNumber());
 
         person.setAddress(address);
+
         person.setShoppingCart(shoppingCart);
         return person;
     }
@@ -63,6 +67,7 @@ public class RegistrationMapper {
         dto.setZipCode(person.getAddress().getZipCode());
         dto.setStreet(person.getAddress().getStreet());
         dto.setHouseNumber(person.getAddress().getHouseNumber());
+
 
 
         return dto;

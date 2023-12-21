@@ -77,24 +77,26 @@ public class CarService {
         Optional<Car> bySerialNumber = carRepository.findBySerialNumber(serialNumber);
         if (bySerialNumber.isPresent()) {
             Car q = bySerialNumber.get();
+
             if (q.getQuantity() > 0 && q.getQuantity() >= quantity) {
                 int update = q.getQuantity() - quantity;
-                q.setQuantity(update);
-                Car save = carRepository.save(q);
-                CarDto map = carMapper.map(save);
+               // q.setQuantity(update);
+               // Car save = carRepository.save(q);
+                CarDto map = carMapper.map(q);
+                map.setQuantity(quantity);
+
                 Set<CarDto> carDto = basketByPersonEmail.getCarDto();
                 carDto.add(map);
-                shoppingCartService.sell(carDto,basketByPersonEmail.getPersonEmail());
+                shoppingCartService.sell(carDto,basketByPersonEmail);
 
 
             }
         }
 
     }
-    private ShoppingCartDto sell(Set<CarDto>sell,String email){
-       return shoppingCartService.sell(sell,email);
 
-    }
+
+
 
     public Optional<CarDto> findBySerialNumber(String serialNumber) {
         Optional<Car> bySerialNumber = carRepository.findBySerialNumber(serialNumber);

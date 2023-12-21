@@ -1,5 +1,7 @@
 package com.example.carshop.App.LoginAndRegistration.Registration;
 
+import java.math.BigDecimal;
+
 public class RegistrationDto {
     private long userId;
     private String firstName;
@@ -13,6 +15,7 @@ public class RegistrationDto {
     private String street;
     private String houseNumber;
     private long basketId;
+    private BigDecimal basketSum;
 
 
     public long getUserId() {
@@ -101,5 +104,13 @@ public class RegistrationDto {
 
     public void setBasketId(long basketId) {
         this.basketId = basketId;
+    }
+
+    public BigDecimal getBasketSum() {
+        return basketSum;
+    }
+
+    public void setBasketSum(BigDecimal basketSum) {
+        this.basketSum = basketSum;
     }
 }

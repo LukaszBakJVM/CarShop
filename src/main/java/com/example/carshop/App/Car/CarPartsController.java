@@ -3,8 +3,7 @@ package com.example.carshop.App.Car;
 
 
 
-import com.example.carshop.App.Shop.ShoppingCartDto;
-import com.example.carshop.App.Shop.ShoppingCartService;
+
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.security.core.Authentication;
@@ -30,13 +29,12 @@ import static java.io.File.createTempFile;
 
 public class CarPartsController {
     private final CarService service;
-    private final ShoppingCartService shoppingCartService;
 
 
-    public CarPartsController(CarService service, ShoppingCartService shoppingCartService) {
+
+
+    public CarPartsController(CarService service) {
         this.service = service;
-
-        this.shoppingCartService = shoppingCartService;
     }
 
     @PostMapping("/newPart")

@@ -6,7 +6,7 @@ import com.example.carshop.App.LoginAndRegistration.PersonRepository;
 import com.example.carshop.App.Moto.*;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
+
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -28,6 +28,7 @@ private final MotoMapper motoMapper;
     ShoppingCart map(ShoppingCartDto dto){
         ShoppingCart shoppingCart = new ShoppingCart();
         shoppingCart.setId(dto.getBasketId());
+
         Person person = personRepository.findByEmail(dto.getPersonEmail()).orElseThrow();
         shoppingCart.setPerson(person);
 
@@ -44,6 +45,7 @@ private final MotoMapper motoMapper;
     ShoppingCartDto map(ShoppingCart shoppingCart){
         ShoppingCartDto dto = new ShoppingCartDto();
         dto.setBasketId(shoppingCart.getId());
+
         dto.setPersonEmail(shoppingCart.getPerson().getEmail());
 
         Set<CarDto> carDto = shoppingCart.getCarsParts().stream().map(carMapper::map).collect(Collectors.toSet());

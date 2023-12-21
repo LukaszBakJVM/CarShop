@@ -5,10 +5,9 @@ import com.example.carshop.App.Car.Car;
 import com.example.carshop.App.Car.CarDto;
 import com.example.carshop.App.Car.CarMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+
+
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -40,9 +39,10 @@ public class ShoppingCartService {
         return shoppingCartMapper.map(shoppingCart);
     }
 
-    public ShoppingCartDto sell(Set<CarDto>sell,String email) {
-        ShoppingCart shoppingCart = shoppingCartRepository.findByPersonEmail(email)
-                .orElseThrow();
+    public ShoppingCartDto sell(Set<CarDto>sell,ShoppingCartDto dto) {
+        ShoppingCart shoppingCart = shoppingCartRepository.findByPersonEmail(dto.getPersonEmail()).orElseThrow();
+
+
         Set<Car> collect = sell.stream().map(carMapper::map).collect(Collectors.toSet());
         Set<Car> carsParts = shoppingCart.getCarsParts();
         carsParts.addAll(collect);
