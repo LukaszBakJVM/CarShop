@@ -14,7 +14,7 @@
     <form id="searchForm" onsubmit="event.preventDefault(); searchForParts();">
         <div class="form-row">
             <div class="form-group col-md-6">
-                <label for="serialNumber">Serial Number:</label>
+
                 <input type="text" class="form-control" id="serialNumber" name="serialNumber">
             </div>
             <div class="form-group col-md-6 mt-4">
@@ -26,6 +26,7 @@
 
 
     <div id="searchResults"></div>
+    <p id="totalCost"></p>
     <button class="btn btn-info mt-3" onclick="showPreviousResults()">Previous page</button>
     <button class="btn btn-info mt-3" onclick="showNextResults()">Next page</button>
     <a href="/index.html" class="btn btn-primary mt-3">Back to main page</a>
@@ -40,6 +41,7 @@
         const response = await fetch(url);
         const data = await response.json();
         displaySearchResults(data);
+        displayTotalCost(data);
     }
 
     async function searchParts() {
@@ -47,6 +49,7 @@
         const response = await fetch(url);
         const data = await response.json();
         displaySearchResults(data);
+        displayTotalCost(data);
     }
 
     async function deletePart(serialNumber) {
@@ -126,6 +129,16 @@
             searchResultsDiv.appendChild(table);
         } else {
             searchResultsDiv.innerHTML = 'No results found.';
+        }
+    }
+
+    async function displayTotalCost(data) {
+        const totalCostElement = document.getElementById('totalCost');
+        if (data.length > 0 && data[0].carDto.length > 0) {
+            const totalCost = data[0].carDto.reduce((acc, carPart) => acc + (carPart.price * carPart.quantity), 0);
+            totalCostElement.innerText = `Total Cost: ${totalCost.toFixed(2)} PLN`;
+        } else {
+            totalCostElement.innerText = '';
         }
     }
 
