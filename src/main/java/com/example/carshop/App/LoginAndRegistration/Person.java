@@ -1,6 +1,7 @@
 package com.example.carshop.App.LoginAndRegistration;
 
 import com.example.carshop.App.LoginAndRegistration.Address.Address;
+import com.example.carshop.App.Shop.ShoppingCart;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -20,24 +21,26 @@ public class Person {
     private String password;
     @OneToOne()
     private Address address;
+    @OneToOne( mappedBy = "person" ,cascade = CascadeType.ALL)
+    private ShoppingCart shoppingCart;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_role",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
 
-
-
     private Set<Role> roles = new HashSet<>();
+
+
 
     public Person() {
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -87,6 +90,14 @@ public class Person {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public ShoppingCart getShoppingCart() {
+        return shoppingCart;
+    }
+
+    public void setShoppingCart(ShoppingCart shoppingCart) {
+        this.shoppingCart = shoppingCart;
     }
 }
 

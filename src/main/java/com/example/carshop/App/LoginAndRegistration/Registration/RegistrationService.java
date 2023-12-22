@@ -6,6 +6,7 @@ import com.example.carshop.App.LoginAndRegistration.Person;
 import com.example.carshop.App.LoginAndRegistration.PersonRepository;
 
 
+import com.example.carshop.App.Shop.ShoppingCart;
 
 import org.springframework.stereotype.Service;
 
@@ -18,24 +19,29 @@ public class RegistrationService {
     private final AddressRepository addressRepository;
 
 
+
+
     public RegistrationService(RegistrationMapper mapper, PersonRepository repository,
                                AddressRepository addressRepository) {
         this.mapper = mapper;
         this.repository = repository;
         this.addressRepository = addressRepository;
 
+
     }
-    public RegistrationDto register(RegistrationDto dto) {
+    public void register(RegistrationDto dto) {
         Person person = mapper.map(dto);
         Address address = person.getAddress();
         addressRepository.save(address);
         address.setPerson(person);
 
 
-
+        ShoppingCart shoppingCart = person.getShoppingCart();
+        shoppingCart.setPerson(person);
 
         Person savePerson = repository.save(person);
 
-        return mapper.map(savePerson);
+
+        mapper.map(savePerson);
     }
 }

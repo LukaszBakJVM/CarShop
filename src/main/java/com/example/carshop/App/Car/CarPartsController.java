@@ -3,8 +3,11 @@ package com.example.carshop.App.Car;
 
 
 
+
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -28,9 +31,10 @@ public class CarPartsController {
     private final CarService service;
 
 
+
+
     public CarPartsController(CarService service) {
         this.service = service;
-
     }
 
     @PostMapping("/newPart")
@@ -68,7 +72,11 @@ public class CarPartsController {
 
     @PatchMapping("/sell")
     ResponseEntity<?> sellPart(@RequestParam String serialNumber, @RequestParam int quantity) {
-        service.sellParts(serialNumber, quantity);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+
+        service.sellParts(serialNumber, quantity,email);
         return ResponseEntity.noContent().build();
     }
 

@@ -1,14 +1,15 @@
-package com.example.carshop.App.Car;
+package com.example.carshop.App.Shop.Basket.CarParts;
 
 import com.example.carshop.App.Car.Category.Category;
-
+import com.example.carshop.App.Shop.ShoppingCart;
 import com.example.carshop.App.SuperClass.Parts;
 import jakarta.persistence.*;
 
-
+import java.util.List;
 
 @Entity
-public class Car extends Parts  {
+public class CarPartsBasket extends Parts {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -19,9 +20,8 @@ public class Car extends Parts  {
 
 
 
-    public Car() {
-
-    }
+    @ManyToMany(mappedBy = "carsParts")
+      private List<ShoppingCart> shoppingCarts;
 
     public long getId() {
         return id;
@@ -39,5 +39,11 @@ public class Car extends Parts  {
         this.category = category;
     }
 
+    public List<ShoppingCart> getShoppingCarts() {
+        return shoppingCarts;
+    }
 
+    public void setShoppingCarts(List<ShoppingCart> shoppingCarts) {
+        this.shoppingCarts = shoppingCarts;
+    }
 }

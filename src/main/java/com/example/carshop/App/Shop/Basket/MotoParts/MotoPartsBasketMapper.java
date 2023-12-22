@@ -1,27 +1,27 @@
-package com.example.carshop.App.Moto;
-
+package com.example.carshop.App.Shop.Basket.MotoParts;
 
 import com.example.carshop.App.Car.Category.Category;
 import com.example.carshop.App.Car.Category.CategoryRepository;
+
 import com.example.carshop.App.Compononent.PhotoMapper;
 import org.springframework.stereotype.Service;
 
 
 
 @Service
+public class MotoPartsBasketMapper {
 
-public class MotoMapper {
     private final CategoryRepository categoryRepository;
     private final PhotoMapper photoMapper;
 
-
-    public MotoMapper(CategoryRepository categoryRepository, PhotoMapper photoMapper) {
+    public MotoPartsBasketMapper(CategoryRepository categoryRepository, PhotoMapper photoMapper) {
         this.categoryRepository = categoryRepository;
         this.photoMapper = photoMapper;
     }
 
-   public MotoParts map(MotoDto dto) {
-        MotoParts motoParts = new MotoParts();
+
+    public MotoPartsBasket map(MotoPartsBasketDto dto) {
+        MotoPartsBasket motoParts = new MotoPartsBasket();
         motoParts.setId(dto.getId());
         motoParts.setMark(dto.getMark());
         motoParts.setModel(dto.getModel());
@@ -38,8 +38,8 @@ public class MotoMapper {
         return motoParts;
     }
 
-  public   MotoDto map(MotoParts parts) {
-        MotoDto dto = new MotoDto();
+    public   MotoPartsBasketDto map(MotoPartsBasket parts) {
+        MotoPartsBasketDto dto = new MotoPartsBasketDto();
         dto.setId(parts.getId());
         dto.setMark(parts.getMark());
         dto.setModel(parts.getModel());
@@ -56,9 +56,5 @@ public class MotoMapper {
     }
 
 
-
-
-        }
-
-
+}
 

@@ -13,6 +13,7 @@ import java.util.Optional;
 interface CarRepository  extends JpaRepository<Car,Long> {
 Optional<Car>findBySerialNumber(String serialNumber);
 Page<Car>findCarBySerialNumberContainingIgnoreCase(String serialNumber,Pageable pageable);
+
 Page<Car>findAll(Pageable pageable);
 
 

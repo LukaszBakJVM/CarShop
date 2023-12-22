@@ -1,33 +1,25 @@
-package com.example.carshop.App.Car;
+package com.example.carshop.App.Shop.Basket.CarParts;
+
 
 import com.example.carshop.App.Car.Category.Category;
 import com.example.carshop.App.Car.Category.CategoryRepository;
-
 import com.example.carshop.App.Compononent.PhotoMapper;
-import com.example.carshop.App.Shop.Basket.CarParts.CarPartsBasketDto;
 import org.springframework.stereotype.Service;
 
 
 
-
-
 @Service
-public class CarMapper {
-
-
-    private final CategoryRepository categoryRepository;
+public class CarPartsBasketMapper {
+    private final CategoryRepository repository;
     private final PhotoMapper photoMapper;
 
-
-
-    public CarMapper(CategoryRepository categoryRepository, PhotoMapper photoMapper) {
-        this.categoryRepository = categoryRepository;
-
+    public CarPartsBasketMapper(CategoryRepository repository, PhotoMapper photoMapper) {
+        this.repository = repository;
         this.photoMapper = photoMapper;
     }
 
-   public Car map(CarDto dto)  {
-        Car car = new Car();
+    public CarPartsBasket map(CarPartsBasketDto dto)  {
+       CarPartsBasket car = new CarPartsBasket();
         car.setId(dto.getId());
         car.setMark(dto.getMark());
         car.setModel(dto.getModel());
@@ -39,14 +31,14 @@ public class CarMapper {
             byte[] bytes = photoMapper.compressFile(dto.getPhotoDto());
             car.setPhoto(bytes);
         }
-        Category category = categoryRepository.findById(dto.getCategory()).orElseThrow();
+        Category category = repository.findById(dto.getCategory()).orElseThrow();
         car.setCategory(category);
 
         return car;
     }
 
-  public   CarDto map(Car car) {
-        CarDto dto = new CarDto();
+    public   CarPartsBasketDto map(CarPartsBasket car) {
+        CarPartsBasketDto dto = new CarPartsBasketDto();
         dto.setId(car.getId());
         dto.setMark(car.getMark());
         dto.setModel(car.getModel());
@@ -62,30 +54,5 @@ public class CarMapper {
         return dto;
     }
 
-    CarPartsBasketDto basket(CarDto car){
-        CarPartsBasketDto dto = new CarPartsBasketDto();
-
-
-        dto.setMark(car.getMark());
-        dto.setModel(car.getModel());
-        dto.setSerialNumber(car.getSerialNumber());
-        dto.setPartsBrand(car.getPartsBrand());
-        dto.setPrice(car.getPrice());
-        dto.setQuantity(car.getQuantity());
-
-            dto.setPhotoDto(car.getPhotoDto());
-
-        dto.setCategory(car.getCategory());
-        return dto;
-    }
-
-
-
-
-
-
-
-
-
-
 }
+

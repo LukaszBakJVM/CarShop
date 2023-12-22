@@ -8,8 +8,11 @@ import java.util.stream.Collectors;
 
 @Service
 public class LoginMapper {
+
     LoginDto map(Person person){
-        return new LoginDto(person.getEmail(), person.getPassword(), person.getRoles().stream().map(Role::getName).collect(Collectors.toUnmodifiableSet()));
+        return new LoginDto(person.getEmail(), person.getPassword(), person.getRoles().stream()
+                .map(Role::getName)
+                .collect(Collectors.toSet()), person.getShoppingCart().getId());
 
     }
 

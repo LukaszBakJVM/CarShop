@@ -58,8 +58,8 @@ public class MotoController {
         return ResponseEntity.ok(service.findAllBySerialNumber(serialNumber,page));
     }
     @PatchMapping("/sell")
-    ResponseEntity<?> sellPart(@RequestParam String serialNumber, @RequestParam int quantity) {
-        service.sellParts(serialNumber, quantity);
+    ResponseEntity<?> sellPart(@RequestParam String serialNumber, @RequestParam int quantity,@RequestParam String email) {
+        service.sellParts(serialNumber, quantity,email);
         return ResponseEntity.noContent().build();
     }
     @GetMapping("/{serialNumber}")

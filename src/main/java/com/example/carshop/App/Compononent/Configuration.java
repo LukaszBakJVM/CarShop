@@ -1,4 +1,4 @@
-package com.example.carshop.App;
+package com.example.carshop.App.Compononent;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -7,7 +7,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 
 
+import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
+
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -18,6 +20,7 @@ import java.math.BigDecimal;
 
 
 public class Configuration {
+
     @Bean
     BigDecimal bigDecimal(){
         return new BigDecimal("0.0");
@@ -32,11 +35,13 @@ public class Configuration {
        http.csrf(h2->h2.ignoringRequestMatchers(h2Console));
 
         http.formLogin(e->e.loginPage("/login").permitAll());
+       // http.formLogin(AbstractAuthenticationFilterConfigurer::permitAll);
 
         http.authorizeHttpRequests(a -> a.requestMatchers("/", "/img/**", "/register.html",
-                        "/register","/login.html","/index.html")
+                        "/register","/login.html","/index.html","/basket")
                 .permitAll().requestMatchers(h2Console).permitAll().anyRequest().authenticated());
-        http.csrf(i->i.ignoringRequestMatchers("/**"));
+        http.csrf(i->i.ignoringRequestMatchers("/**")).formLogin(AbstractAuthenticationFilterConfigurer::permitAll);
+
 
         http.headers(httpSecurityHeadersConfigurer -> httpSecurityHeadersConfigurer
        .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));

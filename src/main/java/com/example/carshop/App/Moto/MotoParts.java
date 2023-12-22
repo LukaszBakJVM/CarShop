@@ -1,8 +1,11 @@
 package com.example.carshop.App.Moto;
 
 import com.example.carshop.App.Car.Category.Category;
+
 import com.example.carshop.App.SuperClass.Parts;
 import jakarta.persistence.*;
+
+
 
 @Entity
 public class MotoParts extends Parts {
@@ -11,6 +14,8 @@ public class MotoParts extends Parts {
     private long id;
     @ManyToOne()
     private Category category;
+
+
 
     public MotoParts() {
     }
@@ -30,4 +35,6 @@ public class MotoParts extends Parts {
     public void setCategory(Category category) {
         this.category = category;
     }
+
+
 }
