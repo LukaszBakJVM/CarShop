@@ -19,13 +19,13 @@ public class ShoppingCartController {
 
     private final ShoppingCartService shoppingCartService;
 
-  private final   BigDecimal bigDecimal;
 
-    public ShoppingCartController(ShoppingCartService shoppingCartService, BigDecimal bigDecimal) {
+
+    public ShoppingCartController(ShoppingCartService shoppingCartService) {
         this.shoppingCartService = shoppingCartService;
-        this.bigDecimal = bigDecimal;
+
     }
-    @GetMapping
+    @GetMapping("/id")
    ResponseEntity<ShoppingCartDto> findById(@RequestParam long id){
         return ResponseEntity.ok(shoppingCartService.findById(id));
     }
@@ -51,6 +51,15 @@ public class ShoppingCartController {
         String email = authentication.getName();
       return ResponseEntity.ok(  shoppingCartService.findBasketByPersonEmail(email));
     }
+
+    @GetMapping
+    ResponseEntity<Set<ShoppingCartDto>>findAll(@RequestParam(defaultValue = "0") int page){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+      return ResponseEntity.ok(shoppingCartService.findAll(email,page));
+    }
+
+
 
 
 }

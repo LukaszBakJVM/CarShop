@@ -96,20 +96,20 @@ public class CarService {
                 map1.setQuantity(quantity);
                 CarPartsBasketDto basket = carMapper.basket(map1);
                 CarPartsBasket map2 = carPartsBasketMapper.map(basket);
-                shoppingCart.getCarsParts().add(map2);
-                carPartsBasketRepository.save(map2);
 
+                Set<CarPartsBasket> carsParts = shoppingCart.getCarsParts();
+                if (carsParts.contains(map2)){
+                    carsParts.remove(map2);
+                    map2.setQuantity(map2.getQuantity()+quantity);
+                    carsParts.add(map2);
+                }else {
+                    shoppingCart.getCarsParts().add(map2);
+                }
+                carPartsBasketRepository.save(map2);
                 shoppingCartRepository.save(shoppingCart);
 
-
-
-
-
-
-
-
-
             }
+
         }
 
     }
