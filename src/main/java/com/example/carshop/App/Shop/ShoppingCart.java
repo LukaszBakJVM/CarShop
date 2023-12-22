@@ -28,7 +28,7 @@ public class ShoppingCart {
     @JoinTable(
             name = "shop_moto_part",
             joinColumns = @JoinColumn(name = "Shoping_moto_part_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "parts_id", referencedColumnName = "id"))
+            inverseJoinColumns = @JoinColumn(name = "moto_parts_id", referencedColumnName = "id"))
     private Set<MotoPartsBasket>motoParts;
 
     public long getId() {
