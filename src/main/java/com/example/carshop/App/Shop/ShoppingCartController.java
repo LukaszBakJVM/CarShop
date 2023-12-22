@@ -32,18 +32,17 @@ public class ShoppingCartController {
     @GetMapping("/sum")
     BigDecimal sumToPay(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        BigDecimal sum = BigDecimal.ZERO;
+
 
 
         String email = authentication.getName();
         ShoppingCartDto basketByPersonEmail = shoppingCartService.findBasketByPersonEmail(email);
         Set<CarPartsBasketDto> carDto = basketByPersonEmail.getCarDto();
-        for (CarPartsBasketDto suming:carDto){
-            BigDecimal price = suming.getPrice();
-            BigDecimal multiply = price.multiply(BigDecimal.valueOf(suming.getQuantity()));
-            sum=sum.add(multiply);
-        }
-        return sum;
+      return   carDto.stream().map(basketSum->basketSum.getPrice()
+                .multiply(BigDecimal.valueOf(basketSum.getQuantity())))
+                .reduce(BigDecimal.ZERO,BigDecimal::add);
+
+
 
     }
     @GetMapping("/email")

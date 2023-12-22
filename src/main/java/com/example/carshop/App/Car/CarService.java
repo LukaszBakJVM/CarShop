@@ -6,8 +6,10 @@ import com.example.carshop.App.Shop.Basket.CarParts.CarPartsBasket;
 import com.example.carshop.App.Shop.Basket.CarParts.CarPartsBasketDto;
 import com.example.carshop.App.Shop.Basket.CarParts.CarPartsBasketMapper;
 import com.example.carshop.App.Shop.Basket.CarParts.CarPartsBasketRepository;
-import com.example.carshop.App.Shop.ShoppingCartDto;
-import com.example.carshop.App.Shop.ShoppingCartService;
+import com.example.carshop.App.Shop.ShoppingCart;
+
+import com.example.carshop.App.Shop.ShoppingCartRepository;
+
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -24,18 +26,17 @@ import java.util.stream.Collectors;
 public class CarService {
     private final CarRepository carRepository;
     private final CarMapper carMapper;
-    private final ShoppingCartService shoppingCartService;
+
     private final CarPartsBasketMapper carPartsBasketMapper;
+    private final ShoppingCartRepository shoppingCartRepository;
     private final CarPartsBasketRepository carPartsBasketRepository;
     private final int PAGE_SIZE = 5;
 
-
-    public CarService(CarRepository carRepository, CarMapper carMapper, ShoppingCartService shoppingCartService,
-                      CarPartsBasketMapper carPartsBasketMapper, CarPartsBasketRepository carPartsBasketRepository) {
+    public CarService(CarRepository carRepository, CarMapper carMapper, CarPartsBasketMapper carPartsBasketMapper, ShoppingCartRepository shoppingCartRepository, CarPartsBasketRepository carPartsBasketRepository) {
         this.carRepository = carRepository;
         this.carMapper = carMapper;
-        this.shoppingCartService = shoppingCartService;
         this.carPartsBasketMapper = carPartsBasketMapper;
+        this.shoppingCartRepository = shoppingCartRepository;
         this.carPartsBasketRepository = carPartsBasketRepository;
     }
 
@@ -84,16 +85,25 @@ public class CarService {
     }
 
     public void sellParts(String serialNumber, int quantity , String email) {
-        ShoppingCartDto basketByPersonEmail = shoppingCartService.findBasketByPersonEmail(email);
-        CarDto carDto = findBySerialNumber(serialNumber).orElseThrow();
-        if (carDto.getQuantity() > 0 && carDto.getQuantity() >= quantity) {
-            carDto.setQuantity(quantity);
+        ShoppingCart shoppingCart = shoppingCartRepository.findByPersonEmail(email).orElseThrow();
 
-        CarPartsBasketDto basket = carMapper.basket(carDto);
-        CarPartsBasket carBasket = carPartsBasketMapper.map(basket);
-        carPartsBasketRepository.save(carBasket);
+        Optional<Car> bySerialNumber = carRepository.findBySerialNumber(serialNumber);
+        if (bySerialNumber.isPresent()) {
+            Car q = bySerialNumber.get();
 
-        shoppingCartService.sell(basketByPersonEmail);
+            if (q.getQuantity() > 0 && q.getQuantity() >= quantity) {
+                CarDto map1 = carMapper.map(q);
+                map1.setQuantity(quantity);
+                CarPartsBasketDto basket = carMapper.basket(map1);
+                CarPartsBasket map2 = carPartsBasketMapper.map(basket);
+                shoppingCart.getCarsParts().add(map2);
+                carPartsBasketRepository.save(map2);
+
+                shoppingCartRepository.save(shoppingCart);
+
+
+
+
 
 
 
@@ -102,7 +112,7 @@ public class CarService {
             }
         }
 
-
+    }
 
 
 

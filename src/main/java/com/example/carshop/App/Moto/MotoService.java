@@ -82,7 +82,7 @@ public class MotoService {
                 q.setQuantity(update);
                 MotoParts save = motoRepository.save(q);
                 MotoDto map = motoMapper.map(save);
-                basketByPersonEmail.getMotoDto().add(map);
+              //  basketByPersonEmail.getMotoDto().add(map);
             }
         }
     }

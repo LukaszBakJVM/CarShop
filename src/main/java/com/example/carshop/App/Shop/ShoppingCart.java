@@ -6,6 +6,7 @@ import com.example.carshop.App.Shop.Basket.MotoParts.MotoPartsBasket;
 import jakarta.persistence.*;
 
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -19,8 +20,8 @@ public class ShoppingCart {
     @JoinTable(
             name = "shop_car_part",
             joinColumns = @JoinColumn(name = "Shoping_car_part_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "parts_id", referencedColumnName = "id"))
-    private Set<CarPartsBasket>carsParts;
+            inverseJoinColumns = @JoinColumn(name = "car_parts_id", referencedColumnName = "id"))
+    private Set<CarPartsBasket>carsParts =new HashSet<>();
 
 
     @ManyToMany

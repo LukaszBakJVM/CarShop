@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 
 
-
 @Service
 public class ShoppingCartService {
     private final  ShoppingCartRepository shoppingCartRepository;
@@ -30,10 +29,10 @@ public class ShoppingCartService {
         return shoppingCartMapper.map(shoppingCart);
     }
 
-    public void sell( ShoppingCartDto dto) {
+    public ShoppingCartDto sell( ShoppingCartDto dto) {
         ShoppingCart map = shoppingCartMapper.map(dto);
-         shoppingCartRepository.save(map);
-       // return shoppingCartMapper.map(save);
+    ShoppingCart save = shoppingCartRepository.save(map);
+      return  shoppingCartMapper.map(save);
     }
 
 

@@ -1,8 +1,9 @@
 package com.example.carshop.App.Shop;
 
 
-import com.example.carshop.App.Moto.MotoDto;
+
 import com.example.carshop.App.Shop.Basket.CarParts.CarPartsBasketDto;
+import com.example.carshop.App.Shop.Basket.MotoParts.MotoPartsBasketDto;
 
 
 import java.util.Set;
@@ -11,7 +12,7 @@ public class ShoppingCartDto {
     private long basketId;
     private String personEmail;
      private Set<CarPartsBasketDto>carDto;
-     private Set<MotoDto>motoDto;
+     private Set<MotoPartsBasketDto>motoDto;
 
     public long getBasketId() {
         return basketId;
@@ -37,11 +38,11 @@ public class ShoppingCartDto {
         this.carDto = carDto;
     }
 
-    public Set<MotoDto> getMotoDto() {
+    public Set<MotoPartsBasketDto> getMotoDto() {
         return motoDto;
     }
 
-    public void setMotoDto(Set<MotoDto> motoDto) {
+    public void setMotoDto(Set<MotoPartsBasketDto> motoDto) {
         this.motoDto = motoDto;
     }
 }

@@ -64,7 +64,7 @@ public class CarMapper {
     CarPartsBasketDto basket(CarDto car){
         CarPartsBasketDto dto = new CarPartsBasketDto();
 
-        dto.setId(car.getId());
+
         dto.setMark(car.getMark());
         dto.setModel(car.getModel());
         dto.setSerialNumber(car.getSerialNumber());
