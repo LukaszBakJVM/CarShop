@@ -3,20 +3,21 @@ package com.example.carshop.App.Moto;
 
 import com.example.carshop.App.Car.Category.Category;
 import com.example.carshop.App.Car.Category.CategoryRepository;
+import com.example.carshop.App.Compononent.PhotoMapper;
 import org.springframework.stereotype.Service;
 
-import java.io.ByteArrayOutputStream;
-import java.util.zip.Deflater;
-import java.util.zip.Inflater;
+
 
 @Service
 
 public class MotoMapper {
     private final CategoryRepository categoryRepository;
+    private final PhotoMapper photoMapper;
 
 
-    public MotoMapper(CategoryRepository categoryRepository) {
+    public MotoMapper(CategoryRepository categoryRepository, PhotoMapper photoMapper) {
         this.categoryRepository = categoryRepository;
+        this.photoMapper = photoMapper;
     }
 
    public MotoParts map(MotoDto dto) {
@@ -29,7 +30,7 @@ public class MotoMapper {
         motoParts.setPrice(dto.getPrice());
         motoParts.setQuantity(dto.getQuantity());
         if (dto.getPhotoDto()!=null) {
-            byte[] bytes = compressImage(dto.getPhotoDto());
+            byte[] bytes = photoMapper.compressFile(dto.getPhotoDto());
             motoParts.setPhoto(bytes);
         }
         Category category = categoryRepository.findById(dto.getCategory()).orElseThrow();
@@ -47,48 +48,17 @@ public class MotoMapper {
         dto.setPrice(parts.getPrice());
         dto.setQuantity(parts.getQuantity());
         if (parts.getPhoto()!=null) {
-            byte[] bytes = decompressImage(parts.getPhoto());
+            byte[] bytes = photoMapper.decompressFile(parts.getPhoto());
             dto.setPhotoDto(bytes);
         }
         dto.setCategory(parts.getCategory().getName());
         return dto;
     }
 
-    private byte[] compressImage(byte[] data) {
 
-        Deflater deflater = new Deflater();
-        deflater.setLevel(Deflater.BEST_SPEED);
-        deflater.setInput(data);
-        deflater.finish();
 
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length);
-        byte[] tmp = new byte[4 * 1024];
-        while (!deflater.finished()) {
-            int size = deflater.deflate(tmp);
-            outputStream.write(tmp, 0, size);
-        }
-        try {
-            outputStream.close();
-        } catch (Exception e) {
-            e.getCause();
-        }
-        return outputStream.toByteArray();
-    }
 
-    private byte[] decompressImage(byte[] data) {
-        Inflater inflater = new Inflater();
-        inflater.setInput(data);
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length);
-        byte[] tmp = new byte[4 * 1024];
-        try {
-            while (!inflater.finished()) {
-                int count = inflater.inflate(tmp);
-                outputStream.write(tmp, 0, count);
-            }
-            outputStream.close();
-        } catch (Exception e) {
-            e.getCause();
         }
-        return outputStream.toByteArray();
-    }
-}
+
+
+

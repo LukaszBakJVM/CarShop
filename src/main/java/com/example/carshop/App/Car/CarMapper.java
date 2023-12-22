@@ -3,13 +3,12 @@ package com.example.carshop.App.Car;
 import com.example.carshop.App.Car.Category.Category;
 import com.example.carshop.App.Car.Category.CategoryRepository;
 
+import com.example.carshop.App.Compononent.PhotoMapper;
 import com.example.carshop.App.Shop.Basket.CarParts.CarPartsBasketDto;
 import org.springframework.stereotype.Service;
 
 
-import java.io.ByteArrayOutputStream;
-import java.util.zip.Deflater;
-import java.util.zip.Inflater;
+
 
 
 @Service
@@ -17,12 +16,14 @@ public class CarMapper {
 
 
     private final CategoryRepository categoryRepository;
+    private final PhotoMapper photoMapper;
 
 
 
-    public CarMapper(CategoryRepository categoryRepository) {
+    public CarMapper(CategoryRepository categoryRepository, PhotoMapper photoMapper) {
         this.categoryRepository = categoryRepository;
 
+        this.photoMapper = photoMapper;
     }
 
    public Car map(CarDto dto)  {
@@ -35,7 +36,7 @@ public class CarMapper {
         car.setPrice(dto.getPrice());
         car.setQuantity(dto.getQuantity());
         if (dto.getPhotoDto() != null) {
-            byte[] bytes = compressFile(dto.getPhotoDto());
+            byte[] bytes = photoMapper.compressFile(dto.getPhotoDto());
             car.setPhoto(bytes);
         }
         Category category = categoryRepository.findById(dto.getCategory()).orElseThrow();
@@ -54,7 +55,7 @@ public class CarMapper {
         dto.setPrice(car.getPrice());
         dto.setQuantity(car.getQuantity());
         if (car.getPhoto() != null) {
-            byte[] bytes = decompressFile(car.getPhoto());
+            byte[] bytes = photoMapper.decompressFile(car.getPhoto());
             dto.setPhotoDto(bytes);
         }
         dto.setCategory(car.getCategory().getName());
@@ -71,10 +72,9 @@ public class CarMapper {
         dto.setPartsBrand(car.getPartsBrand());
         dto.setPrice(car.getPrice());
         dto.setQuantity(car.getQuantity());
-        if (car.getPhotoDto() != null) {
-            byte[] bytes = decompressFile(car.getPhotoDto());
-            dto.setPhotoDto(bytes);
-        }
+
+            dto.setPhotoDto(car.getPhotoDto());
+
         dto.setCategory(car.getCategory());
         return dto;
     }
@@ -87,41 +87,5 @@ public class CarMapper {
 
 
 
-    private byte[] compressFile(byte[] data) {
 
-        Deflater deflater = new Deflater();
-        deflater.setLevel(Deflater.BEST_SPEED);
-        deflater.setInput(data);
-        deflater.finish();
-
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length);
-        byte[] tmp = new byte[4 * 1024];
-        while (!deflater.finished()) {
-            int size = deflater.deflate(tmp);
-            outputStream.write(tmp, 0, size);
-        }
-        try {
-            outputStream.close();
-        } catch (Exception e) {
-            e.getCause();
-        }
-        return outputStream.toByteArray();
-    }
-
-    private byte[] decompressFile(byte[] data) {
-        Inflater inflater = new Inflater();
-        inflater.setInput(data);
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length);
-        byte[] tmp = new byte[4 * 1024];
-        try {
-            while (!inflater.finished()) {
-                int count = inflater.inflate(tmp);
-                outputStream.write(tmp, 0, count);
-            }
-            outputStream.close();
-        } catch (Exception e) {
-            e.getCause();
-        }
-        return outputStream.toByteArray();
-    }
 }

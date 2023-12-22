@@ -1,4 +1,4 @@
-package com.example.carshop.App;
+package com.example.carshop.App.Compononent;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
