@@ -2,6 +2,10 @@ package com.example.carshop.App.Car;
 
 
 import com.example.carshop.App.Exception.NotFoundException;
+import com.example.carshop.App.Shop.Basket.CarParts.CarPartsBasket;
+import com.example.carshop.App.Shop.Basket.CarParts.CarPartsBasketDto;
+import com.example.carshop.App.Shop.Basket.CarParts.CarPartsBasketMapper;
+import com.example.carshop.App.Shop.Basket.CarParts.CarPartsBasketRepository;
 import com.example.carshop.App.Shop.ShoppingCartDto;
 import com.example.carshop.App.Shop.ShoppingCartService;
 import org.springframework.data.domain.PageRequest;
@@ -21,13 +25,20 @@ public class CarService {
     private final CarRepository carRepository;
     private final CarMapper carMapper;
     private final ShoppingCartService shoppingCartService;
+    private final CarPartsBasketMapper carPartsBasketMapper;
+    private final CarPartsBasketRepository carPartsBasketRepository;
     private final int PAGE_SIZE = 5;
 
-    public CarService(CarRepository carRepository, CarMapper carMapper, ShoppingCartService shoppingCartService) {
+
+    public CarService(CarRepository carRepository, CarMapper carMapper, ShoppingCartService shoppingCartService,
+                      CarPartsBasketMapper carPartsBasketMapper, CarPartsBasketRepository carPartsBasketRepository) {
         this.carRepository = carRepository;
         this.carMapper = carMapper;
         this.shoppingCartService = shoppingCartService;
+        this.carPartsBasketMapper = carPartsBasketMapper;
+        this.carPartsBasketRepository = carPartsBasketRepository;
     }
+
 
     public CarDto save(CarDto carDto)  {
         Car car = carMapper.map(carDto);
@@ -74,30 +85,24 @@ public class CarService {
 
     public void sellParts(String serialNumber, int quantity , String email) {
         ShoppingCartDto basketByPersonEmail = shoppingCartService.findBasketByPersonEmail(email);
-        Optional<CarDto> bySerialNumber = findBySerialNumber(serialNumber);
+        CarDto carDto = findBySerialNumber(serialNumber).orElseThrow();
+        if (carDto.getQuantity() > 0 && carDto.getQuantity() >= quantity) {
+            carDto.setQuantity(quantity);
+
+        CarPartsBasketDto basket = carMapper.basket(carDto);
+        CarPartsBasket carBasket = carPartsBasketMapper.map(basket);
+        carPartsBasketRepository.save(carBasket);
+
+        shoppingCartService.sell(basketByPersonEmail);
 
 
-
-        if (bySerialNumber.isPresent()) {
-            CarDto q = bySerialNumber.get();
-            int quantity1 = q.getQuantity();
-            Car map = carMapper.map(q);
-
-            if (q.getQuantity() > 0 && q.getQuantity() >= quantity) {
-                q.setQuantity(quantity);
-              //  basketByPersonEmail.getCarDto().add(q);
-
-                carRepository.save(map);
-                shoppingCartService.sell(basketByPersonEmail);
-                map.setQuantity(quantity1);
-                carRepository.save(map);
 
 
 
             }
         }
 
-    }
+
 
 
 

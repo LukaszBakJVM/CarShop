@@ -3,6 +3,7 @@ package com.example.carshop.App.Car;
 import com.example.carshop.App.Car.Category.Category;
 import com.example.carshop.App.Car.Category.CategoryRepository;
 
+import com.example.carshop.App.Shop.Basket.CarParts.CarPartsBasketDto;
 import org.springframework.stereotype.Service;
 
 
@@ -60,24 +61,30 @@ public class CarMapper {
         return dto;
     }
 
-    public Car mapInt(CarDto dto,int quantitu)  {
-        Car car = new Car();
-        car.setId(dto.getId());
-        car.setMark(dto.getMark());
-        car.setModel(dto.getModel());
-        car.setSerialnumber(dto.getSerialNumber());
-        car.setPartsBrand(dto.getPartsBrand());
-        car.setPrice(dto.getPrice());
-        car.setQuantity(quantitu);
-        if (dto.getPhotoDto() != null) {
-            byte[] bytes = compressFile(dto.getPhotoDto());
-            car.setPhoto(bytes);
-        }
-        Category category = categoryRepository.findById(dto.getCategory()).orElseThrow();
-        car.setCategory(category);
+    CarPartsBasketDto basket(CarDto car){
+        CarPartsBasketDto dto = new CarPartsBasketDto();
 
-        return car;
+        dto.setId(car.getId());
+        dto.setMark(car.getMark());
+        dto.setModel(car.getModel());
+        dto.setSerialNumber(car.getSerialNumber());
+        dto.setPartsBrand(car.getPartsBrand());
+        dto.setPrice(car.getPrice());
+        dto.setQuantity(car.getQuantity());
+        if (car.getPhotoDto() != null) {
+            byte[] bytes = decompressFile(car.getPhotoDto());
+            dto.setPhotoDto(bytes);
+        }
+        dto.setCategory(car.getCategory());
+        return dto;
     }
+
+
+
+
+
+
+
 
 
     private byte[] compressFile(byte[] data) {
