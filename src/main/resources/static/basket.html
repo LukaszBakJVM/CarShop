@@ -18,13 +18,13 @@
                 <input type="text" class="form-control" id="serialNumber" name="serialNumber">
             </div>
             <div class="form-group col-md-6 mt-4">
-                <button type="submit" class="btn btn-primary">Search</button>
+
             </div>
         </div>
     </form>
 
-    <button class="btn btn-success mt-3 mb-3" onclick="goToNewPart()">Enter Part</button>
-    <button class="btn btn-success mt-3 mb-3" onclick="goToBasket()">Basket</button>
+
+
     <div id="searchResults"></div>
     <button class="btn btn-info mt-3" onclick="showPreviousResults()">Previous page</button>
     <button class="btn btn-info mt-3" onclick="showNextResults()">Next page</button>
@@ -36,22 +36,22 @@
 
     async function searchForParts() {
         const serialNumber = document.getElementById('serialNumber').value;
-        const url = `car?serialNumber=${serialNumber}&page=${currentPage}`;
+        const url = `basket?serialNumber=${serialNumber}&page=${currentPage}`;
         const response = await fetch(url);
         const data = await response.json();
         displaySearchResults(data);
     }
 
     async function searchParts() {
-        const url = `car?page=${currentPage}`;
+        const url = `basket?page=${currentPage}`;
         const response = await fetch(url);
         const data = await response.json();
         displaySearchResults(data);
     }
 
     async function deletePart(serialNumber) {
-        if (confirm(" Delete the part ?"  )) {
-            const url = '/car/' + serialNumber;
+        if (confirm("Delete the part?")) {
+            const url = `api/parts/${serialNumber}`;
             const response = await fetch(url, { method: 'DELETE' });
             if (response.ok) {
                 alert('Deleted');
@@ -65,7 +65,7 @@
     async function sellPart(serialNumber) {
         const sellQuantity = prompt(`Enter quantity :`);
         if (sellQuantity !== null) {
-            const url = `/car/sell?serialNumber=${serialNumber}&quantity=${sellQuantity}`;
+            const url = `api/parts/sell?serialNumber=${serialNumber}&quantity=${sellQuantity}`;
             const response = await fetch(url, { method: 'PATCH' });
             if (response.ok) {
                 searchParts();
@@ -78,52 +78,55 @@
     function goToNewPart() {
         window.location.href = 'newpart.html';
     }
+
     function goToBasket() {
         window.location.href = 'basket.html';
     }
-
 
     async function displaySearchResults(data) {
         const searchResultsDiv = document.getElementById('searchResults');
         searchResultsDiv.innerHTML = '';
 
-        const table = document.createElement('table');
-        table.classList.add('table', 'mt-3');
+        if (data.length > 0 && data[0].carDto.length > 0) {
+            const table = document.createElement('table');
+            table.classList.add('table', 'mt-3');
 
-        const thead = document.createElement('thead');
-        thead.innerHTML = `
-        <tr>
-            <th scope="col">Marka</th>
-            <th scope="col">Model</th>
-            <th scope="col">Numer Seryjny</th>
-            <th scope="col">Cena</th>
-            <th scope="col">Ilość</th>
-            <th scope="col">Plik</th>
-            <th scope="col">Akcje</th>
-        </tr>
-    `;
-        table.appendChild(thead);
+            const thead = document.createElement('thead');
+            thead.innerHTML = `
+                <tr>
+                    <th scope="col">Marka</th>
+                    <th scope="col">Model</th>
+                    <th scope="col">Numer Seryjny</th>
+                    <th scope="col">Cena</th>
+                    <th scope="col">Ilość</th>
+                    <th scope="col">Plik</th>
+                    <th scope="col">Akcje</th>
+                </tr>
+            `;
+            table.appendChild(thead);
 
-        const tbody = document.createElement('tbody');
-        for (const carPart of data) {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-            <td>${carPart.mark}</td>
-            <td>${carPart.model}</td>
-            <td>${carPart.serialNumber}</td>
-            <td>${carPart.price}</td>
-            <td>${carPart.quantity}</td>
-            <td>${await getFileDisplay(carPart)}</td>
-            <td>
-                <button class="btn btn-danger" onclick="deletePart('${carPart.serialNumber}')">Delete</button>
-                <button class="btn btn-warning" onclick="sellPart('${carPart.serialNumber}')">Buy</button>
-            </td>
-        `;
-            tbody.appendChild(tr);
+            const tbody = document.createElement('tbody');
+            for (const carPart of data[0].carDto) {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${carPart.mark}</td>
+                    <td>${carPart.model}</td>
+                    <td>${carPart.serialNumber}</td>
+                    <td>${carPart.price}</td>
+                    <td>${carPart.quantity}</td>
+                    <td>${await getFileDisplay(carPart)}</td>
+                    <td>
+                        <button class="btn btn-danger" onclick="deletePart('${carPart.serialNumber}')">Delete</button>
+                        <button class="btn btn-warning" onclick="sellPart('${carPart.serialNumber}')">Buy</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            }
+            table.appendChild(tbody);
+            searchResultsDiv.appendChild(table);
+        } else {
+            searchResultsDiv.innerHTML = 'No results found.';
         }
-        table.appendChild(tbody);
-
-        searchResultsDiv.appendChild(table);
     }
 
     async function getFileDisplay(carPart) {
@@ -140,15 +143,14 @@
                     const imgUrl = URL.createObjectURL(imgBlob);
                     return `<img src="${imgUrl}" alt="Zdjęcie" style="max-width: 50px;">`;
                 } else if (fileType === "pdf" || fileType === "txt") {
-                    // Dodaj bezpośredni link do otwarcia pliku w kolumnie
-                    return `<a href="#" onclick="openFile('${base64String}', '${fileType}')">Otwórz plik</a>`;
+                    return `<a href="#" onclick="openFile('${base64String}', '${fileType}')">Open file</a>`;
                 }
             } catch (error) {
-                console.error("Błąd podczas pobierania typu pliku:", error);
+                console.error("Error getting file type:", error);
             }
         }
 
-        return "Brak pliku";
+        return "No file";
     }
 
     async function openFile(base64String, fileType) {
@@ -158,36 +160,23 @@
         const formData = new FormData();
         formData.append("file", blob);
 
-        const response = await fetch("car/tmp", {
+        const response = await fetch("api/parts/tmp", {
             method: "POST",
             body: formData
         });
 
         if (response.ok) {
-
             window.open(blobUrl, "_blank");
         } else {
-            console.error("Błąd podczas zapisywania pliku tymczasowego na serwerze");
+            console.error("Error saving temporary file on the server");
         }
     }
 
     async function getFileType(serialNumber) {
-        const url = `/car/filetyp/${serialNumber}`;
+        const url = `api/parts/filetype/${serialNumber}`;
         const response = await fetch(url);
         const fileType = await response.text();
         return fileType.trim().toLowerCase();
-    }
-
-    function base64ToBlob(base64String, type) {
-        const binaryString = atob(base64String);
-        const length = binaryString.length;
-        const binaryArray = new Uint8Array(length);
-
-        for (let i = 0; i < length; i++) {
-            binaryArray[i] = binaryString.charCodeAt(i);
-        }
-
-        return new Blob([binaryArray], { type: type });
     }
 
     function showPreviousResults() {
