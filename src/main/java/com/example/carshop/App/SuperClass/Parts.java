@@ -3,6 +3,7 @@ package com.example.carshop.App.SuperClass;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Objects;
 
 @MappedSuperclass
@@ -90,5 +91,18 @@ public class Parts {
     @Override
     public int hashCode() {
         return Objects.hash(mark, model, serialNumber, partsBrand);
+    }
+
+    @Override
+    public String toString() {
+        return "Parts{" +
+                "mark='" + mark + '\'' +
+                ", model='" + model + '\'' +
+                ", serialNumber='" + serialNumber + '\'' +
+                ", partsBrand='" + partsBrand + '\'' +
+                ", price=" + price +
+                ", quantity=" + quantity +
+                ", photo=" + Arrays.toString(photo) +
+                '}';
     }
 }

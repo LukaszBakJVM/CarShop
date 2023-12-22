@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 
 @SpringBootTest(classes = CarShopApplication.class)
 @AutoConfigureMockMvc
-class CarPartsControllerTest {
+class CarPartsBasketControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @Autowired

@@ -1,15 +1,11 @@
 package com.example.carshop.App.Shop;
 
 
-import com.example.carshop.App.Car.Car;
-import com.example.carshop.App.Car.CarDto;
+
 import com.example.carshop.App.Car.CarMapper;
 import org.springframework.stereotype.Service;
 
 
-
-import java.util.Set;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -34,17 +30,12 @@ public class ShoppingCartService {
         return shoppingCartMapper.map(shoppingCart);
     }
 
-    public void sell(Set<CarDto>sell, ShoppingCartDto dto) {
-        ShoppingCart shoppingCart = shoppingCartRepository.findByPersonEmail(dto.getPersonEmail()).orElseThrow();
+    public void sell( ShoppingCartDto dto) {
+        ShoppingCart map = shoppingCartMapper.map(dto);
+         shoppingCartRepository.save(map);
+       // return shoppingCartMapper.map(save);
+    }
 
-
-        Set<Car> collect = sell.stream().map(carMapper::map).collect(Collectors.toSet());
-        Set<Car> carsParts = shoppingCart.getCarsParts();
-        carsParts.addAll(collect);
-        ShoppingCart save = shoppingCartRepository.save(shoppingCart);
-
-
-        shoppingCartMapper.map(save);
 
     }
 
@@ -57,6 +48,6 @@ public class ShoppingCartService {
 
 
 
-    }
+
 
 

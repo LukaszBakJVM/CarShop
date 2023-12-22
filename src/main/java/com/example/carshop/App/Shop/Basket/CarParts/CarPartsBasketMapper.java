@@ -1,31 +1,25 @@
-package com.example.carshop.App.Car;
+package com.example.carshop.App.Shop.Basket.CarParts;
 
+import com.example.carshop.App.Car.Car;
+import com.example.carshop.App.Car.CarDto;
 import com.example.carshop.App.Car.Category.Category;
 import com.example.carshop.App.Car.Category.CategoryRepository;
-
 import org.springframework.stereotype.Service;
-
 
 import java.io.ByteArrayOutputStream;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
-
 @Service
-public class CarMapper {
+public class CarPartsBasketMapper {
+    private final CategoryRepository repository;
 
-
-    private final CategoryRepository categoryRepository;
-
-
-
-    public CarMapper(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
-
+    public CarPartsBasketMapper(CategoryRepository repository) {
+        this.repository = repository;
     }
 
-   public Car map(CarDto dto)  {
-        Car car = new Car();
+    public CarPartsBasket map(CarPartsBasketDto dto)  {
+       CarPartsBasket car = new CarPartsBasket();
         car.setId(dto.getId());
         car.setMark(dto.getMark());
         car.setModel(dto.getModel());
@@ -37,14 +31,14 @@ public class CarMapper {
             byte[] bytes = compressFile(dto.getPhotoDto());
             car.setPhoto(bytes);
         }
-        Category category = categoryRepository.findById(dto.getCategory()).orElseThrow();
+        Category category = repository.findById(dto.getCategory()).orElseThrow();
         car.setCategory(category);
 
         return car;
     }
 
-  public   CarDto map(Car car) {
-        CarDto dto = new CarDto();
+    public   CarPartsBasketDto map(CarPartsBasket car) {
+        CarPartsBasketDto dto = new CarPartsBasketDto();
         dto.setId(car.getId());
         dto.setMark(car.getMark());
         dto.setModel(car.getModel());
@@ -73,7 +67,7 @@ public class CarMapper {
             byte[] bytes = compressFile(dto.getPhotoDto());
             car.setPhoto(bytes);
         }
-        Category category = categoryRepository.findById(dto.getCategory()).orElseThrow();
+        Category category = repository.findById(dto.getCategory()).orElseThrow();
         car.setCategory(category);
 
         return car;
@@ -118,3 +112,4 @@ public class CarMapper {
         return outputStream.toByteArray();
     }
 }
+

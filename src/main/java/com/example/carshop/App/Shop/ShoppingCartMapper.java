@@ -1,9 +1,12 @@
 package com.example.carshop.App.Shop;
 
-import com.example.carshop.App.Car.*;
+
 import com.example.carshop.App.LoginAndRegistration.Person;
 import com.example.carshop.App.LoginAndRegistration.PersonRepository;
-import com.example.carshop.App.Moto.*;
+
+import com.example.carshop.App.Shop.Basket.CarParts.CarPartsBasket;
+import com.example.carshop.App.Shop.Basket.CarParts.CarPartsBasketMapper;
+import com.example.carshop.App.Shop.Basket.MotoParts.MotoPartsBasketMapper;
 import org.springframework.stereotype.Service;
 
 
@@ -15,13 +18,16 @@ public class ShoppingCartMapper {
 
 
 private final PersonRepository personRepository;
-private final CarMapper carMapper;
-private final MotoMapper motoMapper;
+private final CarPartsBasketMapper carPartsBasketMapper;
+private final MotoPartsBasketMapper motoPartsBasketMapper;
+private  final ShoppingCartRepository shoppingCartRepository;
 
-    public ShoppingCartMapper(PersonRepository personRepository, CarMapper carMapper, MotoMapper motoMapper) {
+    public ShoppingCartMapper(PersonRepository personRepository, CarPartsBasketMapper carPartsBasketMapper,
+                              MotoPartsBasketMapper motoPartsBasketMapper, ShoppingCartRepository shoppingCartRepository) {
         this.personRepository = personRepository;
-        this.carMapper = carMapper;
-        this.motoMapper = motoMapper;
+        this.carPartsBasketMapper = carPartsBasketMapper;
+        this.motoPartsBasketMapper = motoPartsBasketMapper;
+        this.shoppingCartRepository = shoppingCartRepository;
     }
 
 
@@ -31,12 +37,13 @@ private final MotoMapper motoMapper;
 
         Person person = personRepository.findByEmail(dto.getPersonEmail()).orElseThrow();
         shoppingCart.setPerson(person);
+        ShoppingCart shoppingCart1 = shoppingCartRepository.findByPersonEmail(person.getEmail()).orElseThrow();
+        Set<CarPartsBasket> collect = dto.getCarDto().stream().map(carPartsBasketMapper::map).peek(System.out::println).collect(Collectors.toSet());
+          shoppingCart.setCarsParts(collect);
+        shoppingCart.setMotoParts(shoppingCart1.getMotoParts());
 
-        Set<Car> carParts = shoppingCart.getCarsParts();
-        shoppingCart.setCarsParts(carParts);
 
-        Set<MotoParts> motoParts = shoppingCart.getMotoParts();
-        shoppingCart.setMotoParts(motoParts);
+
 
 
         return shoppingCart;
@@ -48,15 +55,17 @@ private final MotoMapper motoMapper;
 
         dto.setPersonEmail(shoppingCart.getPerson().getEmail());
 
-        Set<CarDto> carDto = shoppingCart.getCarsParts().stream().map(carMapper::map).collect(Collectors.toSet());
-        dto.setCarDto(carDto);
+      //  Set<CarDto> carDto = shoppingCart.getCarsParts().stream().map(carMapper::map).collect(Collectors.toSet());
+      //  dto.setCarDto(carDto);
 
-        Set<MotoDto> motoDto = shoppingCart.getMotoParts().stream().map(motoMapper::map).collect(Collectors.toSet());
-        dto.setMotoDto(motoDto);
+     //   Set<MotoDto> motoDto = shoppingCart.getMotoParts().stream().map(motoMapper::map).collect(Collectors.toSet());
+      //  dto.setMotoDto(motoDto);
 
         return dto;
 
 
     }
+
+
 
 }

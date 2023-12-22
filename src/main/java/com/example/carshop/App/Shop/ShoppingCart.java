@@ -1,8 +1,8 @@
 package com.example.carshop.App.Shop;
 
-import com.example.carshop.App.Car.Car;
 import com.example.carshop.App.LoginAndRegistration.Person;
-import com.example.carshop.App.Moto.MotoParts;
+import com.example.carshop.App.Shop.Basket.CarParts.CarPartsBasket;
+import com.example.carshop.App.Shop.Basket.MotoParts.MotoPartsBasket;
 import jakarta.persistence.*;
 
 
@@ -18,15 +18,17 @@ public class ShoppingCart {
     @ManyToMany
     @JoinTable(
             name = "shop_car_part",
-            joinColumns = @JoinColumn(name = "shopping_cart_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "car_id", referencedColumnName = "id"))
-   private Set<Car>carsParts;
+            joinColumns = @JoinColumn(name = "Shoping_car_part_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "parts_id", referencedColumnName = "id"))
+    private Set<CarPartsBasket>carsParts;
+
+
     @ManyToMany
     @JoinTable(
             name = "shop_moto_part",
             joinColumns = @JoinColumn(name = "Shoping_moto_part_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "parts_id", referencedColumnName = "id"))
-    private Set<MotoParts>motoParts;
+    private Set<MotoPartsBasket>motoParts;
 
     public long getId() {
         return id;
@@ -44,21 +46,19 @@ public class ShoppingCart {
         this.person = person;
     }
 
-    public Set<Car> getCarsParts() {
+    public Set<CarPartsBasket> getCarsParts() {
         return carsParts;
     }
 
-    public void setCarsParts(Set<Car> carsParts) {
+    public void setCarsParts(Set<CarPartsBasket> carsParts) {
         this.carsParts = carsParts;
     }
 
-    public Set<MotoParts> getMotoParts() {
+    public Set<MotoPartsBasket> getMotoParts() {
         return motoParts;
     }
 
-    public void setMotoParts(Set<MotoParts> motoParts) {
+    public void setMotoParts(Set<MotoPartsBasket> motoParts) {
         this.motoParts = motoParts;
     }
-
-
 }
