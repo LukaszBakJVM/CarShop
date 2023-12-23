@@ -4,9 +4,17 @@ package com.example.carshop.App.Moto;
 
 
 
+
 import com.example.carshop.App.Exception.NotFoundException;
-import com.example.carshop.App.Shop.ShoppingCartDto;
-import com.example.carshop.App.Shop.ShoppingCartService;
+
+import com.example.carshop.App.Shop.Basket.MotoParts.MotoPartsBasket;
+import com.example.carshop.App.Shop.Basket.MotoParts.MotoPartsBasketDto;
+import com.example.carshop.App.Shop.Basket.MotoParts.MotoPartsBasketMapper;
+import com.example.carshop.App.Shop.Basket.MotoParts.MotoPartsBasketRepository;
+import com.example.carshop.App.Shop.ShoppingCart;
+
+import com.example.carshop.App.Shop.ShoppingCartRepository;
+
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,14 +29,21 @@ import java.util.stream.Collectors;
 public class MotoService {
     private final MotoRepository motoRepository;
     private final MotoMapper motoMapper;
-    private final ShoppingCartService shoppingCartService;
+   private final MotoPartsBasketMapper motoPartsBasketMapper;
+   private final ShoppingCartRepository shoppingCartRepository;
+   private final MotoPartsBasketRepository motoPartsBasketRepository;
     private final int PAGE_SIZE = 5;
 
-    public MotoService(MotoRepository motoRepository, MotoMapper motoMapper, ShoppingCartService shoppingCartService) {
+    public MotoService(MotoRepository motoRepository, MotoMapper motoMapper, MotoPartsBasketMapper motoPartsBasketMapper,
+                       ShoppingCartRepository shoppingCartRepository, MotoPartsBasketRepository motoPartsBasketRepository) {
         this.motoRepository = motoRepository;
         this.motoMapper = motoMapper;
-        this.shoppingCartService = shoppingCartService;
+        this.motoPartsBasketMapper = motoPartsBasketMapper;
+        this.shoppingCartRepository = shoppingCartRepository;
+        this.motoPartsBasketRepository = motoPartsBasketRepository;
     }
+
+
     public MotoDto save(MotoDto motoDto){
         MotoParts motoParts = motoMapper.map(motoDto);
         Optional<MotoParts> bySerialNumber = motoRepository.findBySerialNumber(motoParts.getSerialnumber());
@@ -72,17 +87,32 @@ public class MotoService {
     }
 
     public void sellParts(String serialNumber, int quantity , String email) {
-        ShoppingCartDto basketByPersonEmail = shoppingCartService.findBasketByPersonEmail(email);
+        ShoppingCart shoppingCart = shoppingCartRepository.findByPersonEmail(email).orElseThrow();
 
         Optional<MotoParts> bySerialNumber = motoRepository.findBySerialNumber(serialNumber);
         if (bySerialNumber.isPresent()) {
             MotoParts q = bySerialNumber.get();
+
             if (q.getQuantity() > 0 && q.getQuantity() >= quantity) {
-                int update = q.getQuantity() - quantity;
-                q.setQuantity(update);
-                MotoParts save = motoRepository.save(q);
-                MotoDto map = motoMapper.map(save);
-              //  basketByPersonEmail.getMotoDto().add(map);
+
+                MotoDto map = motoMapper.map(q);
+                map.setQuantity(quantity);
+                MotoPartsBasketDto basket = motoMapper.basket(map);
+                MotoPartsBasket map1 = motoPartsBasketMapper.map(basket);
+
+                motoPartsBasketMapper.map(basket);
+
+
+                Set<MotoPartsBasket> motoParts = shoppingCart.getMotoParts();
+                if (motoParts.contains(map1)) {
+                    motoParts.remove(map1);
+                    map1.setQuantity(map1.getQuantity() + quantity);
+                    motoParts.add(map1);
+                } else {
+                    shoppingCart.getMotoParts().add(map1);
+                }
+                motoPartsBasketRepository.save(map1);
+                shoppingCartRepository.save(shoppingCart);
             }
         }
     }

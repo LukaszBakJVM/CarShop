@@ -5,6 +5,8 @@ package com.example.carshop.App.Moto;
 import org.springframework.http.ResponseEntity;
 
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -58,7 +60,9 @@ public class MotoController {
         return ResponseEntity.ok(service.findAllBySerialNumber(serialNumber,page));
     }
     @PatchMapping("/sell")
-    ResponseEntity<?> sellPart(@RequestParam String serialNumber, @RequestParam int quantity,@RequestParam String email) {
+    ResponseEntity<?> sellPart(@RequestParam String serialNumber, @RequestParam int quantity) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
         service.sellParts(serialNumber, quantity,email);
         return ResponseEntity.noContent().build();
     }

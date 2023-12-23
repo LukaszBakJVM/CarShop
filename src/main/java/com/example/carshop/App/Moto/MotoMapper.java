@@ -1,9 +1,12 @@
 package com.example.carshop.App.Moto;
 
 
+
 import com.example.carshop.App.Car.Category.Category;
 import com.example.carshop.App.Car.Category.CategoryRepository;
 import com.example.carshop.App.Compononent.PhotoMapper;
+
+import com.example.carshop.App.Shop.Basket.MotoParts.MotoPartsBasketDto;
 import org.springframework.stereotype.Service;
 
 
@@ -52,6 +55,22 @@ public class MotoMapper {
             dto.setPhotoDto(bytes);
         }
         dto.setCategory(parts.getCategory().getName());
+        return dto;
+    }
+    MotoPartsBasketDto basket(MotoDto car){
+        MotoPartsBasketDto dto = new MotoPartsBasketDto();
+
+
+        dto.setMark(car.getMark());
+        dto.setModel(car.getModel());
+        dto.setSerialNumber(car.getSerialNumber());
+        dto.setPartsBrand(car.getPartsBrand());
+        dto.setPrice(car.getPrice());
+        dto.setQuantity(car.getQuantity());
+
+        dto.setPhotoDto(car.getPhotoDto());
+
+        dto.setCategory(car.getCategory());
         return dto;
     }
 
