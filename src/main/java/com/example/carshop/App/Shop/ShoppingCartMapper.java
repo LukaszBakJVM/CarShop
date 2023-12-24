@@ -25,14 +25,14 @@ public class ShoppingCartMapper {
 private final PersonRepository personRepository;
 private final CarPartsBasketMapper carPartsBasketMapper;
 private final MotoPartsBasketMapper motoPartsBasketMapper;
-private  final ShoppingCartRepository shoppingCartRepository;
+
 
     public ShoppingCartMapper(PersonRepository personRepository, CarPartsBasketMapper carPartsBasketMapper,
-                              MotoPartsBasketMapper motoPartsBasketMapper, ShoppingCartRepository shoppingCartRepository) {
+                              MotoPartsBasketMapper motoPartsBasketMapper) {
         this.personRepository = personRepository;
         this.carPartsBasketMapper = carPartsBasketMapper;
         this.motoPartsBasketMapper = motoPartsBasketMapper;
-        this.shoppingCartRepository = shoppingCartRepository;
+
     }
 
 

@@ -87,6 +87,8 @@ public class CarService {
     public void sellParts(String serialNumber, int quantity , String email) {
         ShoppingCart shoppingCart = shoppingCartRepository.findByPersonEmail(email).orElseThrow();
 
+
+
         Optional<Car> bySerialNumber = carRepository.findBySerialNumber(serialNumber);
         if (bySerialNumber.isPresent()) {
             Car q = bySerialNumber.get();
@@ -97,15 +99,24 @@ public class CarService {
                 CarPartsBasketDto basket = carMapper.basket(map1);
                 CarPartsBasket map2 = carPartsBasketMapper.map(basket);
 
-                Set<CarPartsBasket> carsParts = shoppingCart.getCarsParts();
-                if (carsParts.contains(map2)){
-                    carsParts.remove(map2);
-                    map2.setQuantity(map2.getQuantity()+quantity);
-                    carsParts.add(map2);
+                Optional<CarPartsBasket> bySerialNumberExist =
+                        carPartsBasketRepository.findBySerialNumberAndShoppingCartsId(map2.getSerialnumber(),shoppingCart.getId());
+                if (bySerialNumberExist.isPresent()){
+                    CarPartsBasket carPartsBasket1 = bySerialNumberExist.get();
+                    shoppingCart.getCarsParts().remove(carPartsBasket1);
+                    carPartsBasket1.setQuantity(carPartsBasket1.getQuantity()+quantity);
+                    carPartsBasketRepository.save(carPartsBasket1);
+                    shoppingCart.getCarsParts().add(carPartsBasket1);
+
+
                 }else {
-                    shoppingCart.getCarsParts().add(map2);
+                    CarPartsBasket save = carPartsBasketRepository.save(map2);
+                    shoppingCart.getCarsParts().add(save);
+
+
+
                 }
-                carPartsBasketRepository.save(map2);
+
                 shoppingCartRepository.save(shoppingCart);
 
             }
