@@ -87,6 +87,8 @@ public class CarService {
     public void sellParts(String serialNumber, int quantity , String email) {
         ShoppingCart shoppingCart = shoppingCartRepository.findByPersonEmail(email).orElseThrow();
 
+
+
         Optional<Car> bySerialNumber = carRepository.findBySerialNumber(serialNumber);
         if (bySerialNumber.isPresent()) {
             Car q = bySerialNumber.get();
@@ -97,7 +99,8 @@ public class CarService {
                 CarPartsBasketDto basket = carMapper.basket(map1);
                 CarPartsBasket map2 = carPartsBasketMapper.map(basket);
 
-                Optional<CarPartsBasket> bySerialNumberExist = carPartsBasketRepository.findBySerialNumber(map2.getSerialnumber());
+                Optional<CarPartsBasket> bySerialNumberExist =
+                        carPartsBasketRepository.findBySerialNumberAndShoppingCartsId(map2.getSerialnumber(),shoppingCart.getId());
                 if (bySerialNumberExist.isPresent()){
                     CarPartsBasket carPartsBasket1 = bySerialNumberExist.get();
                     shoppingCart.getCarsParts().remove(carPartsBasket1);

@@ -40,7 +40,8 @@
         const url = `basket?serialNumber=${serialNumber}&page=${currentPage}`;
         const response = await fetch(url);
         const data = await response.json();
-        displaySearchResults(data);
+        displaySearchResultsCar(data);
+        displaySearchResultsMoto(data);
         displayTotalCost(data);
     }
 
@@ -48,7 +49,8 @@
         const url = `basket?page=${currentPage}`;
         const response = await fetch(url);
         const data = await response.json();
-        displaySearchResults(data);
+        displaySearchResultsCar(data);
+        displaySearchResultsMoto(data);
         displayTotalCost(data);
     }
 
@@ -82,11 +84,8 @@
         window.location.href = 'newpart.html';
     }
 
-    function goToBasket() {
-        window.location.href = 'basket.html';
-    }
 
-    async function displaySearchResults(data) {
+    async function displaySearchResultsCar(data) {
         const searchResultsDiv = document.getElementById('searchResults');
         searchResultsDiv.innerHTML = '';
 
@@ -132,15 +131,66 @@
         }
     }
 
-    async function displayTotalCost(data) {
-        const totalCostElement = document.getElementById('totalCost');
-        if (data.length > 0 && data[0].carDto.length > 0) {
-            const totalCost = data[0].carDto.reduce((acc, carPart) => acc + (carPart.price * carPart.quantity), 0);
-            totalCostElement.innerText = `Total Cost: ${totalCost.toFixed(2)} PLN`;
+    async function displaySearchResultsMoto(data) {
+        const searchResultsDiv = document.getElementById('searchResults');
+        searchResultsDiv.innerHTML = '';
+
+        if (data.length > 0 && data[0].motoDto.length > 0) {
+            const table = document.createElement('table');
+            table.classList.add('table', 'mt-3');
+
+            const thead = document.createElement('thead');
+            thead.innerHTML = `
+                <tr>
+                    <th scope="col">Marka</th>
+                    <th scope="col">Model</th>
+                    <th scope="col">Numer Seryjny</th>
+                    <th scope="col">Cena</th>
+                    <th scope="col">Ilość</th>
+                    <th scope="col">Plik</th>
+                    <th scope="col">Akcje</th>
+                </tr>
+            `;
+            table.appendChild(thead);
+
+            const tbody = document.createElement('tbody');
+            for (const motoPart of data[0].motoDto) {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${motoPart.mark}</td>
+                    <td>${motoPart.model}</td>
+                    <td>${motoPart.serialNumber}</td>
+                    <td>${motoPart.price}</td>
+                    <td>${motoPart.quantity}</td>
+                    <td>${await getFileDisplay(motoPart)}</td>
+                    <td>
+                        <button class="btn btn-danger" onclick="deletePart('${motoPart.serialNumber}')">Delete</button>
+                        <button class="btn btn-warning" onclick="sellPart('${motoPart.serialNumber}')">Buy</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            }
+            table.appendChild(tbody);
+            searchResultsDiv.appendChild(table);
         } else {
-            totalCostElement.innerText = '';
+            searchResultsDiv.innerHTML = 'No results found.';
         }
     }
+
+    async function displayTotalCost(data) {
+        const totalCostElement = document.getElementById('totalCost');
+
+            const response = await fetch('/basket/sum');
+
+            if (response.ok) {
+                const data = await response.json();
+                totalCostElement.innerText = `Total Cost: ${data} PLN`;
+            } else {
+                totalCostElement.innerText = '';
+            }
+        }
+
+
 
     async function getFileDisplay(carPart) {
         if (carPart.photoDto) {

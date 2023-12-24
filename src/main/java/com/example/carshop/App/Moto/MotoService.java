@@ -95,23 +95,25 @@ public class MotoService {
 
             if (q.getQuantity() > 0 && q.getQuantity() >= quantity) {
 
-                MotoDto map = motoMapper.map(q);
-                map.setQuantity(quantity);
-                MotoPartsBasketDto basket = motoMapper.basket(map);
-                MotoPartsBasket map1 = motoPartsBasketMapper.map(basket);
+                MotoDto map1 = motoMapper.map(q);
+                map1.setQuantity(quantity);
+                MotoPartsBasketDto basket = motoMapper.basket(map1);
+                MotoPartsBasket map2 = motoPartsBasketMapper.map(basket);
+                Optional<MotoPartsBasket> bySerialNumberExist =
+                        motoPartsBasketRepository.findBySerialNumberAndShoppingCartsId(map2.getSerialnumber(),shoppingCart.getId());
+                if (bySerialNumberExist.isPresent()){
+                    MotoPartsBasket motoPartsBasket = bySerialNumberExist.get();
+                    shoppingCart.getMotoParts().remove(motoPartsBasket);
+                    motoPartsBasket.setQuantity(motoPartsBasket.getQuantity()+quantity);
+                    motoPartsBasketRepository.save(motoPartsBasket);
+                    shoppingCart.getMotoParts().add(motoPartsBasket);
 
-                motoPartsBasketMapper.map(basket);
 
-
-                Set<MotoPartsBasket> motoParts = shoppingCart.getMotoParts();
-                if (motoParts.contains(map1)) {
-                    motoParts.remove(map1);
-                    map1.setQuantity(map1.getQuantity() + quantity);
-                    motoParts.add(map1);
                 } else {
-                    shoppingCart.getMotoParts().add(map1);
+                    MotoPartsBasket save = motoPartsBasketRepository.save(map2);
+                    shoppingCart.getMotoParts().add(save);
                 }
-                motoPartsBasketRepository.save(map1);
+
                 shoppingCartRepository.save(shoppingCart);
             }
         }

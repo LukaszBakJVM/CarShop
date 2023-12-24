@@ -9,5 +9,5 @@ import java.util.Optional;
 
 public interface CarPartsBasketRepository extends JpaRepository<CarPartsBasket,Long> {
 
-    Optional<CarPartsBasket>findBySerialNumber(String serialNumber);
+    Optional<CarPartsBasket>findBySerialNumberAndShoppingCartsId(String serialNumber,long id);
 }

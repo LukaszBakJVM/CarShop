@@ -24,6 +24,7 @@
     </form>
 
     <button class="btn btn-success mt-3 mb-3" onclick="goToNewPart()">Enter Part</button>
+    <button class="btn btn-success mt-3 mb-3" onclick="goToBasket()">Basket</button>
     <div id="searchResults"></div>
     <button class="btn btn-info mt-3" onclick="showPreviousResults()">Previous page</button>
     <button class="btn btn-info mt-3" onclick="showNextResults()">Next page</button>
@@ -76,6 +77,9 @@
 
     function goToNewPart() {
         window.location.href = 'motonewpart.html';
+    }
+    function goToBasket() {
+        window.location.href = 'basket.html';
     }
 
     async function displaySearchResults(data) {
