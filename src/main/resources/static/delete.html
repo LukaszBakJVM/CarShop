@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Person</title>
+</head>
+<body>
+<h2>Delete Person</h2>
+<form id="deleteForm" onsubmit="deletePerson(event)">
+    <label for="email">Email:</label>
+    <input type="text" id="email" name="email" required>
+    <br>
+    <button type="submit">Delete</button>
+</form>
+
+<script>
+    function deletePerson(event) {
+        event.preventDefault();
+
+        var email = document.getElementById('email').value;
+
+        fetch('http://localhost:8080/persondelete?email=' + encodeURIComponent(email), {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                // Dodaj nagłówki autoryzacyjne, jeśli są wymagane
+                // 'Authorization': 'Bearer your_access_token'
+            },
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
+            .then(data => {
+                console.log(data);
+                alert('Person deleted successfully!');
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+                alert('Error deleting person. Please check the console for details.');
+            });
+    }
+</script>
+</body>
+</html>

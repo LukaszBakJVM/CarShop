@@ -116,7 +116,7 @@
             <td>${await getFileDisplay(carPart)}</td>
             <td>
                 <button class="btn btn-danger" onclick="deletePart('${carPart.serialNumber}')">Delete</button>
-                <button class="btn btn-warning" onclick="sellPart('${carPart.serialNumber}')">Buy</button>
+                <button class="btn btn-warning" onclick="sellPart('${carPart.serialNumber}')">Add to basket</button>
             </td>
         `;
             tbody.appendChild(tr);

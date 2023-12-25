@@ -48,14 +48,24 @@ public class Configuration {
       // http.csrf(h2->h2.ignoringRequestMatchers(h2Console));
 
         http.formLogin(e->e.loginPage("/login").permitAll());
-       // http.formLogin(AbstractAuthenticationFilterConfigurer::permitAll);
+      // http.formLogin(AbstractAuthenticationFilterConfigurer::permitAll);
 
         http.authorizeHttpRequests(a -> a.requestMatchers("/", "/img/**", "/register.html",
-                        "/register","/login.html","/index.html","/car.html","/moto.html")
-                .permitAll().requestMatchers(mvc.pattern(HttpMethod.GET, "/car/**")).permitAll()
-                .requestMatchers(mvc.pattern(HttpMethod.GET, "/moto/**")).permitAll()
+                        "/register","/login.html","/index.html"
+                        ,"/car.html","/moto.html").permitAll()
+           //carParts
+                .requestMatchers(mvc.pattern(HttpMethod.GET, "/car/**")).permitAll()
                 .requestMatchers(mvc.pattern(HttpMethod.POST,"/car/sell")).permitAll()
+                .requestMatchers(mvc.pattern(HttpMethod.POST,"/car/newPart")).hasAnyRole("Moderator","Admin")
+                .requestMatchers(mvc.pattern(HttpMethod.DELETE,"car")).hasAnyRole("Moderator","Admin")
+      // motoParts
+                .requestMatchers(mvc.pattern(HttpMethod.GET, "/moto/**")).permitAll()
                 .requestMatchers(mvc.pattern(HttpMethod.POST,"moto/sell")).permitAll()
+                .requestMatchers(mvc.pattern(HttpMethod.POST,"/moto/newPart")).hasAnyRole("Moderator","Admin")
+                .requestMatchers(mvc.pattern(HttpMethod.DELETE,"/moto")).hasAnyRole("Moderator","Admin")
+
+                //person
+                .requestMatchers(mvc.pattern(HttpMethod.DELETE,"/persondelete/**")).hasRole("Admin")
 
                // .requestMatchers(h2Console).permitAll()
          .anyRequest().authenticated());
