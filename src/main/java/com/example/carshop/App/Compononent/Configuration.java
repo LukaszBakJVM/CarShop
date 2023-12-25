@@ -55,8 +55,10 @@ public class Configuration {
                 .permitAll().requestMatchers(mvc.pattern(HttpMethod.GET, "/car/**")).permitAll()
                 .requestMatchers(mvc.pattern(HttpMethod.GET, "/moto/**")).permitAll()
                 .requestMatchers(mvc.pattern(HttpMethod.POST,"/car/sell")).permitAll()
-                .requestMatchers(mvc.pattern(HttpMethod.POST,"moto/sell")).permitAll());
-               // .requestMatchers(h2Console).permitAll().anyRequest().authenticated());
+                .requestMatchers(mvc.pattern(HttpMethod.POST,"moto/sell")).permitAll()
+
+               // .requestMatchers(h2Console).permitAll()
+         .anyRequest().authenticated());
         http.csrf(i->i.ignoringRequestMatchers("/**")).formLogin(AbstractAuthenticationFilterConfigurer::permitAll);
 
 

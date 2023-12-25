@@ -8,6 +8,7 @@ import com.example.carshop.App.Exception.SecurityException;
 import org.springframework.http.ResponseEntity;
 
 
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -76,12 +77,13 @@ public class CarPartsController {
 
     ResponseEntity<?> sellPart(@RequestParam String serialNumber, @RequestParam int quantity) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        if (isLogged(email)) {
+
+
+        if ((authentication instanceof AnonymousAuthenticationToken)) {
            throw new SecurityException();
         }
 
-
+        String email = authentication.getName();
             service.sellParts(serialNumber, quantity, email);
             return ResponseEntity.noContent().build();
 
@@ -117,9 +119,7 @@ public class CarPartsController {
 
         }
     }
-    private boolean isLogged(String email){
-        return email.equals("anonymousUser");
-    }
+
     }
 
 
