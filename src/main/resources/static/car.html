@@ -66,7 +66,7 @@
         const sellQuantity = prompt(`Enter quantity :`);
         if (sellQuantity !== null) {
             const url = `/car/sell?serialNumber=${serialNumber}&quantity=${sellQuantity}`;
-            const response = await fetch(url, { method: 'PATCH' });
+            const response = await fetch(url, { method: 'POST' });
             if (response.ok) {
                 searchParts();
             } else {

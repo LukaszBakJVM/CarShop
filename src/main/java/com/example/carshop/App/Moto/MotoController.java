@@ -2,6 +2,7 @@ package com.example.carshop.App.Moto;
 
 
 
+import com.example.carshop.App.Exception.SecurityException;
 import org.springframework.http.ResponseEntity;
 
 
@@ -59,10 +60,13 @@ public class MotoController {
         }
         return ResponseEntity.ok(service.findAllBySerialNumber(serialNumber,page));
     }
-    @PatchMapping("/sell")
+    @PostMapping("/sell")
     ResponseEntity<?> sellPart(@RequestParam String serialNumber, @RequestParam int quantity) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
+        if (isLogged(email)) {
+            throw new SecurityException();
+        }
         service.sellParts(serialNumber, quantity,email);
         return ResponseEntity.noContent().build();
     }
@@ -96,4 +100,9 @@ public class MotoController {
         }
     }
 
-}
+
+    private boolean isLogged(String email) {
+        return email.equals("anonymousUser");
+
+    }
+    }

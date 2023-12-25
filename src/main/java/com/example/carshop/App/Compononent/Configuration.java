@@ -44,17 +44,19 @@ public class Configuration {
     }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http,MvcRequestMatcher.Builder mvc) throws Exception {
-        PathRequest.H2ConsoleRequestMatcher h2Console = PathRequest.toH2Console();
-       http.csrf(h2->h2.ignoringRequestMatchers(h2Console));
+       // PathRequest.H2ConsoleRequestMatcher h2Console = PathRequest.toH2Console();
+      // http.csrf(h2->h2.ignoringRequestMatchers(h2Console));
 
         http.formLogin(e->e.loginPage("/login").permitAll());
        // http.formLogin(AbstractAuthenticationFilterConfigurer::permitAll);
 
         http.authorizeHttpRequests(a -> a.requestMatchers("/", "/img/**", "/register.html",
                         "/register","/login.html","/index.html","/car.html","/moto.html")
-                .permitAll().requestMatchers(mvc.pattern(HttpMethod.GET, "/car")).permitAll()
-                .requestMatchers(mvc.pattern(HttpMethod.GET, "/moto")).permitAll()
-                .requestMatchers(h2Console).permitAll().anyRequest().authenticated());
+                .permitAll().requestMatchers(mvc.pattern(HttpMethod.GET, "/car/**")).permitAll()
+                .requestMatchers(mvc.pattern(HttpMethod.GET, "/moto/**")).permitAll()
+                .requestMatchers(mvc.pattern(HttpMethod.POST,"/car/sell")).permitAll()
+                .requestMatchers(mvc.pattern(HttpMethod.POST,"moto/sell")).permitAll());
+               // .requestMatchers(h2Console).permitAll().anyRequest().authenticated());
         http.csrf(i->i.ignoringRequestMatchers("/**")).formLogin(AbstractAuthenticationFilterConfigurer::permitAll);
 
 

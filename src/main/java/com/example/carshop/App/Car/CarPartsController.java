@@ -4,7 +4,9 @@ package com.example.carshop.App.Car;
 
 
 
+import com.example.carshop.App.Exception.SecurityException;
 import org.springframework.http.ResponseEntity;
+
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -70,14 +72,19 @@ public class CarPartsController {
         return ResponseEntity.ok(service.findAllBySerialNumber(serialNumber, page));
     }
 
-    @PatchMapping("/sell")
+    @PostMapping("/sell")
+
     ResponseEntity<?> sellPart(@RequestParam String serialNumber, @RequestParam int quantity) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
+        if (isLogged(email)) {
+           throw new SecurityException();
+        }
 
 
-        service.sellParts(serialNumber, quantity,email);
-        return ResponseEntity.noContent().build();
+            service.sellParts(serialNumber, quantity, email);
+            return ResponseEntity.noContent().build();
+
     }
 
     @GetMapping("/{serialNumber}")
@@ -109,11 +116,10 @@ public class CarPartsController {
             return ResponseEntity.status(500).body("Błąd podczas zapisywania pliku tymczasowego");
 
         }
-
-
-
-
-        }
+    }
+    private boolean isLogged(String email){
+        return email.equals("anonymousUser");
+    }
     }
 
 
