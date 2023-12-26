@@ -74,6 +74,11 @@ public class ShoppingCartService {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         return  carPartsSum.add(motoPartsSum);
     }
+    void saveAfterSell(ShoppingCartDto shoppingCartDto){
+        ShoppingCart map = shoppingCartMapper.map(shoppingCartDto);
+        shoppingCartRepository.save(map);
+
+    }
 
 
 

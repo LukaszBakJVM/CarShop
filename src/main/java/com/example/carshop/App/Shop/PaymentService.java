@@ -16,6 +16,7 @@ public class PaymentService {
     private final MotoService motoService;
     private final ShoppingCartService shoppingCartService;
 
+
     public PaymentService(CarService carService, MotoService motoService, ShoppingCartService shoppingCartService) {
         this.carService = carService;
         this.motoService = motoService;
@@ -26,8 +27,21 @@ public class PaymentService {
         Set<CarPartsBasketDto> carDto = basketByPersonEmail.getCarDto();
         Map<String, Integer> carMap = carDto.stream().collect(Collectors
                 .toMap(CarPartsBasketDto::getSerialNumber, CarPartsBasketDto::getQuantity));
+        carMap.forEach(carService::updateAfterPurchase);
+        carDto.clear();
+
+
+
+
 
         Set<MotoPartsBasketDto> motoDto = basketByPersonEmail.getMotoDto();
-        Map<String, Integer> motoMap = motoDto.stream().collect(Collectors.toMap(MotoPartsBasketDto::getSerialNumber, MotoPartsBasketDto::getQuantity));
+        Map<String, Integer> motoMap = motoDto.stream().collect(Collectors
+                .toMap(MotoPartsBasketDto::getSerialNumber, MotoPartsBasketDto::getQuantity));
+        motoMap.forEach(motoService::updateAfterPurchase);
+        motoDto.clear();
+        shoppingCartService.saveAfterSell(basketByPersonEmail);
+
+
     }
+
 }
