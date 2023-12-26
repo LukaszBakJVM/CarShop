@@ -8,6 +8,7 @@ import com.example.carshop.App.Shop.Basket.CarParts.CarPartsBasketRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -44,6 +45,16 @@ public class ShoppingCartService {
       return   shoppingCartRepository.findAByPersonEmail(email,pageRequest)
                 .getContent()
               .stream().map(shoppingCartMapper::map).collect(Collectors.toSet());
+
+    }
+    void deletePartFromBasket(String email,String serialNumber){
+        Optional<ShoppingCart> byPersonEmail = shoppingCartRepository.findByPersonEmail(email);
+        byPersonEmail.isPresent();
+        ShoppingCart shoppingCart = byPersonEmail.get();
+        shoppingCart.getCarsParts().removeIf(car->car.getSerialnumber().equals(serialNumber));
+        shoppingCart.getMotoParts().removeIf(moto->moto.getSerialnumber().equals(serialNumber));
+        ShoppingCart save = shoppingCartRepository.save(shoppingCart);
+        shoppingCartMapper.map(save);
 
     }
 

@@ -56,7 +56,7 @@
 
     async function deletePart(serialNumber) {
         if (confirm("Delete the part?")) {
-            const url = `api/parts/${serialNumber}`;
+            const url = '/basket/' + serialNumber;
             const response = await fetch(url, { method: 'DELETE' });
             if (response.ok) {
                 alert('Deleted');
@@ -119,7 +119,7 @@
                     <td>${await getFileDisplay(carPart)}</td>
                     <td>
                         <button class="btn btn-danger" onclick="deletePart('${carPart.serialNumber}')">Delete</button>
-                        <button class="btn btn-warning" onclick="sellPart('${carPart.serialNumber}')">Buy</button>
+                     <!---   <button class="btn btn-warning" onclick="sellPart('${carPart.serialNumber}')">Buy</button>--->
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -165,7 +165,7 @@
                     <td>${await getFileDisplay(motoPart)}</td>
                     <td>
                         <button class="btn btn-danger" onclick="deletePart('${motoPart.serialNumber}')">Delete</button>
-                        <button class="btn btn-warning" onclick="sellPart('${motoPart.serialNumber}')">Buy</button>
+                  <!---      <button class="btn btn-warning" onclick="sellPart('${motoPart.serialNumber}')">Buy</button>-->
                     </td>
                 `;
                 tbody.appendChild(tr);
