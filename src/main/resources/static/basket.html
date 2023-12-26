@@ -195,16 +195,15 @@
 
         payButton.addEventListener('click', async () => {
 
-            const paymentResponse = await fetch('/payment', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
+            window.location.href =('/payment')
+
+            await new Promise(resolve => setTimeout(resolve, 3000));
 
             if (paymentResponse.ok) {
 
-                window.location.href = '/payment'
+
+                window.location.href = '/payment/checkout';
+            } else {
 
                 console.error('Payment request failed');
             }

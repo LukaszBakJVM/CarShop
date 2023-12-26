@@ -4,8 +4,17 @@
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
-<body>
-<h1> You Must Pay</h1>
+<body onload="displayTotalCost()">
+<h1>You Must Pay</h1>
 
+
+
+
+<script>
+    async function displayTotalCost() {
+        await new Promise(resolve => setTimeout(resolve, 3000));
+        window.location.href = '/paymentOk';
+    }
+</script>
 </body>
 </html>
