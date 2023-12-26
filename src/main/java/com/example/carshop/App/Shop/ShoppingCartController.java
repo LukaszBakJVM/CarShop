@@ -1,8 +1,7 @@
 package com.example.carshop.App.Shop;
 
 
-import com.example.carshop.App.Shop.Basket.CarParts.CarPartsBasketDto;
-import com.example.carshop.App.Shop.Basket.MotoParts.MotoPartsBasketDto;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,20 +30,9 @@ public class ShoppingCartController {
     BigDecimal sumToPay(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-
-
         String email = authentication.getName();
-        ShoppingCartDto basketByPersonEmail = shoppingCartService.findBasketByPersonEmail(email);
-        Set<CarPartsBasketDto> carDto = basketByPersonEmail.getCarDto();
-        BigDecimal carPartsSum = carDto.stream().map(basketSum -> basketSum.getPrice()
-                        .multiply(BigDecimal.valueOf(basketSum.getQuantity())))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        Set<MotoPartsBasketDto> motoDto = basketByPersonEmail.getMotoDto();
-        BigDecimal motoPartsSum = motoDto.stream().map(basketSum -> basketSum.getPrice()
-                        .multiply(BigDecimal.valueOf(basketSum.getQuantity())))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-        return carPartsSum.add(motoPartsSum);
+        return shoppingCartService.sum(email);
 
 
     }
