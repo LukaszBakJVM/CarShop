@@ -2,9 +2,11 @@ package com.example.carshop.App.Moto;
 
 
 
+import com.example.carshop.App.Exception.SecurityException;
 import org.springframework.http.ResponseEntity;
 
 
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -59,9 +61,13 @@ public class MotoController {
         }
         return ResponseEntity.ok(service.findAllBySerialNumber(serialNumber,page));
     }
-    @PatchMapping("/sell")
+    @PostMapping("/sell")
     ResponseEntity<?> sellPart(@RequestParam String serialNumber, @RequestParam int quantity) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if ((authentication instanceof AnonymousAuthenticationToken)) {
+            throw new SecurityException();
+        }
         String email = authentication.getName();
         service.sellParts(serialNumber, quantity,email);
         return ResponseEntity.noContent().build();
@@ -96,4 +102,6 @@ public class MotoController {
         }
     }
 
-}
+
+
+    }

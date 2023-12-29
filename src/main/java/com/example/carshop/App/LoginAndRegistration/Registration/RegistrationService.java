@@ -1,5 +1,6 @@
 package com.example.carshop.App.LoginAndRegistration.Registration;
 
+import com.example.carshop.App.Exception.NotFoundException;
 import com.example.carshop.App.LoginAndRegistration.Address.Address;
 import com.example.carshop.App.LoginAndRegistration.Address.AddressRepository;
 import com.example.carshop.App.LoginAndRegistration.Person;
@@ -10,6 +11,7 @@ import com.example.carshop.App.Shop.ShoppingCart;
 
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 
 
 @Service
@@ -43,5 +45,13 @@ public class RegistrationService {
 
 
         mapper.map(savePerson);
+    }
+    void delete(String email){
+        Optional<Person> byEmail = repository.findByEmail(email);
+        if (byEmail.isEmpty()){
+            throw new NotFoundException();
+        }
+        Person person = byEmail.get();
+        repository.delete(person);
     }
 }

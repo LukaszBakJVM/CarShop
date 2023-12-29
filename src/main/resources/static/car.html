@@ -66,7 +66,7 @@
         const sellQuantity = prompt(`Enter quantity :`);
         if (sellQuantity !== null) {
             const url = `/car/sell?serialNumber=${serialNumber}&quantity=${sellQuantity}`;
-            const response = await fetch(url, { method: 'PATCH' });
+            const response = await fetch(url, { method: 'POST' });
             if (response.ok) {
                 searchParts();
             } else {
@@ -116,7 +116,7 @@
             <td>${await getFileDisplay(carPart)}</td>
             <td>
                 <button class="btn btn-danger" onclick="deletePart('${carPart.serialNumber}')">Delete</button>
-                <button class="btn btn-warning" onclick="sellPart('${carPart.serialNumber}')">Buy</button>
+                <button class="btn btn-warning" onclick="sellPart('${carPart.serialNumber}')">Add to basket</button>
             </td>
         `;
             tbody.appendChild(tr);

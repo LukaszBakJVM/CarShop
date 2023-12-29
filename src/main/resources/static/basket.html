@@ -27,10 +27,13 @@
 
     <div id="searchResults"></div>
     <p id="totalCost"></p>
+
+    <button id="payButton">Pay Now</button>
     <button class="btn btn-info mt-3" onclick="showPreviousResults()">Previous page</button>
     <button class="btn btn-info mt-3" onclick="showNextResults()">Next page</button>
     <a href="/index.html" class="btn btn-primary mt-3">Back to main page</a>
 </div>
+
 
 <script>
     let currentPage = 0;
@@ -56,7 +59,7 @@
 
     async function deletePart(serialNumber) {
         if (confirm("Delete the part?")) {
-            const url = `api/parts/${serialNumber}`;
+            const url = '/basket/' + serialNumber;
             const response = await fetch(url, { method: 'DELETE' });
             if (response.ok) {
                 alert('Deleted');
@@ -119,7 +122,7 @@
                     <td>${await getFileDisplay(carPart)}</td>
                     <td>
                         <button class="btn btn-danger" onclick="deletePart('${carPart.serialNumber}')">Delete</button>
-                        <button class="btn btn-warning" onclick="sellPart('${carPart.serialNumber}')">Buy</button>
+                     <!---   <button class="btn btn-warning" onclick="sellPart('${carPart.serialNumber}')">Buy</button>--->
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -165,7 +168,7 @@
                     <td>${await getFileDisplay(motoPart)}</td>
                     <td>
                         <button class="btn btn-danger" onclick="deletePart('${motoPart.serialNumber}')">Delete</button>
-                        <button class="btn btn-warning" onclick="sellPart('${motoPart.serialNumber}')">Buy</button>
+                  <!---      <button class="btn btn-warning" onclick="sellPart('${motoPart.serialNumber}')">Buy</button>-->
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -177,19 +180,35 @@
         }
     }
 
-    async function displayTotalCost(data) {
+    async function displayTotalCost() {
         const totalCostElement = document.getElementById('totalCost');
+        const payButton = document.getElementById('payButton');
 
-            const response = await fetch('/basket/sum');
+        const response = await fetch('/basket/sum');
 
-            if (response.ok) {
-                const data = await response.json();
-                totalCostElement.innerText = `Total Cost: ${data} PLN`;
-            } else {
-                totalCostElement.innerText = '';
-            }
+        if (response.ok) {
+            const responseData = await response.json();
+            totalCostElement.innerText = `Total Cost: ${responseData} PLN`;
+        } else {
+            totalCostElement.innerText = '';
         }
 
+        payButton.addEventListener('click', async () => {
+
+            window.location.href =('/payment')
+
+            await new Promise(resolve => setTimeout(resolve, 3000));
+
+            if (paymentResponse.ok) {
+
+
+                window.location.href = '/payment/checkout';
+            } else {
+
+                console.error('Payment request failed');
+            }
+        });
+    }
 
 
     async function getFileDisplay(carPart) {

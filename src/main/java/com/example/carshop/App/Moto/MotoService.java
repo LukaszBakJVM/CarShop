@@ -5,6 +5,7 @@ package com.example.carshop.App.Moto;
 
 
 
+
 import com.example.carshop.App.Exception.NotFoundException;
 
 import com.example.carshop.App.Shop.Basket.MotoParts.MotoPartsBasket;
@@ -100,11 +101,11 @@ public class MotoService {
                 MotoPartsBasketDto basket = motoMapper.basket(map1);
                 MotoPartsBasket map2 = motoPartsBasketMapper.map(basket);
                 Optional<MotoPartsBasket> bySerialNumberExist =
-                        motoPartsBasketRepository.findBySerialNumberAndShoppingCartsId(map2.getSerialnumber(),shoppingCart.getId());
-                if (bySerialNumberExist.isPresent()){
+                        motoPartsBasketRepository.findBySerialNumberAndShoppingCartsId(map2.getSerialnumber(), shoppingCart.getId());
+                if (bySerialNumberExist.isPresent()) {
                     MotoPartsBasket motoPartsBasket = bySerialNumberExist.get();
                     shoppingCart.getMotoParts().remove(motoPartsBasket);
-                    motoPartsBasket.setQuantity(motoPartsBasket.getQuantity()+quantity);
+                    motoPartsBasket.setQuantity(motoPartsBasket.getQuantity() + quantity);
                     motoPartsBasketRepository.save(motoPartsBasket);
                     shoppingCart.getMotoParts().add(motoPartsBasket);
 
@@ -118,6 +119,12 @@ public class MotoService {
             }
         }
     }
+        public void updateAfterPurchase(String serialNumber ,int quantity){
+            MotoParts motoParts = motoRepository.findBySerialNumber(serialNumber).orElseThrow();
+            motoParts.setQuantity(motoParts.getQuantity()-quantity);
+            motoRepository.save(motoParts);
+
+        }
 
     public Optional<MotoDto> findBySerialNumber(String serialNumber) {
         Optional<MotoParts> bySerialNumber = motoRepository.findBySerialNumber(serialNumber);
