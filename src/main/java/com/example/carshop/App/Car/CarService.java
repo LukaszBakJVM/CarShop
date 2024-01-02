@@ -43,7 +43,7 @@ public class CarService {
 
     public CarDto save(CarDto carDto)  {
         Car car = carMapper.map(carDto);
-        Optional<Car> bySerialNumber = carRepository.findBySerialNumber(car.getSerialnumber());
+        Optional<Car> bySerialNumber = carRepository.findBySerialNumber(car.getSerialNumber());
         if (bySerialNumber.isPresent()) {
             Car quantity = bySerialNumber.get();
             int i = quantity.getQuantity() + car.getQuantity();
@@ -99,7 +99,7 @@ public class CarService {
                 CarPartsBasket map2 = carPartsBasketMapper.map(basket);
 
                 Optional<CarPartsBasket> bySerialNumberExist =
-                        carPartsBasketRepository.findBySerialNumberAndShoppingCartsId(map2.getSerialnumber(), shoppingCart.getId());
+                        carPartsBasketRepository.findBySerialNumberAndShoppingCartsId(map2.getSerialNumber(), shoppingCart.getId());
                 if (bySerialNumberExist.isPresent()) {
                     CarPartsBasket carPartsBasket1 = bySerialNumberExist.get();
                     shoppingCart.getCarsParts().remove(carPartsBasket1);

@@ -23,7 +23,7 @@ public class CarPartsBasketMapper {
         car.setId(dto.getId());
         car.setMark(dto.getMark());
         car.setModel(dto.getModel());
-        car.setSerialnumber(dto.getSerialNumber());
+        car.setSerialNumber(dto.getSerialNumber());
         car.setPartsBrand(dto.getPartsBrand());
         car.setPrice(dto.getPrice());
         car.setQuantity(dto.getQuantity());
@@ -42,7 +42,7 @@ public class CarPartsBasketMapper {
         dto.setId(car.getId());
         dto.setMark(car.getMark());
         dto.setModel(car.getModel());
-        dto.setSerialNumber(car.getSerialnumber());
+        dto.setSerialNumber(car.getSerialNumber());
         dto.setPartsBrand(car.getPartsBrand());
         dto.setPrice(car.getPrice());
         dto.setQuantity(car.getQuantity());

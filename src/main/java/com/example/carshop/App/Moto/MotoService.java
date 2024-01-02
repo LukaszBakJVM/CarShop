@@ -47,7 +47,7 @@ public class MotoService {
 
     public MotoDto save(MotoDto motoDto){
         MotoParts motoParts = motoMapper.map(motoDto);
-        Optional<MotoParts> bySerialNumber = motoRepository.findBySerialNumber(motoParts.getSerialnumber());
+        Optional<MotoParts> bySerialNumber = motoRepository.findBySerialNumber(motoParts.getSerialNumber());
         if (bySerialNumber.isPresent()){
             MotoParts quantity = bySerialNumber.get();
             int i = quantity.getQuantity() + motoParts.getQuantity();
@@ -101,7 +101,7 @@ public class MotoService {
                 MotoPartsBasketDto basket = motoMapper.basket(map1);
                 MotoPartsBasket map2 = motoPartsBasketMapper.map(basket);
                 Optional<MotoPartsBasket> bySerialNumberExist =
-                        motoPartsBasketRepository.findBySerialNumberAndShoppingCartsId(map2.getSerialnumber(), shoppingCart.getId());
+                        motoPartsBasketRepository.findBySerialNumberAndShoppingCartsId(map2.getSerialNumber(), shoppingCart.getId());
                 if (bySerialNumberExist.isPresent()) {
                     MotoPartsBasket motoPartsBasket = bySerialNumberExist.get();
                     shoppingCart.getMotoParts().remove(motoPartsBasket);

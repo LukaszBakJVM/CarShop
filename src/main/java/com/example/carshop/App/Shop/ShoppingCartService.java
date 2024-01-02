@@ -54,8 +54,8 @@ public class ShoppingCartService {
         Optional<ShoppingCart> byPersonEmail = shoppingCartRepository.findByPersonEmail(email);
         byPersonEmail.isPresent();
         ShoppingCart shoppingCart = byPersonEmail.get();
-        shoppingCart.getCarsParts().removeIf(car->car.getSerialnumber().equals(serialNumber));
-        shoppingCart.getMotoParts().removeIf(moto->moto.getSerialnumber().equals(serialNumber));
+        shoppingCart.getCarsParts().removeIf(car->car.getSerialNumber().equals(serialNumber));
+        shoppingCart.getMotoParts().removeIf(moto->moto.getSerialNumber().equals(serialNumber));
         ShoppingCart save = shoppingCartRepository.save(shoppingCart);
         shoppingCartMapper.map(save);
 

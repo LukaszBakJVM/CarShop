@@ -25,7 +25,7 @@ public class MotoPartsBasketMapper {
         motoParts.setId(dto.getId());
         motoParts.setMark(dto.getMark());
         motoParts.setModel(dto.getModel());
-        motoParts.setSerialnumber(dto.getSerialNumber());
+        motoParts.setSerialNumber(dto.getSerialNumber());
         motoParts.setPartsBrand(dto.getPartsBrand());
         motoParts.setPrice(dto.getPrice());
         motoParts.setQuantity(dto.getQuantity());
@@ -43,7 +43,7 @@ public class MotoPartsBasketMapper {
         dto.setId(parts.getId());
         dto.setMark(parts.getMark());
         dto.setModel(parts.getModel());
-        dto.setSerialNumber(parts.getSerialnumber());
+        dto.setSerialNumber(parts.getSerialNumber());
         dto.setPartsBrand(parts.getPartsBrand());
         dto.setPrice(parts.getPrice());
         dto.setQuantity(parts.getQuantity());

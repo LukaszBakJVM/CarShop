@@ -38,12 +38,12 @@ public class Parts {
         this.model = model;
     }
 
-    public String getSerialnumber() {
+    public String getSerialNumber() {
         return serialNumber;
     }
 
-    public void setSerialnumber(String serialnumber) {
-        this.serialNumber = serialnumber;
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
     }
 
     public String getPartsBrand() {
