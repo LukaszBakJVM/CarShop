@@ -18,7 +18,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URI;
-import java.util.Optional;
+
 import java.util.Set;
 
 import static java.io.File.createTempFile;
@@ -72,11 +72,7 @@ public class MotoController {
         service.sellParts(serialNumber, quantity,email);
         return ResponseEntity.noContent().build();
     }
-    @GetMapping("/{serialNumber}")
-    ResponseEntity<Optional<MotoDto>>findBySerial(@PathVariable String serialNumber){
-        return ResponseEntity.ok(service.findBySerialNumber(serialNumber));
 
-    }
     @GetMapping("/filetyp/{serialNumber}")
     String fileTyp(@PathVariable String serialNumber) {
         MotoDto dto = service.findBySerialNumber(serialNumber).orElseThrow();

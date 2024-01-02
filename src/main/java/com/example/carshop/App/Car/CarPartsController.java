@@ -22,7 +22,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URI;
-import java.util.Optional;
+
 import java.util.Set;
 
 import static java.io.File.createTempFile;
@@ -89,17 +89,12 @@ public class CarPartsController {
 
     }
 
-    @GetMapping("/{serialNumber}")
-    ResponseEntity<Optional<CarDto>> findBySerialNumber(@PathVariable String serialNumber) {
-        return ResponseEntity.ok(service.findBySerialNumber(serialNumber));
-    }
-
     @GetMapping("/filetyp/{serialNumber}")
     String fileTyp(@PathVariable String serialNumber) {
         CarDto carDto = service.findBySerialNumber(serialNumber).orElseThrow();
         return service.fileTyp(carDto.getPhotoDto());
 
-    }
+      }
 
     @PostMapping("/tmp")
     public ResponseEntity<String> saveTempFile(@RequestParam("file") MultipartFile file) {
