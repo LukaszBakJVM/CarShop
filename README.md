@@ -1,6 +1,6 @@
 # CarShop  in progress
 
-https://carshop.freeddns.org
+https://carshop.freeddns.org       -->aplikacja uruchomiona w Docker Container, proxy nginx
 # git clone  https://github.com/LukaszBakJVM/CarShop
 # maven clean
 # maven install 
