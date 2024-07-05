@@ -22,7 +22,7 @@ can buy
 User , moderator -> bbzzyyczczeek@interia.pl    pass -> lukasz
 can buy,add and remove parts
 
-User-> moderator -> admin bbzzyyczczeek@interia.pl pass -> lukasz
+User-> moderator -> admin bbzzyyczczeekk@interia.pl pass -> lukasz
 can buy,add and remove parts, remove accounts
 
 You need to enter login and  password  to MYsql database application.properties.
